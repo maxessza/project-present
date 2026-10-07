@@ -1,12 +1,14 @@
 # Smart Water Surface Boat Web Presentation
 
-A 20-slide, GitHub Pages-ready presentation built from the project report and selected implementation excerpts. It uses plain HTML, CSS, and JavaScript, with no build step or package installation.
+A static, GitHub Pages-ready project site and 20-slide web presentation built from the project report and selected implementation excerpts. It uses plain HTML, CSS, and JavaScript, with no build step or package installation.
 
 ## Open locally
 
-Open index.html in a browser. The presentation works as a standalone folder because code and images use relative paths.
+Open index.html in a browser for the project overview. Open slides.html for the full slide deck. The pages work as a standalone folder because code and images use relative paths.
 
-Use Left/Right arrows or Space to move between slides. Press F for fullscreen. The activity diagram and wiring image can be opened at full size. Keep all project files and the assets folder together; the page shows a setup message if slide data is missing.
+Use Left/Right arrows or Space to move between slides. Press F for fullscreen. Keep all project files and the assets folder together; the slide viewer shows a setup message if slide data is missing.
+
+The site navigation has five sections: Overall, Waypoints, Heatmap, Sensors and Slides. The heat-map page explains the IDW method; it does not show sample measurements because the supplied report includes no field dataset.
 
 ## Update the presentation
 
@@ -18,7 +20,7 @@ Edit slides-data.js. It contains the slide content as a JavaScript array named w
 - Add images under assets/ and reference them with a relative path such as assets/new-diagram.png.
 - styles.css controls the visual design. app.js renders the slide types and handles navigation.
 
-For a Thai talk track for all 20 slides, open speaker-notes-th.md. It also flags details that the source report does not quantify, such as threshold values and field-test results.
+For a Thai talk track for all 20 slides, open speaker-notes-th.md. It also flags details that the source report does not quantify, such as threshold values and field-test results. site.css controls the five-section website; styles.css controls the slide viewer.
 
 The code excerpts are selected from the supplied main.py and dashboard.html. The complete backend and dashboard files are not copied into this presentation project.
 

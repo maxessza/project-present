@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071827">
+  <meta name="description" content="Turbidity heat-map method and IDW processing used by the Smart Water Boat dashboard.">
+  <title>Heatmap · Smart Water Boat</title>
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Smart Water Boat home"><span class="brand-mark" aria-hidden="true">SW</span><span class="brand-copy"><strong>Smart Water Boat</strong><small>Field Systems · Senior Project</small></span></a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a class="nav-link" href="./index.html">Overall</a><a class="nav-link" href="./waypoints.html">Waypoints</a><a class="nav-link current" href="./heatmap.html" aria-current="page">Heatmap</a><a class="nav-link" href="./sensors.html">Sensors</a><a class="nav-link nav-cta" href="./slides.html">Slides</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-hero container">
+      <p class="eyebrow">02 / Spatial turbidity mapping</p>
+      <h1>Heat maps estimate what lies between the samples</h1>
+      <p class="hero-lead">The dashboard includes an Inverse Distance Weighting routine that estimates turbidity across a grid from readings collected at GPS locations.</p>
+    </section>
+    <section class="container section section-topline">
+      <div class="metric-band inline-metrics">
+        <div class="metric"><strong>25 × 25</strong><span>Grid resolution</span><small>Rows by columns in source</small></div>
+        <div class="metric"><strong>3</strong><span>Distance power</span><small>Nearby points weigh more</small></div>
+        <div class="metric"><strong>NTU</strong><span>Mapped quantity</span><small>Turbidity readings</small></div>
+      </div>
+      <div class="split-section heatmap-explainer">
+        <div>
+          <p class="eyebrow">How IDW works</p>
+          <h2>Each nearby reading contributes to a grid estimate</h2>
+          <p class="body-copy">For a grid location, the algorithm assigns each measured turbidity value a weight based on distance. A nearby sample receives a larger weight; a distant sample has less influence.</p>
+          <div class="formula"><span>Estimated turbidity</span><strong>Σ (Tᵢ / dᵢ³) ÷ Σ (1 / dᵢ³)</strong><small>Tᵢ is a measured NTU value · dᵢ is distance from the grid location</small></div>
+        </div>
+        <div class="data-state" role="note">
+          <span class="state-mark" aria-hidden="true">i</span>
+          <p class="eyebrow">Sample data status</p>
+          <h3>No field measurement dataset is included</h3>
+          <p>The report describes the heat-map method, but does not supply GPS-tagged turbidity samples or measured heat-map values. This page explains the calculation without displaying invented readings.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section section-tint">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Data path</p><h2>From a sensor point to an estimated surface</h2></div>
+        <ol class="system-chain three-chain">
+          <li><span class="chain-index">01</span><h3>Collect samples</h3><p>Record NTU turbidity readings with GPS coordinates as the boat visits waypoints.</p></li>
+          <li><span class="chain-index">02</span><h3>Interpolate</h3><p>For each of the 25 × 25 grid locations, combine samples using inverse-distance weights with power 3.</p></li>
+          <li><span class="chain-index">03</span><h3>Visualize</h3><p>Render estimated turbidity as a spatial heat map for the selected mission.</p></li>
+        </ol>
+        <p class="note">The IDW function is present in <code>dashboard.html</code>. Its general startup and periodic refresh calls are commented out in the supplied dashboard initialization; confirm the active view before describing it as live.</p>
+      </div>
+    </section>
+    <section class="section container">
+      <div class="section-heading"><p class="eyebrow">Interpretation</p><h2>Estimated values are not additional measurements</h2><p>A heat map is only as representative as the collected points. Sparse or uneven sampling can hide local variation, so map detail should be read alongside the boat route and original measurements.</p></div>
+      <a class="text-link" href="./sensors.html">See how turbidity is measured <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><span>IDW method · Project report, Section 3.8; supplied dashboard code</span><a href="./slides.html">Open the slide presentation ↗</a></div></footer>
+</body>
+</html>

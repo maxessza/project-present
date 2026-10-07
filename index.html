@@ -4,41 +4,91 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071827">
-  <meta name="description" content="A code-backed web presentation for the Smart Water Surface Boat project.">
-  <title>Smart Water Surface Boat · Project Presentation</title>
-  <link rel="stylesheet" href="./styles.css">
+  <meta name="description" content="Overview of the Smart Water Surface Boat monitoring system, route planning, sensors and turbidity mapping.">
+  <title>Smart Water Boat · Overall System</title>
+  <link rel="stylesheet" href="./site.css">
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Field Systems / Senior Project</span></div>
-      <div class="university">Mae Fah Luang University · 2026</div>
-    </header>
-    <main class="stage" id="stage" aria-live="polite">
-      <div id="slides" class="slides">
-        <section class="slide fallback">
-          <p class="eyebrow">Presentation setup</p>
-          <h1>Slide content did not load</h1>
-          <p class="fallback-help">Keep index.html, slides-data.js, app.js, styles.css, and the assets folder together. Upload all of them to the same GitHub Pages publishing folder.</p>
-        </section>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Smart Water Boat home">
+      <span class="brand-mark" aria-hidden="true">SW</span>
+      <span class="brand-copy"><strong>Smart Water Boat</strong><small>Field Systems · Senior Project</small></span>
+    </a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a class="nav-link current" href="./index.html" aria-current="page">Overall</a>
+      <a class="nav-link" href="./waypoints.html">Waypoints</a>
+      <a class="nav-link" href="./heatmap.html">Heatmap</a>
+      <a class="nav-link" href="./sensors.html">Sensors</a>
+      <a class="nav-link nav-cta" href="./slides.html">Slides</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Mae Fah Luang University · Computer Engineering · 2026</p>
+        <h1>Smart Water<br><span>Surface Boat</span></h1>
+        <p class="hero-lead">A mobile system for collecting surface-water readings across planned locations, tracking each sample by GPS, and reviewing the mission through a web dashboard.</p>
+        <div class="button-row">
+          <a class="button primary-button" href="./waypoints.html">Explore the system <span aria-hidden="true">→</span></a>
+          <a class="button secondary-button" href="./slides.html">Open slide presentation</a>
+        </div>
+        <p class="authors">Patcharapon Teerasamee <span>·</span> Pisit Nilthongkam</p>
       </div>
-    </main>
-    <footer class="controls">
-      <div class="hint">← → OR SPACE TO NAVIGATE · F FOR FULL SCREEN</div>
-      <div class="control-group">
-        <button id="prev" type="button" aria-label="Previous slide" title="Previous slide">‹</button>
-        <span id="counter" class="counter" aria-live="polite">01 / 20</span>
-        <button id="next" type="button" aria-label="Next slide" title="Next slide">›</button>
+      <p class="hero-caption">Autonomous, location-aware surface-water monitoring</p>
+    </section>
+
+    <section class="metric-band" aria-label="Project overview">
+      <div class="metric"><strong>03</strong><span>Water parameters</span><small>Temperature · pH · turbidity</small></div>
+      <div class="metric"><strong>09</strong><span>Automatic sweep points</span><small>3 lines × 3 points</small></div>
+      <div class="metric"><strong>25 × 25</strong><span>IDW grid</span><small>Turbidity interpolation</small></div>
+      <div class="metric"><strong>ESP32-S3</strong><span>Boat controller</span><small>Navigation · sensing · logging</small></div>
+    </section>
+
+    <section class="section container" aria-labelledby="system-title">
+      <div class="section-heading">
+        <p class="eyebrow">End-to-end system</p>
+        <h2 id="system-title">One mission connects the boat to the dashboard</h2>
+        <p>The boat gathers readings along a route, keeps a local log, then sends mission data through a base station for storage and review.</p>
       </div>
-      <div class="right-hint">WEB PRESENTATION</div>
-    </footer>
-  </div>
-  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
-  <dialog id="imageDialog" aria-label="Project diagram">
-    <div class="dialog-bar"><span id="dialogCaption">Project diagram</span><button id="closeDialog" type="button">Close ×</button></div>
-    <img id="dialogImage" alt="">
-  </dialog>
-  <script src="./slides-data.js"></script>
-  <script src="./app.js"></script>
+      <ol class="system-chain">
+        <li><span class="chain-index">01</span><h3>Measure</h3><p>Temperature, pH, turbidity, GPS position and heading.</p></li>
+        <li><span class="chain-index">02</span><h3>Navigate</h3><p>ESP32-S3 follows waypoints using GPS, compass and heading control.</p></li>
+        <li><span class="chain-index">03</span><h3>Transfer</h3><p>ESP-NOW carries mission commands and telemetry to the base station.</p></li>
+        <li><span class="chain-index">04</span><h3>Review</h3><p>FastAPI and MySQL support status, route history, alerts and heat maps.</p></li>
+      </ol>
+    </section>
+
+    <section class="section section-tint">
+      <div class="container split-section">
+        <div>
+          <p class="eyebrow">System overview</p>
+          <h2>Move measurements between locations</h2>
+          <p class="body-copy">Fixed monitoring stations report conditions at their installed positions. This boat adds mobility: it follows planned waypoints and links sensor readings with their location along the mission route.</p>
+          <a class="text-link" href="./waypoints.html">See how waypoint planning works <span aria-hidden="true">↗</span></a>
+        </div>
+        <figure class="image-frame blueprint-frame">
+          <img src="./assets/boat-structure.png" alt="Top-down and side-view design of the water-monitoring boat">
+          <figcaption>Boat structure design · BETA TEST project report</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section container" aria-labelledby="explore-title">
+      <div class="section-heading">
+        <p class="eyebrow">Explore project details</p>
+        <h2 id="explore-title">Four parts explain how the system works</h2>
+      </div>
+      <div class="topic-list">
+        <a class="topic-row" href="./waypoints.html"><span class="topic-number">01</span><span><strong>Waypoint planning</strong><small>Automatic sweep layout, mission phases and return-to-home</small></span><span class="topic-arrow">↗</span></a>
+        <a class="topic-row" href="./heatmap.html"><span class="topic-number">02</span><span><strong>Turbidity heat map</strong><small>IDW interpolation, grid settings and evidence boundaries</small></span><span class="topic-arrow">↗</span></a>
+        <a class="topic-row" href="./sensors.html"><span class="topic-number">03</span><span><strong>Sensors and hardware</strong><small>Water-quality sensors, navigation modules and propulsion</small></span><span class="topic-arrow">↗</span></a>
+        <a class="topic-row" href="./slides.html"><span class="topic-number">04</span><span><strong>Slide presentation</strong><small>Twenty slides with code excerpts and a Thai speaking guide</small></span><span class="topic-arrow">↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-inner"><span>Smart Water Surface Boat · Senior Project · 2026</span><span>Mae Fah Luang University</span></div></footer>
 </body>
 </html>

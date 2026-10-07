@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071827">
+  <meta name="description" content="How the smart water boat lays out waypoints and runs a monitoring mission.">
+  <title>Waypoints · Smart Water Boat</title>
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Smart Water Boat home"><span class="brand-mark" aria-hidden="true">SW</span><span class="brand-copy"><strong>Smart Water Boat</strong><small>Field Systems · Senior Project</small></span></a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a class="nav-link" href="./index.html">Overall</a><a class="nav-link current" href="./waypoints.html" aria-current="page">Waypoints</a><a class="nav-link" href="./heatmap.html">Heatmap</a><a class="nav-link" href="./sensors.html">Sensors</a><a class="nav-link nav-cta" href="./slides.html">Slides</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-hero container">
+      <p class="eyebrow">01 / Route planning</p>
+      <h1>Waypoints turn a survey area into a patrol route</h1>
+      <p class="hero-lead">The dashboard can generate a sweep route from a selected area. The boat then follows ordered GPS points, logs readings along the mission and returns to its recorded home position.</p>
+    </section>
+    <section class="container section section-topline">
+      <div class="section-heading">
+        <p class="eyebrow">Automatic sweep layout</p>
+        <h2>Three lines with three points on each line</h2>
+        <p>The backend divides the selected bounds evenly. For a horizontal survey, each sweep line uses its start, midpoint and end longitude; vertical mode swaps the axes.</p>
+      </div>
+      <div class="metric-band inline-metrics">
+        <div class="metric"><strong>3</strong><span>Sweep lines</span><small>Across the selected area</small></div>
+        <div class="metric"><strong>3</strong><span>Points per line</span><small>Start · middle · end</small></div>
+        <div class="metric"><strong>9</strong><span>Waypoints total</span><small>Automatic sweep layout</small></div>
+      </div>
+      <div class="split-section code-section">
+        <div>
+          <h3>Alternating point order</h3>
+          <p class="body-copy">After each line, the planner reverses the point order. This makes the boat sweep back and forth instead of returning to the same side before every pass.</p>
+          <p class="source-note">Simplified from <code>main.py</code> · <code>/generate_sweep</code>. This is the route-generation logic, not measured field coverage.</p>
+        </div>
+        <pre class="code-window"><code>sweep_lines = [start, middle, end]
+line_points = [start, middle, end]
+direction = 1
+
+for line in sweep_lines:
+    points = line_points if direction == 1 \
+             else reversed(line_points)
+    for point in points:
+        add_waypoint(line, point)
+    direction *= -1</code></pre>
+      </div>
+    </section>
+    <section class="section section-tint">
+      <div class="container split-section">
+        <div>
+          <p class="eyebrow">Mission workflow</p>
+          <h2>Check, patrol, investigate and return</h2>
+          <ol class="plain-steps">
+            <li><strong>Prepare:</strong> define the area, upload waypoints and check GPS, compass and battery.</li>
+            <li><strong>Patrol:</strong> navigate to each waypoint, read water sensors and save the position with the data.</li>
+            <li><strong>Investigate:</strong> if a configured threshold is exceeded, perform a local spiral scan and then resume near the closest waypoint.</li>
+            <li><strong>Return:</strong> navigate to home, stop the motors and finalize the mission log.</li>
+          </ol>
+          <p class="note">The report does not specify a field-tested waypoint spacing or a measured coverage percentage.</p>
+        </div>
+        <figure class="image-frame">
+          <img src="./assets/activity-flow.png" alt="Activity diagram for mission setup, patrol, spiral mapping and return to home">
+          <figcaption>Activity diagram · BETA TEST project report, Figure 3.6</figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="section container">
+      <div class="section-heading"><p class="eyebrow">Navigation inputs</p><h2>GPS locates the boat; the compass guides its heading</h2></div>
+      <div class="system-chain three-chain">
+        <div><span class="chain-index">01</span><h3>Position</h3><p>NEO-8M GPS supplies coordinates for waypoint tracking and route history.</p></div>
+        <div><span class="chain-index">02</span><h3>Heading</h3><p>QMC5883L magnetometer reports compass heading for line-of-sight guidance.</p></div>
+        <div><span class="chain-index">03</span><h3>Correction</h3><p>The report describes PID heading control that adjusts the left and right thrusters.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><span>Waypoints and mission flow · Project report, Chapter 3</span><a href="./slides.html">Open the slide presentation ↗</a></div></footer>
+</body>
+</html>
