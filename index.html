@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071827">
+  <meta name="description" content="A code-backed web presentation for the Smart Water Surface Boat project.">
+  <title>Smart Water Surface Boat · Project Presentation</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-dot" aria-hidden="true"></span><span>Field Systems / Senior Project</span></div>
+      <div class="university">Mae Fah Luang University · 2026</div>
+    </header>
+    <main class="stage" id="stage" aria-live="polite">
+      <div id="slides" class="slides">
+        <section class="slide fallback">
+          <p class="eyebrow">Presentation setup</p>
+          <h1>Slide content did not load</h1>
+          <p class="fallback-help">Keep index.html, slides-data.js, app.js, styles.css, and the assets folder together. Upload all of them to the same GitHub Pages publishing folder.</p>
+        </section>
+      </div>
+    </main>
+    <footer class="controls">
+      <div class="hint">← → OR SPACE TO NAVIGATE · F FOR FULL SCREEN</div>
+      <div class="control-group">
+        <button id="prev" type="button" aria-label="Previous slide" title="Previous slide">‹</button>
+        <span id="counter" class="counter" aria-live="polite">01 / 20</span>
+        <button id="next" type="button" aria-label="Next slide" title="Next slide">›</button>
+      </div>
+      <div class="right-hint">WEB PRESENTATION</div>
+    </footer>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <dialog id="imageDialog" aria-label="Project diagram">
+    <div class="dialog-bar"><span id="dialogCaption">Project diagram</span><button id="closeDialog" type="button">Close ×</button></div>
+    <img id="dialogImage" alt="">
+  </dialog>
+  <script src="./slides-data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
