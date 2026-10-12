@@ -2,6 +2,36 @@
 
 A static, GitHub Pages-ready project site and 20-slide web presentation built from the project report and selected implementation excerpts. It uses plain HTML, CSS, and JavaScript, with no build step or package installation.
 
+## Shared interactive preview
+
+The current interactive version is on branch `preview/boat-system-motion`; `main` is intentionally unchanged.
+
+```bash
+git clone --branch preview/boat-system-motion --single-branch https://github.com/maxessza/project-present.git
+cd project-present
+python -m http.server 8765 --bind 127.0.0.1
+```
+
+Open `http://127.0.0.1:8765/` and hard-refresh if necessary. On systems where Python is named `python3`, use that executable instead. No npm install or build is needed.
+
+If you already have a clean clone:
+
+```bash
+git fetch origin
+git switch --track origin/preview/boat-system-motion
+# For subsequent updates, while on this branch:
+git pull --ff-only
+```
+
+If this branch already exists locally, use `git switch preview/boat-system-motion` instead. Preserve or commit your own changes before switching; do not reset them to follow this guide.
+
+- **Learn / Overview:** animated SMA, GRID-to-SPIRAL, task/radio/SD data flow, and HOME gates.
+- **PID / Heading:** remaining heading error, qualitative P/I/D roles, PWM-command mixing and compass feedback.
+- **Operate:** whole-mission simulation, checkpoints, What-if, RTH lab and retained technical details.
+- Each teaching diagram has play/pause, next and reset; keyboard controls and reduced-motion preferences are supported.
+
+This is a **shared educational prototype**, not a reviewed production/boat release. Read [PREVIEW_STATUS.md](PREVIEW_STATUS.md) for the verification boundary and remaining process holds. Values, timing and geometry are illustrative; no real boat connection, field dataset or measured PID response is included. Sharing this branch does not certify firmware or confirm backend/dashboard packet delivery.
+
 ## Open locally
 
 Open index.html in a browser for the project overview. Open slides.html for the full slide deck. The pages work as a standalone folder because code and images use relative paths.
@@ -9,6 +39,16 @@ Open index.html in a browser for the project overview. Open slides.html for the 
 Use Left/Right arrows or Space to move between slides. Press F for fullscreen. Keep all project files and the assets folder together; the slide viewer shows a setup message if slide data is missing.
 
 The site navigation has five sections: Overall, Waypoints, Heatmap, Sensors and Slides. The heat-map page explains the IDW method; it does not show sample measurements because the supplied report includes no field dataset.
+
+## Overall mission mockup
+
+The Overall page includes an offline SVG mission simulation. Its teaching flow asks why the boat does not start the spiral at WP1, then follows five stages: pass WP1, continue along GRID, calculate SMA(8), check safety before SPIRAL, and return HOME using RTH. The anomaly scene shows eight mock turbidity values, the 50 NTU threshold, and their 78 NTU mean as a bar chart. The boat approaches and confirms WP1, advances the Navigator index, and continues along the grid toward WP2. Only then can an anomaly move the FSM into SPIRAL, provided safety allows it; the spiral center is illustrated midway along the WP1–WP2 grid leg to show a current GPS fix after WP1, not WP1 itself. This offset is schematic, not a claimed real distance. During the spiral, it generates each target at a 45-degree increment and travels to that target before revealing the next one. After WP9, the mockup depicts firmware RTH as a direct-bearing leg to the stored SET_HOME fix; it stops at an illustrative 4 m arrival ring, holds for the 3-second confirmation, then enters STANDBY. The RTH leg is animated but its trail is hidden so the map only draws the planned route inside the grid. Use Start/Pause, Next step, Reset and the speed selector.
+
+The spiral explanation follows the locally inspected 1_Firmware source: an 8-sample turbidity average above 50 NTU (or a sustained baseline deviation), a fixed GPS center, Archimedean radius 4–8 m, 45-degree increments and 3 turns (25 targets). Each target is revealed in order with its angle, radius and east/north offset before the boat travels to it. On exit, GRID resumes the existing Navigator index rather than selecting the nearest waypoint. Timeout, clean-water exit, safety priority and cooldown rules are explained separately; the animated scenario demonstrates normal completion.
+
+All sensor readings and animation timings are illustrative; no boat connection or API is used. The simulated anomaly is the rolling turbidity check after WP1; temperature and pH do not trigger the spiral. Firmware also schedules quiet measurement holds every two waypoint boundaries (3-second settle plus 5-second measurement). Additional spiral readings and physical GPS/PID behavior are not simulated.
+
+Edit overall.js for the scenario and decision messages, overall.css for its appearance, and index.html for the markup. The simulation starts only after user input and pauses when the tab is hidden.
 
 ## Update the presentation
 
