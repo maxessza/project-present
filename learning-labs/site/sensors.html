@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071827">
+  <meta name="description" content="Water-quality sensors and supporting hardware in the Smart Water Boat.">
+  <title>Sensors · Smart Water Boat</title>
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Smart Water Boat home"><span class="brand-mark" aria-hidden="true">SW</span><span class="brand-copy"><strong>Smart Water Boat</strong><small>Field Systems · Senior Project</small></span></a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a class="nav-link" href="./index.html">Overall</a><a class="nav-link" href="./waypoints.html">Waypoints</a><a class="nav-link" href="./heatmap.html">Heatmap</a><a class="nav-link current" href="./sensors.html" aria-current="page">Sensors</a><a class="nav-link nav-cta" href="./slides.html">Slides</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-hero container">
+      <p class="eyebrow">03 / Water sensing</p>
+      <h1>Three sensors describe surface-water conditions</h1>
+      <p class="hero-lead">The boat measures temperature, pH and turbidity. Navigation sensors and the controller attach those water readings to a position and a mission state.</p>
+    </section>
+    <section class="container section section-topline">
+      <div class="sensor-grid">
+        <article class="sensor-item"><span class="sensor-index">01</span><p class="eyebrow">Temperature</p><h2>DS18B20</h2><p>A waterproof temperature probe measures water temperature. The backend represents the reading as <code>temp_c</code>.</p><span class="sensor-unit">UNIT · °C</span></article>
+        <article class="sensor-item"><span class="sensor-index">02</span><p class="eyebrow">Acidity / alkalinity</p><h2>pH sensor</h2><p>The analog pH sensor reports the water’s pH level. The backend stores the value as <code>ph_level</code>.</p><span class="sensor-unit">UNIT · pH</span></article>
+        <article class="sensor-item"><span class="sensor-index">03</span><p class="eyebrow">Water clarity</p><h2>Turbidity sensor</h2><p>The analog sensor measures turbidity for alert checks and spatial mapping. The backend uses <code>turbidity_ntu</code>.</p><span class="sensor-unit">UNIT · NTU</span></article>
+      </div>
+      <p class="note">The report does not provide sensor accuracy figures or calibration coefficients. Measurement quality depends on calibration and environmental conditions.</p>
+    </section>
+    <section class="section section-tint">
+      <div class="container split-section">
+        <div>
+          <p class="eyebrow">Navigation and data support</p>
+          <h2>Supporting modules locate, control and preserve readings</h2>
+          <ul class="component-list">
+            <li><strong>NEO-8M GPS</strong><span>Position for waypoint tracking and sample location.</span></li>
+            <li><strong>QMC5883L compass</strong><span>Heading for line-of-sight navigation and PID control.</span></li>
+            <li><strong>ESP32-S3</strong><span>Main controller for sensor acquisition and boat control.</span></li>
+            <li><strong>MicroSD module</strong><span>Local mission log and data backup.</span></li>
+            <li><strong>BTS7960 + two 12 V thrusters</strong><span>Motor control and boat propulsion.</span></li>
+          </ul>
+        </div>
+        <figure class="image-frame">
+          <img src="./assets/hardware-wiring.png" alt="Wiring diagram connecting controller, sensors, navigation, storage, power and thrusters">
+          <figcaption>Hardware wiring diagram · BETA TEST project report, Figure 3.4</figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="section container">
+      <div class="section-heading"><p class="eyebrow">From sensor to record</p><h2>Each reading is more useful with its location and boat state</h2><p>The telemetry model can pair sensor values with latitude, longitude, battery, heading and mission mode. The web map and history can then show what was measured and where the boat was operating.</p></div>
+      <a class="text-link" href="./heatmap.html">See how turbidity samples feed the heat map <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><span>Sensors and electronics · Project report, Sections 1.4 and 2.4</span><a href="./slides.html">Open the slide presentation ↗</a></div></footer>
+</body>
+</html>

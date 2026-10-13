@@ -1,0 +1,12 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.HeadingModel=api;})(typeof window!=='undefined'?window:globalThis,function(){
+'use strict';
+function wrapError(target,current){if(!Number.isFinite(target)||!Number.isFinite(current))throw new RangeError('finite bearings required');let d=(target-current)%360;if(d>180)d-=360;if(d< -180)d+=360;return Object.is(d,-0)?0:d;}
+function initial(){return {heading:0,rate:0,integral:0,prevError:null,dFiltered:0,p:0,i:0,d:0,u:0,saturated:false};}
+function control(s,error,g,dt){const raw=s.prevError===null?0:wrapError(error,s.prevError)/dt;const dFiltered=.25*raw+.75*s.dFiltered;const p=g.p*error,d=g.d*dFiltered;let integral=s.integral+error*dt;let candidate=p+g.i*integral+d;if((candidate>60&&error>0)||(candidate< -60&&error<0))integral=s.integral;const i=g.i*integral,rawU=p+i+d,u=Math.max(-60,Math.min(60,rawU));return {...s,p,i,d,u,integral,dFiltered,prevError:error,saturated:Math.abs(rawU)>60};}
+function advance(s,target,g,wind,dt){if(!Number.isFinite(dt)||dt<=0||dt>.25||!Number.isFinite(wind)||Math.abs(wind)>20||!g||!Number.isFinite(g.p)||g.p<0||g.p>4||!Number.isFinite(g.i)||g.i<0||g.i>1||!Number.isFinite(g.d)||g.d<0||g.d>4)throw new RangeError('invalid simulation input');const n=control(s,wrapError(target,s.heading),g,dt);n.rate=s.rate+dt*(n.u+wind-.45*s.rate);n.heading=((s.heading+n.rate*dt)%360+360)%360;return n;}
+const PRESETS=Object.freeze({pOnly:{p:.65,i:0,d:0},oscillate:{p:2,i:0,d:0},damped:{p:.65,i:.08,d:1.25}});
+function createRun(config){const c=config||{target:90,wind:0,a:PRESETS.pOnly,b:PRESETS.damped};advance(initial(),c.target,c.a,c.wind,.05);advance(initial(),c.target,c.b,c.wind,.05);const target=((c.target%360)+360)%360;return {config:{target,wind:c.wind,a:{...c.a},b:{...c.b}},a:initial(),b:initial(),ticks:0,time:0,done:false,history:[{t:0,a:wrapError(target,0),b:wrapError(target,0)}]};}
+function stepRun(s){if(s.done)return s;const ticks=s.ticks+1,time=ticks*.05,a=advance(s.a,s.config.target,s.config.a,s.config.wind,.05),b=advance(s.b,s.config.target,s.config.b,s.config.wind,.05);return {...s,a,b,ticks,time,done:ticks>=400,history:[...s.history,{t:time,a:wrapError(s.config.target,a.heading),b:wrapError(s.config.target,b.heading)}]};}
+function resetRun(s){return createRun(s.config);}
+return {wrapError,initial,control,advance,createRun,stepRun,resetRun,PRESETS};
+});
