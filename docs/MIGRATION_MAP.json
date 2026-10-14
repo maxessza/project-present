@@ -1,0 +1,278 @@
+{
+  "source_bundle": "current local teaching bundle (browser-only preview)",
+  "records": [
+    {
+      "old_path": "app.js",
+      "new_path": "src/js/slides/app.js",
+      "input_sha256": "238621ec534b86468321048c47a8ec2ebcbb77dad08d7f1002388331e84b5db0",
+      "output_sha256": "238621ec534b86468321048c47a8ec2ebcbb77dad08d7f1002388331e84b5db0",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "heading-model.js",
+      "new_path": "src/js/heading/heading-model.js",
+      "input_sha256": "289f80bdb93b6a851b6c5e920956d350742fd0202052db340f8b8141d79f6c19",
+      "output_sha256": "289f80bdb93b6a851b6c5e920956d350742fd0202052db340f8b8141d79f6c19",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "heading.css",
+      "new_path": "src/css/heading.css",
+      "input_sha256": "630c8fcd65997823c5a3606b37e620b70972e081d6967e5a9a334c61c699cfa9",
+      "output_sha256": "630c8fcd65997823c5a3606b37e620b70972e081d6967e5a9a334c61c699cfa9",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "heading.html",
+      "new_path": "pages/heading-pid.html",
+      "input_sha256": "0f5dfe0e4665250eb86e5ff4ebb6cbef4d3c836f40d454e48c62f1b3daf09840",
+      "output_sha256": "5ab56375cb831947d6da9a9d639a5568dbcc71ee950edcced0d9387be1abc5e8",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "heading.js",
+      "new_path": "src/js/heading/heading.js",
+      "input_sha256": "fde1a8eb598a09e03dbb23bb8a1ccdc9af630d8585d31f2473e23c0ea11c9e0b",
+      "output_sha256": "fde1a8eb598a09e03dbb23bb8a1ccdc9af630d8585d31f2473e23c0ea11c9e0b",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "heatmap.html",
+      "new_path": "pages/heatmap.html",
+      "input_sha256": "c8a2ab9ee66902b1baeae4ec69bce6c7aa45078ec54ba1b01cad9585451fceed",
+      "output_sha256": "61be22d6f9aad5d3702781c2eb31dc68ed9c5522819bef46cfa043a991ddb0ca",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "index.html",
+      "new_path": "pages/overall.html",
+      "input_sha256": "e2fa510b6119af788d205e812fd74b2699213e71036bf290dd1444a9f6ac0c7d",
+      "output_sha256": "e8bcf1d2c7b9ebca5b13da74a5017e9c2ab82d796555ed5408b72619994e199a",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "labs.html",
+      "new_path": "index.html",
+      "input_sha256": "a50713ff12c931b502eaf2bc5386ce67e5c4e640ee6c35e6008282a270c9926e",
+      "output_sha256": "877778eabed093371338c974310974437ccee1fb21dee58ad59e12d20597a745",
+      "edit_kind": "portal navigation updated, existing styles extracted"
+    },
+    {
+      "old_path": "learn.css",
+      "new_path": "src/css/learn.css",
+      "input_sha256": "c429f9f3c9e857bfdb37d65dd06431a5f5d082679fbe2ed8e7a03b0a6953e7ae",
+      "output_sha256": "c429f9f3c9e857bfdb37d65dd06431a5f5d082679fbe2ed8e7a03b0a6953e7ae",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "learn.html",
+      "new_path": "pages/classroom.html",
+      "input_sha256": "00fdbff063f36f0dd64e045dd8428463677bc586bc319463c0a3739242887098",
+      "output_sha256": "3b35756a98dd06d8d8065477a356b03851c1838deb40bf49f072893ed5aa839e",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "learn.js",
+      "new_path": "src/js/classroom/learn.js",
+      "input_sha256": "b43560d07b1b65572d51e70479baed7f961dc8454682146a7969b507a72a1ae9",
+      "output_sha256": "b43560d07b1b65572d51e70479baed7f961dc8454682146a7969b507a72a1ae9",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "mission-start-model.js",
+      "new_path": "src/js/mission/mission-start-model.js",
+      "input_sha256": "4d732e0a74be9c609251bc096bdd1257f58ca551df57fcd6b84572be0778955f",
+      "output_sha256": "4d732e0a74be9c609251bc096bdd1257f58ca551df57fcd6b84572be0778955f",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "mission-start-telemetry-model.js",
+      "new_path": "src/js/mission/mission-start-telemetry-model.js",
+      "input_sha256": "3b703ebfa57a2bbd997d4df9dc9790294b871780cb86679fa5565a72b6f4014d",
+      "output_sha256": "3b703ebfa57a2bbd997d4df9dc9790294b871780cb86679fa5565a72b6f4014d",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "mission-start.css",
+      "new_path": "src/css/mission-start.css",
+      "input_sha256": "2eb7548c0e08c2ae4f284d975900834096bdd540d9b1ba762887d25c8b7d439b",
+      "output_sha256": "2eb7548c0e08c2ae4f284d975900834096bdd540d9b1ba762887d25c8b7d439b",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "mission-start.html",
+      "new_path": "docs/legacy/mission-start-fragment.html",
+      "input_sha256": "55346f3da526fb0099e6429d14f09346e6d5537d05a46840cdb9cabe91198ef4",
+      "output_sha256": "55346f3da526fb0099e6429d14f09346e6d5537d05a46840cdb9cabe91198ef4",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "mission-start.js",
+      "new_path": "src/js/mission/mission-start.js",
+      "input_sha256": "14c283e35add369163922048d5c49be12efa67f8b41a8644506989d9cbfc053b",
+      "output_sha256": "14c283e35add369163922048d5c49be12efa67f8b41a8644506989d9cbfc053b",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "overall-labs-model.js",
+      "new_path": "src/js/overall/overall-labs-model.js",
+      "input_sha256": "fe6dada91a427728e62cc2a39781cd2101142db47c5b8e565e4d0e4f0182f788",
+      "output_sha256": "fe6dada91a427728e62cc2a39781cd2101142db47c5b8e565e4d0e4f0182f788",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "overall-labs.js",
+      "new_path": "src/js/overall/overall-labs.js",
+      "input_sha256": "fb94e2d17cdb46aa84f936d17a366e645102f0fdd266afe8f419107a8d008008",
+      "output_sha256": "fb94e2d17cdb46aa84f936d17a366e645102f0fdd266afe8f419107a8d008008",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "overall-model.js",
+      "new_path": "src/js/overall/overall-model.js",
+      "input_sha256": "29430d80ea44f1d4c1f61f28446315b7b51a7d59f370e0698bd8cbcc5bd33139",
+      "output_sha256": "29430d80ea44f1d4c1f61f28446315b7b51a7d59f370e0698bd8cbcc5bd33139",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "overall-visual-motion.js",
+      "new_path": "src/js/overall/overall-visual-motion.js",
+      "input_sha256": "7bc9eec2b0581c5ff6c3ca692d26355cf05e72e80c13bcf07507c28f4f9bd3a3",
+      "output_sha256": "7bc9eec2b0581c5ff6c3ca692d26355cf05e72e80c13bcf07507c28f4f9bd3a3",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "overall-visuals.css",
+      "new_path": "src/css/overall-visuals.css",
+      "input_sha256": "a540c0de87e5f0ec5b0f38a7c78c0ae090183c7746c33499d7e8fd8812bcd298",
+      "output_sha256": "a540c0de87e5f0ec5b0f38a7c78c0ae090183c7746c33499d7e8fd8812bcd298",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "overall.css",
+      "new_path": "src/css/overall.css",
+      "input_sha256": "93e63dca14dc846300872f949ba06c16e8313ae7ecfc4a7243be010b2947e6a6",
+      "output_sha256": "93e63dca14dc846300872f949ba06c16e8313ae7ecfc4a7243be010b2947e6a6",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "overall.js",
+      "new_path": "src/js/overall/overall.js",
+      "input_sha256": "67ecab3aa558b5c8a33e63b195e1b8243b12ea92f24165163460262838f57032",
+      "output_sha256": "67ecab3aa558b5c8a33e63b195e1b8243b12ea92f24165163460262838f57032",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "quiz-model.js",
+      "new_path": "src/js/classroom/quiz-model.js",
+      "input_sha256": "670941a9319a4d00d05184fd73fefb6c2df04065ad2decd24d9d7344b588e242",
+      "output_sha256": "670941a9319a4d00d05184fd73fefb6c2df04065ad2decd24d9d7344b588e242",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "sensors.html",
+      "new_path": "pages/sensors.html",
+      "input_sha256": "d3d21b3bc978e4ee276ed173458312b8a0cda6388d193066b5332780f0262795",
+      "output_sha256": "0e02287d739ce210a3cdde68a302fbc484ec5b1422ea6f2c5da5135093537215",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "site.css",
+      "new_path": "src/css/site.css",
+      "input_sha256": "f472a8dbbb366c8e0a14c8e9ffae3c95d9fd533072facc27438ef57f89ad9c08",
+      "output_sha256": "f4218a317fe6d3cb812d57712d4cdee4258d64c6add17686f0d2df54bfcb0447",
+      "edit_kind": "CSS resource URL only: hero image relocated"
+    },
+    {
+      "old_path": "slides-data.js",
+      "new_path": "src/js/slides/slides-data.js",
+      "input_sha256": "7e14e50027c2cf3939e474697f95fad21a2b538cdd8f1daf17589e3ee457e612",
+      "output_sha256": "f60174ee46e71694a42e9a88f8dc593ade909f64ff91ef7645eef5561874794a",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "slides.html",
+      "new_path": "pages/slides.html",
+      "input_sha256": "df31e879688a3141570ed55789c5a87937ffb72d289808cc845a4810ee6c3118",
+      "output_sha256": "54d1e23264de0fe7a0978b5e7bcaa3ef429304aff24d369b5a95b8a809988faa",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "speaker-notes-th.md",
+      "new_path": "docs/SPEAKER_NOTES.md",
+      "input_sha256": "c565940c2aa45b895aef7d13b1de6275d4349e894b0655f441732394c41e7e8e",
+      "output_sha256": "c565940c2aa45b895aef7d13b1de6275d4349e894b0655f441732394c41e7e8e",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "story-model.js",
+      "new_path": "src/js/story/story-model.js",
+      "input_sha256": "d8aeb1efd1712381ec4a59596d22e1f104938b2564fb90839a1c8e5762ded41a",
+      "output_sha256": "d053768ff5930073ff374f0d45657c79984a7cec16655f378f9e1e1d63a6ca75",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "story.css",
+      "new_path": "src/css/story.css",
+      "input_sha256": "033cc3c890dcc969357079f637d185ae77101c92a89b520d9406998db31600a7",
+      "output_sha256": "033cc3c890dcc969357079f637d185ae77101c92a89b520d9406998db31600a7",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "story.html",
+      "new_path": "pages/story.html",
+      "input_sha256": "2b037e855757f691efc70cc958cbc7eb6405690ab6e68199ed8cbb711e93d90a",
+      "output_sha256": "ab8be8b9dfbe7a5bbef94d8cf8e1c79d1be128f44044607b61399f6ffea3a5df",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "story.js",
+      "new_path": "src/js/story/story.js",
+      "input_sha256": "3106ffa8827185ae4d1657598489ada208bc76ed1ddd903a016bd8fadd785e9c",
+      "output_sha256": "3106ffa8827185ae4d1657598489ada208bc76ed1ddd903a016bd8fadd785e9c",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "styles.css",
+      "new_path": "src/css/styles.css",
+      "input_sha256": "42618440d38273291d1eee497e78269b43322cf3e8cee8dce06a3d63422b82c3",
+      "output_sha256": "42618440d38273291d1eee497e78269b43322cf3e8cee8dce06a3d63422b82c3",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "uplink-motion.js",
+      "new_path": "src/js/mission/uplink-motion.js",
+      "input_sha256": "1b912783f70ecd522d4603080a4fd8632f3159805f34012c7e06ff29e63685ef",
+      "output_sha256": "1b912783f70ecd522d4603080a4fd8632f3159805f34012c7e06ff29e63685ef",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "waypoints.html",
+      "new_path": "pages/waypoints.html",
+      "input_sha256": "98eea8271abd34bd2c72d676d0d0a4a9374a10bf5775ec4246e8de399721d378",
+      "output_sha256": "303e5bbca927e1adafb0b5584a8d046a103a40cfadd3dc1674d677a17985af83",
+      "edit_kind": "resource_paths/navigation_only"
+    },
+    {
+      "old_path": "assets/activity-flow.png",
+      "new_path": "assets/images/activity-flow.png",
+      "input_sha256": "13786d5cb23205f7b8747a58bf2cbc5ff61ab6d61cad658f49b46a20d3db2f6a",
+      "output_sha256": "13786d5cb23205f7b8747a58bf2cbc5ff61ab6d61cad658f49b46a20d3db2f6a",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "assets/boat-structure.png",
+      "new_path": "assets/images/boat-structure.png",
+      "input_sha256": "31605eab7a5cb4a1ba8e148923f8819daf6a37e4b3bf2a9346102f8589e4f17f",
+      "output_sha256": "31605eab7a5cb4a1ba8e148923f8819daf6a37e4b3bf2a9346102f8589e4f17f",
+      "edit_kind": "move_only"
+    },
+    {
+      "old_path": "assets/hardware-wiring.png",
+      "new_path": "assets/images/hardware-wiring.png",
+      "input_sha256": "b4bb36c5586f43092389312184be20d17f0103d593202226eacd4731e51bc845",
+      "output_sha256": "b4bb36c5586f43092389312184be20d17f0103d593202226eacd4731e51bc845",
+      "edit_kind": "move_only"
+    }
+  ]
+}
