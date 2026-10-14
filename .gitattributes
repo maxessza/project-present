@@ -1,0 +1,2 @@
+# Preserve exact browser source, test and migration hashes on checkout.
+* -text

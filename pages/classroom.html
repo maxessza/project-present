@@ -1,0 +1,173 @@
+﻿<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3ed">
+  <title>ก่อนเรือออกเดินทาง ต้องพร้อมอะไร?</title>
+  <link rel="stylesheet" href="../src/css/mission-start.css">
+  <link rel="stylesheet" href="../src/css/learn.css">
+<link rel="stylesheet" href="../src/css/navigation.css">
+</head>
+<body class="learn-page">
+<nav class="project-entry-nav" aria-label="กลับจุดเริ่มต้น"><a href="../index.html">← เริ่มดู / ทุกหน้า</a></nav>
+  <header class="learn-hero">
+    <div class="learn-hero-copy">
+      <p class="learn-eyebrow">ห้องเรียนจำลอง · นำทางด้วย GPS</p>
+      <h1>ก่อนเรือออกเดินทาง<br>ต้องพร้อมอะไร?</h1>
+      <p>เป้าหมายวันนี้ · แยกบทบาทของ GPS, HOME, เส้นทาง 9 จุด และ START แล้วทายให้ได้ว่าเหตุใดเรืออาจยังไม่ออกเดินทาง</p>
+    </div>
+    <ol class="learn-roadmap" aria-label="ลำดับการเรียนรู้">
+      <li aria-current="step"><span>01</span><b>ดูภาพ</b></li>
+      <li><span>02</span><b>ลองเปลี่ยนเงื่อนไข</b></li>
+      <li><span>03</span><b>เช็กความเข้าใจ</b></li>
+    </ol>
+  </header>
+  <main><section id="mission-start" class="mission-start container" lang="th" aria-labelledby="ms-heading">
+  <div class="ms-intro">
+    <div>
+      <p class="ms-kicker">ดู → ลอง → เช็ก · ตัวอย่างเพื่อการเรียนรู้</p>
+      <h2 id="ms-heading">GPS · HOME · เส้นทาง · START ทำหน้าที่ต่างกัน</h2>
+      <p class="ms-lead">ดูตำแหน่ง HOME และลำดับกวาดทั้ง 9 จุด ก่อนทดลองเปลี่ยนเงื่อนไข</p>
+    </div>
+    <p class="ms-limit"><span aria-hidden="true">●</span> แผนภาพและสถานการณ์จำลอง<br><small>ไม่ใช่สถานะสด ขั้นตอนบูตจริง หรือคำสั่งควบคุมเรือ</small></p>
+  </div><div class="ms-layout">
+    <section class="ms-console" aria-label="คำอธิบายและตัวควบคุมเรื่องราว">
+      <div class="learn-coach-note"><b>ลองทาย</b><span>เมื่อถึง “รอ START” เอาเครื่องหมาย HOME ออก แล้วส่ง START จำลอง ดูว่าเกิดอะไรขึ้น</span></div>
+      <div class="ms-console-top"><span>MISSION SEQUENCE</span><b id="ms-stage">01 / 08</b></div>
+      <h3 id="ms-title">เปิดระบบ</h3>
+      <p id="ms-explanation" class="ms-explanation">เปิดไฟเลี้ยงและตรวจความพร้อมของระบบ</p>
+      <p id="ms-status" class="ms-status" role="status" aria-live="polite" aria-atomic="true">เริ่มทัวร์เพื่อดูตัวอย่างลำดับการเตรียมเรือ</p>
+
+      <a class="learn-checkpoint-link" href="#learning-checkpoint">ไปเช็กความเข้าใจ <span aria-hidden="true">↓</span></a>
+      <div class="ms-gps-prompt">
+        <button id="ms-gps-ready" class="ms-quiet-button" type="button" hidden>จำลองว่า GPS พร้อม</button>
+        <p>เมื่อ GPS ยังไม่พร้อม เรือจะรอที่จุดเริ่มต้นและไม่ขยับ</p>
+      </div>
+
+      <fieldset class="ms-readiness" aria-describedby="ms-readiness-note">
+        <legend>ตัวอย่างเงื่อนไขก่อนออกเดินทาง</legend>
+        <label><input id="ms-ready-gps" type="checkbox" disabled> GPS พร้อม</label>
+        <label><input id="ms-ready-home" type="checkbox" disabled> กำหนด HOME แล้ว</label>
+        <label><input id="ms-ready-route" type="checkbox" disabled> เส้นทาง 9 จุดพร้อม</label>
+        <small id="ms-readiness-note">แตะช่องเพื่อจำลองเงื่อนไขที่ยังไม่ผ่าน · ไม่มีค่ามาตรวัดจริง</small>
+      </fieldset>
+
+      <div class="ms-actions" aria-label="ตัวควบคุม storyboard">
+        <button id="ms-play" class="ms-button ms-button-primary" type="button">เล่นทัวร์</button>
+        <button id="ms-next" class="ms-button" type="button">ขั้นถัดไป</button>
+        <button id="ms-reset" class="ms-button ms-button-reset" type="button">เริ่มใหม่</button>
+        <button id="ms-start-btn" class="ms-button ms-button-start" type="button" disabled>ส่ง START จำลองจากฝั่ง</button>
+      </div>
+      <button id="ms-continue" class="ms-handoff" type="button" hidden aria-hidden="true">เปิด OPERATE · เริ่มภารกิจจำลอง <span aria-hidden="true">↗</span></button>
+    </section>
+
+    <div class="ms-visual-column">
+      <figure class="ms-scene">
+        <figcaption class="ms-scene-head"><span><i aria-hidden="true"></i> MISSION MAP / แผนที่ภารกิจ</span><span>HOME → GRID · WP1–WP9</span></figcaption>
+        <div class="ms-map-scroll" tabindex="0" aria-label="แผนภาพลูกศรตำแหน่งและเส้นทางตัวอย่าง เลื่อนแนวนอนได้บนจอเล็ก">
+          <svg class="ms-map" viewBox="0 0 1000 580" role="img" aria-labelledby="ms-map-title ms-map-desc">
+<title id="ms-map-title">แผนที่ภารกิจ ลูกศรตำแหน่ง และกริดเก้าจุดเรียงแนวจากฝั่ง</title>
+<desc id="ms-map-desc">สถานีอยู่ซ้าย WP1 WP2 WP3 อยู่แนวใกล้ฝั่ง ลำดับลง ขึ้น ลงตามคอลัมน์ ลูกศรอยู่ HOME จนกว่าจะผ่าน GPS HOME เส้นทาง และรับ START จำลอง จึงไป WP1 เป็นแผนภาพเพื่อการเรียนรู้ไม่ใช่สถานะสดหรือมาตราส่วนจริง</desc>
+<defs>
+<pattern id="ms-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#90cbd2" stroke-opacity=".045"/></pattern>
+<filter id="ms-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<marker id="ms-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#8bece2" stroke-width="1.5" stroke-linejoin="round"/></marker>
+<marker id="ms-command-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#eac28f" stroke-width="1.5" stroke-linejoin="round"/></marker>
+</defs>
+<rect width="1000" height="580" fill="#081c29"/><rect width="1000" height="580" fill="url(#ms-grid)"/>
+<g class="ms-shore">
+<rect x="0" y="0" width="225" height="580" fill="#10222b"/>
+<path d="M235 32V548" stroke="#3b5860" stroke-width="1.5"/>
+<text x="40" y="66" class="ms-svg-micro">SHORE / ฝั่งสถานี</text>
+<rect x="40" y="157" width="145" height="122" rx="10" fill="#142f3b" stroke="#375866"/>
+<rect x="62" y="179" width="98" height="57" rx="4" fill="#0a1e29" stroke="#6e929c" stroke-width="1.5"/>
+<path d="M74 217h20l9-16 10 9h33M111 238v12m-16 0h32" fill="none" stroke="#a6cbd0" stroke-width="2" stroke-linecap="round"/>
+<text x="40" y="320" class="ms-svg-label">สถานีสั่งงาน</text>
+<text x="40" y="345" class="ms-svg-small">ผู้ควบคุมส่ง START</text>
+</g>
+<g id="ms-signal" class="ms-command-lane" data-active="false" data-accepted="false">
+<path class="ms-command-path" d="M160 260H280Q335 260 335 320V425" fill="none" stroke="#eac28f" stroke-opacity=".45" stroke-width="2" stroke-dasharray="5 7" marker-end="url(#ms-command-arrow)"/>
+<circle id="ms-packet" cx="160" cy="260" r="4" fill="#ffe3b8"/>
+<rect x="259" y="333" width="116" height="61" rx="8" fill="#102936" stroke="#866b4e"/>
+<text x="317" y="357" text-anchor="middle" class="ms-svg-small">START → gate</text>
+<text x="317" y="380" text-anchor="middle" class="ms-svg-muted">รับ · ตรวจเงื่อนไข</text>
+</g>
+<g class="ms-route-layer" fill="none">
+<rect class="ms-survey-zone" x="400" y="145" width="540" height="290" rx="14" fill="#102d3a" fill-opacity=".55" stroke="#3d6570" stroke-width="1"/>
+<path d="M440 170H890M440 280H890M440 390H890M440 170V390M665 170V390M890 170V390" stroke="#7fc1c4" stroke-opacity=".15" stroke-width="1"/>
+<path d="M335 455 L440 170 L440 280 L440 390 L665 390 L665 280 L665 170 L890 170 L890 280 L890 390" stroke="#8bece2" stroke-opacity=".12" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M335 455 L440 170 L440 280 L440 390 L665 390 L665 280 L665 170 L890 170 L890 280 L890 390" stroke="#8bece2" stroke-opacity=".8" stroke-width="2.5" stroke-dasharray="4 8" stroke-linecap="round"/>
+</g>
+<g class="ms-grid-direction" fill="none" stroke="#8bece2" stroke-width="2" marker-end="url(#ms-arrow)"><path d="M440 213V243"/><path d="M665 348V318"/><path d="M890 213V243"/><path d="M532 390H568"/><path d="M757 170H793"/></g>
+<g text-anchor="middle" class="ms-column-label"><text x="440" y="104">แนวใกล้ฝั่ง</text><text x="665" y="104">แนวกลาง</text><text x="890" y="104">แนวไกลฝั่ง</text></g>
+<g class="ms-waypoints" font-family="inherit" text-anchor="middle">
+<g class="ms-waypoint ms-waypoint-home"><circle cx="335" cy="455" r="17" fill="#102936" stroke="#eac28f" stroke-width="2"/><circle cx="335" cy="455" r="3" fill="#eac28f"/><text x="335" y="501" class="ms-svg-small">HOME</text></g>
+<g class="ms-waypoint is-first"><circle cx="440" cy="170" r="20"/><text x="440" y="175" class="ms-wp-number">1</text><text x="440" y="139" class="ms-svg-label">WP1</text></g>
+<g class="ms-waypoint"><circle cx="440" cy="280" r="16"/><text x="440" y="285" class="ms-wp-number">2</text></g>
+<g class="ms-waypoint"><circle cx="440" cy="390" r="16"/><text x="440" y="395" class="ms-wp-number">3</text></g>
+<g class="ms-waypoint"><circle cx="665" cy="390" r="16"/><text x="665" y="395" class="ms-wp-number">4</text></g>
+<g class="ms-waypoint"><circle cx="665" cy="280" r="16"/><text x="665" y="285" class="ms-wp-number">5</text></g>
+<g class="ms-waypoint"><circle cx="665" cy="170" r="16"/><text x="665" y="175" class="ms-wp-number">6</text></g>
+<g class="ms-waypoint"><circle cx="890" cy="170" r="16"/><text x="890" y="175" class="ms-wp-number">7</text></g>
+<g class="ms-waypoint"><circle cx="890" cy="280" r="16"/><text x="890" y="285" class="ms-wp-number">8</text></g>
+<g class="ms-waypoint"><circle cx="890" cy="390" r="16"/><text x="890" y="395" class="ms-wp-number">9</text></g>
+</g>
+<g class="ms-map-tags">
+<text x="401" y="59" class="ms-svg-label">พื้นที่สำรวจ</text><text x="938" y="59" text-anchor="end" class="ms-svg-micro">GRID · 3 × 3 · 9 จุด</text>
+<path d="M400 76H940" stroke="#31505d"/>
+<rect x="40" y="440" width="182" height="79" rx="8" fill="#0b1d28" stroke="#354a54"/>
+<text x="56" y="466" class="ms-svg-muted">PWM / มอเตอร์จำลอง</text><text id="ms-pwm-value" x="56" y="496" class="ms-pwm-value">ยังไม่ทำงาน</text>
+<text x="940" y="528" text-anchor="end" class="ms-svg-muted">แผนผังจำลอง · ไม่ใช่มาตราส่วนจริง</text>
+</g>
+<g id="ms-boat" class="ms-boat" data-motors="false" data-moved="false" transform="translate(335 455)" role="img" aria-label="ลูกศรตำแหน่งและทิศทาง"><path class="ms-nav-arrow" d="M0 0L-26-12L-19 0L-26 12Z" fill="#6ce5df" stroke="#f0ffff" stroke-width="1.6" stroke-linejoin="round"/></g>
+</svg>
+        </div>
+        <div class="ms-legend"><span><i class="ms-legend-home"></i> HOME · จุดเริ่ม</span><span><i class="ms-legend-route"></i> เส้นทางตัวอย่าง</span><span><i class="ms-legend-command"></i> คำสั่งจากฝั่ง</span><span><i class="ms-legend-position"></i> ลูกศร · ตำแหน่ง / ทิศทาง</span></div>
+      </figure>
+
+      <ol class="ms-rail" aria-label="แปดขั้นของตัวอย่างการเริ่มภารกิจ">
+        <li class="ms-step is-current" data-index="0" aria-current="step"><span>01</span><b>ระบบ</b></li>
+        <li class="ms-step" data-index="1"><span>02</span><b>GPS</b></li>
+        <li class="ms-step" data-index="2"><span>03</span><b>HOME</b></li>
+        <li class="ms-step" data-index="3"><span>04</span><b>9 จุด</b></li>
+        <li class="ms-step" data-index="4"><span>05</span><b>รอ START</b></li>
+        <li class="ms-step" data-index="5"><span>06</span><b>ผ่าน gate</b></li>
+        <li class="ms-step" data-index="6"><span>07</span><b>มอเตอร์</b></li>
+        <li class="ms-step" data-index="7"><span>08</span><b>ไป WP1</b></li>
+      </ol>
+    </div>
+  </div>
+  <p class="ms-teaching-note">ลำดับนี้เป็นแบบจำลองเพื่ออธิบายแนวคิด readiness เท่านั้น · รายละเอียดการเริ่มระบบจริงอาจต่างจากตัวอย่าง</p>
+</section>
+  <section class="learn-quiz" id="learning-checkpoint" aria-labelledby="quiz-heading">
+    <div class="learn-quiz-heading">
+      <p class="learn-eyebrow">เช็กความเข้าใจ · 2 คำถาม</p>
+      <h2 id="quiz-heading">คุณอ่านเงื่อนไขและเส้นทางออกไหม?</h2>
+      <p>เลือกคำตอบทีละข้อ · คำตอบจะไม่เปลี่ยนการทดลองด้านบน</p>
+    </div>
+    <div class="learn-quiz-card">
+      <p class="quiz-number">คำถาม <span aria-hidden="true">·</span> <span id="quiz-counter">1 / 2</span></p>
+      <h3 id="quiz-prompt" class="quiz-prompt">กำลังเตรียมคำถาม…</h3>
+      <div id="quiz-answers" class="quiz-answers" role="group" aria-labelledby="quiz-prompt">
+        <button id="quiz-answer-0" class="quiz-answer" type="button"></button>
+        <button id="quiz-answer-1" class="quiz-answer" type="button"></button>
+        <button id="quiz-answer-2" class="quiz-answer" type="button"></button>
+      </div>
+      <p id="quiz-feedback" class="quiz-feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="quiz-actions">
+        <button id="quiz-retry" class="quiz-action" type="button" hidden>ลองตอบอีกครั้ง</button>
+        <button id="quiz-next" class="quiz-action quiz-action-primary" type="button" hidden>คำถามถัดไป <span aria-hidden="true">→</span></button>
+        <button id="quiz-replay" class="quiz-action quiz-replay" type="button">เริ่มเช็กใหม่</button>
+      </div>
+    </div>
+    <p class="quiz-route-note">ลำดับ 9 จุดนี้เป็นแผนภาพตัวอย่างเพื่อการเรียนรู้ รายละเอียดจริงอาจต่างกัน</p>
+  </section>
+  </main>
+  <script src="../src/js/mission/mission-start-model.js"></script>
+  <script src="../src/js/mission/mission-start.js"></script>
+  <script src="../src/js/classroom/quiz-model.js"></script>
+  <script src="../src/js/classroom/learn.js"></script>
+</body>
+</html>
+

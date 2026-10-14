@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071827">
+  <meta name="description" content="Twenty-slide presentation for the Smart Water Surface Boat senior project.">
+  <title>Slides · Smart Water Surface Boat</title>
+  <link rel="stylesheet" href="../src/css/styles.css">
+<link rel="stylesheet" href="../src/css/navigation.css">
+</head>
+<body>
+<nav class="project-entry-nav" aria-label="กลับจุดเริ่มต้น"><a href="../index.html">← เริ่มดู / ทุกหน้า</a></nav>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="overall.html"><span class="brand-dot" aria-hidden="true"></span><span>Smart Water Boat / Slides</span></a>
+      <nav class="deck-nav" aria-label="Main navigation">
+        <a href="overall.html">Overall</a><a href="waypoints.html">Waypoints</a><a href="heatmap.html">Heatmap</a><a href="sensors.html">Sensors</a><a class="active" href="slides.html" aria-current="page">Slides</a>
+      </nav>
+      <div class="university">Mae Fah Luang University · 2026</div>
+    </header>
+    <main class="stage" id="stage" aria-live="polite">
+      <div id="slides" class="slides">
+        <section class="slide fallback">
+          <p class="eyebrow">Presentation setup</p>
+          <h1>Slide content did not load</h1>
+          <p class="fallback-help">Keep the complete project folder together: pages/, src/, assets/. Open index.html at the project root; do not move this page alone.</p>
+        </section>
+      </div>
+    </main>
+    <footer class="controls">
+      <div class="hint">← → OR SPACE TO NAVIGATE · F FOR FULL SCREEN</div>
+      <div class="control-group">
+        <button id="prev" type="button" aria-label="Previous slide" title="Previous slide">‹</button>
+        <span id="counter" class="counter" aria-live="polite">01 / 20</span>
+        <button id="next" type="button" aria-label="Next slide" title="Next slide">›</button>
+      </div>
+      <div class="right-hint"><a href="../docs/SPEAKER_NOTES.md">THAI SPEAKER NOTES ↗</a></div>
+    </footer>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <dialog id="imageDialog" aria-label="Project diagram">
+    <div class="dialog-bar"><span id="dialogCaption">Project diagram</span><button id="closeDialog" type="button">Close ×</button></div>
+    <img id="dialogImage" alt="">
+  </dialog>
+  <script src="../src/js/slides/slides-data.js"></script>
+  <script src="../src/js/slides/app.js"></script>
+</body>
+</html>
