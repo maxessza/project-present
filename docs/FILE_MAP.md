@@ -5,7 +5,7 @@
 ## จุดเริ่มต้นและหน้าเว็บ
 
 - `README.md` — คู่มือเปิดเว็บ เส้นทางเริ่มต้น คำสั่งตรวจในเครื่อง และลิงก์เอกสาร
-- `index.html` — หน้าเข้าโครงการและเจ้าของ navigation หลัก: ลิงก์ 9 หัวข้อ แบ่งสื่อเริ่มเรียนกับรายละเอียดโครงงาน
+- `index.html` — redirect แบบเรียบง่ายไปยัง `pages/overall.html`; ส่งต่อ query/hash เดิมและมีลิงก์ fallback ที่เข้าถึงด้วยแป้นพิมพ์ได้
 - `.gitignore` — ละเว้นไฟล์สภาพแวดล้อม Python และ cache (`.env`, `.venv`, `__pycache__`)
 - `.gitattributes` — เก็บ bytes ของไฟล์ตามต้นฉบับ ไม่แปลง line endings ตอน clone เพื่อรักษา hashes ของ source/tests และ migration map
 - `pages/classroom.html` — หน้า Classroom; markup ของ storyboard เตรียมภารกิจ 8 ขั้นและแบบทดสอบ 2 ข้อ โหลดโมเดล/ตัวควบคุมภารกิจและ quiz ตามลำดับ
@@ -26,13 +26,13 @@
 ## สไตล์
 
 - `src/css/heading.css` — รูปแบบหน้าปัดสอง lane, กราฟ, gain controls, responsive layout และ reduced-motion ของ Heading / PID
+- `src/css/learning-theme.css` — ใช้ tokens สี navy/cyan เดียวกับเว็บหลักกับ Classroom, Story, Heading / PID และ Slides โดยคงสถานะ A/B และ controls เฉพาะหน้า
 - `src/css/learn.css` — hero, roadmap, พื้นที่อ่านและ quiz ของ Classroom
 - `src/css/mission-start.css` — สไตล์เฉพาะ namespace `.mission-start` สำหรับ storyboard readiness, แผนที่เก้าจุด, controls และ telemetry ที่ใช้ใน Classroom/Overall
-- `src/css/navigation.css` — รูปแบบลิงก์นำทางกลับหน้าเริ่มต้นที่ใช้ซ้ำในหน้าต่าง ๆ
+- `src/css/navigation.css` — รูปแบบลิงก์ตามบริบทจากบทเรียนกลับไปยังส่วนที่เกี่ยวข้องใน Overall
 - `src/css/overall-visuals.css` — รูปแบบ SVG/diagram และสถานะการเคลื่อนไหวของตัวอย่างภาพใน Overall
 - `src/css/overall.css` — layout, panels, charts, inspector และ controls ของหน้า Overall
-- `src/css/portal.css` — typography, grid และ responsive cards ของหน้า launcher `index.html`
-- `src/css/site.css` — shared shell, navigation และ section/card styles ของหน้าอธิบายโครงงานและ Overall
+- `src/css/site.css` — shared tokens, SW shell, touch-sized navigation และ section/card styles ของหน้า active ทั้งหมด
 - `src/css/story.css` — scene panels, SVG, readiness controls, responsive viewport และ reduced-motion ของ Story Lab
 - `src/css/styles.css` — deck, stage, slide layouts, navigation และ responsive rules ของหน้า Slides
 
@@ -77,7 +77,8 @@
 - `tests/story-model.test.js` — ตรวจ fixture readiness, การเลือก scene, gate ของ START, effects และ reset ใน Story model
 - `tests/story-rework.test.js` — ตรวจ SVG readiness, สถานะมอเตอร์/การเคลื่อน, packet replay และ behavior ของ viewport/control
 - `tests/story-ui.test.js` — ตรวจ 4 ฉาก picture-first, controls และพิกัด route diagram ของ Story
-- `tests/structure.test.js` — ตรวจ launcher 9 หัวข้อ, ลิงก์กลับหน้าเริ่มต้น และการครอบคลุม/hash ของ migration map
+- `tests/structure.test.js` — ตรวจ root redirect, ลิงก์กลับบริบทใน Overall และ hash ปัจจุบันของ migration map
+- `tests/shared-shell.test.js` — regression contract สำหรับ shared shell, 9 ปลายทาง, dark tokens, touch targets และ context navigation
 - `tests/visual-rework.test.js` — ตรวจ marker รูปลูกศรและขนาด/การตอบสนองของภาพ PWM
 - `tools/check-links.py` — ตรวจ local href/src, CSS `url()`, anchor ใน HTML, image path ของสไลด์ และลิงก์ Markdown โดยไม่แก้ไฟล์
 

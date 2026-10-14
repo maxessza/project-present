@@ -26,7 +26,7 @@
       "old_path": "heading.html",
       "new_path": "pages/heading-pid.html",
       "input_sha256": "0f5dfe0e4665250eb86e5ff4ebb6cbef4d3c836f40d454e48c62f1b3daf09840",
-      "output_sha256": "5ab56375cb831947d6da9a9d639a5568dbcc71ee950edcced0d9387be1abc5e8",
+      "output_sha256": "68eff7eeda813becd39e8b795dd53316c845a449ce41c12f9027229184816b15",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -40,22 +40,22 @@
       "old_path": "heatmap.html",
       "new_path": "pages/heatmap.html",
       "input_sha256": "c8a2ab9ee66902b1baeae4ec69bce6c7aa45078ec54ba1b01cad9585451fceed",
-      "output_sha256": "61be22d6f9aad5d3702781c2eb31dc68ed9c5522819bef46cfa043a991ddb0ca",
+      "output_sha256": "35f21e9e9da3c1237d467546295c2da67ca2cc9fb11f382721ddfdef58a1af39",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
       "old_path": "index.html",
       "new_path": "pages/overall.html",
       "input_sha256": "e2fa510b6119af788d205e812fd74b2699213e71036bf290dd1444a9f6ac0c7d",
-      "output_sha256": "e8bcf1d2c7b9ebca5b13da74a5017e9c2ab82d796555ed5408b72619994e199a",
+      "output_sha256": "3645979befde9a5c07c6b582233a5f3dca21923395357aba287ba41050f7a2b9",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
       "old_path": "labs.html",
       "new_path": "index.html",
       "input_sha256": "a50713ff12c931b502eaf2bc5386ce67e5c4e640ee6c35e6008282a270c9926e",
-      "output_sha256": "877778eabed093371338c974310974437ccee1fb21dee58ad59e12d20597a745",
-      "edit_kind": "portal navigation updated, existing styles extracted"
+      "output_sha256": "c393726425f3982bf99e1626caed827f940a4e57eee6514290abcd26f0b2fdc5",
+      "edit_kind": "owner_correction/root_redirect_to_overall"
     },
     {
       "old_path": "learn.css",
@@ -68,7 +68,7 @@
       "old_path": "learn.html",
       "new_path": "pages/classroom.html",
       "input_sha256": "00fdbff063f36f0dd64e045dd8428463677bc586bc319463c0a3739242887098",
-      "output_sha256": "3b35756a98dd06d8d8065477a356b03851c1838deb40bf49f072893ed5aa839e",
+      "output_sha256": "3bdd56f2a604d8d40736ebae60402f6d60b5655253af92d28a891019e386cbb3",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -173,14 +173,14 @@
       "old_path": "sensors.html",
       "new_path": "pages/sensors.html",
       "input_sha256": "d3d21b3bc978e4ee276ed173458312b8a0cda6388d193066b5332780f0262795",
-      "output_sha256": "0e02287d739ce210a3cdde68a302fbc484ec5b1422ea6f2c5da5135093537215",
+      "output_sha256": "cf1b36f99e547556930a6ee719b37bda745c1279e195d505382f34a6cd2e0d7e",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
       "old_path": "site.css",
       "new_path": "src/css/site.css",
       "input_sha256": "f472a8dbbb366c8e0a14c8e9ffae3c95d9fd533072facc27438ef57f89ad9c08",
-      "output_sha256": "f4218a317fe6d3cb812d57712d4cdee4258d64c6add17686f0d2df54bfcb0447",
+      "output_sha256": "9796e929eebd56b5d8b056186ee578d068f1d27c839b02b2af91608c34b4f857",
       "edit_kind": "CSS resource URL only: hero image relocated"
     },
     {
@@ -194,7 +194,7 @@
       "old_path": "slides.html",
       "new_path": "pages/slides.html",
       "input_sha256": "df31e879688a3141570ed55789c5a87937ffb72d289808cc845a4810ee6c3118",
-      "output_sha256": "54d1e23264de0fe7a0978b5e7bcaa3ef429304aff24d369b5a95b8a809988faa",
+      "output_sha256": "ad847cd3969c0e308ff61923bf6f1a36e803501a981b3dcbbb2419d991dc5551",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -222,7 +222,7 @@
       "old_path": "story.html",
       "new_path": "pages/story.html",
       "input_sha256": "2b037e855757f691efc70cc958cbc7eb6405690ab6e68199ed8cbb711e93d90a",
-      "output_sha256": "ab8be8b9dfbe7a5bbef94d8cf8e1c79d1be128f44044607b61399f6ffea3a5df",
+      "output_sha256": "1c6fa1c76fa8cadcd5ae68ed0930dbfe2831e6a8802df3a006e448afc2e953a1",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -250,7 +250,7 @@
       "old_path": "waypoints.html",
       "new_path": "pages/waypoints.html",
       "input_sha256": "98eea8271abd34bd2c72d676d0d0a4a9374a10bf5775ec4246e8de399721d378",
-      "output_sha256": "303e5bbca927e1adafb0b5584a8d046a103a40cfadd3dc1674d677a17985af83",
+      "output_sha256": "88c65f03783f5aee28481f91eb1b2397842695060e05a79ce62f8a0bf1a695f1",
       "edit_kind": "resource_paths/navigation_only"
     },
     {

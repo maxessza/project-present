@@ -1,0 +1,114 @@
+@charset "UTF-8";
+:root{
+  color-scheme:dark;
+  --bg:#06121d;--panel:#0b1d2b;--panel-2:#102638;--line:#20394a;
+  --text:#eef6f8;--muted:#97afbb;--cyan:#25c5d2;--sea:#7be1d5;
+  --navy:#06121d;--deep:#0b1d2b;--paper:#102638;--ink:#eef6f8;
+  --white:#eef6f8;--sea-dark:#25c5d2;
+  --learn-ink:#eef6f8;--learn-muted:#97afbb;--learn-paper:#06121d;
+  --learn-teal:#25c5d2;--learn-cyan:#7be1d5;--learn-amber:#ffbd69;--learn-line:#20394a;
+  background:#06121d;color:#eef6f8;
+}
+html{scroll-padding-top:84px}
+.context-link{width:min(1220px,calc(100% - 40px));margin:12px auto 0}
+.context-link a{min-height:44px;display:inline-flex;align-items:center;padding:7px 12px;border:1px solid #294e62;border-radius:9px;background:#0b1d2b;color:#7be1d5;font-size:13px;font-weight:700;text-decoration:none}
+.context-link a:hover{border-color:#25c5d2;background:#102638}
+.context-link a:focus-visible{outline:3px solid #25c5d2;outline-offset:3px}
+
+/* Heading/PID keeps its existing A/B plot and full-width experiment layout. */
+.heading-page{--a:#25c5d2;--b:#ffbd69;background:#06121d;color:#eef6f8;font-family:Inter,"Segoe UI",Arial,sans-serif}
+.heading-page .shell{max-width:1220px;padding-inline:clamp(16px,4vw,48px)}
+.heading-page .visual-stage{background:#0b1d2b;border-color:#20394a}
+.heading-page .lane-a{--lane:#25c5d2}.heading-page .lane-b{--lane:#ffbd69}
+.heading-page .target-line{stroke:#eef6f8}
+.heading-page button{border-color:#365668;background:#102638;color:#eef6f8;font-family:inherit}
+.heading-page button:hover{border-color:#25c5d2;background:#173447}
+.heading-page .primary{border-color:#25c5d2;background:#25c5d2;color:#06121d}
+.heading-page .primary:hover{background:#7be1d5}
+.heading-page .presets button[aria-pressed=true]{background:#173447}
+.heading-page .explain p{color:#c0d2d8}
+.heading-page .topline{border-color:#20394a}
+
+/* Story nodes and maps use the same dark surfaces while preserving state colors. */
+.story-page{background:#06121d;color:#eef6f8;font-family:Inter,"Segoe UI",Arial,sans-serif}
+.story-page .chapters button,.story-page button{border-color:#294e62;background:#102638;color:#eef6f8;font-family:inherit}
+.story-page .chapters button:hover,.story-page button:hover{border-color:#25c5d2;background:#173447}
+.story-page .chapters button[aria-pressed=true]{border-color:#25c5d2;background:#16404b;color:#eaffff}
+.story-page .stage,.story-page .experiment{border-color:#20394a;background:#0b1d2b;color:#eef6f8}
+.story-page .panel-copy p,.story-page .disclaimer{color:#afc3cb}
+.story-page .disclaimer strong{color:#eef6f8}
+.story-page .message{color:#ffcf8a}
+.story-page .message[data-state=accepted],.story-page .message[data-state=motors],.story-page .message[data-state=moved]{color:#7be1d5}
+.story-page [data-indicator][data-state=on]{color:#7be1d5}
+.story-page [data-indicator][data-state=blocked]{color:#ff9a76}
+.story-page .pan-hint{background:#0b1d2b;color:#afc3cb}
+.story-page .causal text,.story-page .route-map text{fill:#eef6f8}
+.story-page .causal text.minor,.story-page .route-map text.minor{fill:#afc3cb}
+.story-page .node,.story-page .survey{fill:#102638;stroke:#365668}
+.story-page .gate{fill:#103443;stroke:#25c5d2}
+.story-page .link,.story-page .condition-link{stroke:#25c5d2}
+.story-page .gridline{stroke:#294e62}
+.story-page .route{stroke:#7be1d5}
+.story-page .wp circle{fill:#0b1d2b;stroke:#7be1d5}
+.story-page .home-point{fill:#ffbd69;stroke:#684b29}
+.story-page svg [fill="#fbfaf6"],.story-page svg [fill="#fff"],.story-page svg [fill="#e7e4da"]{fill:#102638}
+.story-page svg marker path[fill="#087b72"]{fill:#25c5d2}
+
+/* Classroom controls stay distinct and legible on the original navy surfaces. */
+body.classroom-page{background:#06121d;color:#eef6f8;font-family:Inter,"Segoe UI",Arial,sans-serif}
+.classroom-page .site-header .nav-link{font:650 13px/1.55 Inter,"Segoe UI",Arial,sans-serif}
+@media(max-width:850px){.classroom-page .site-header .nav-link{font-size:12px}}
+@media(max-width:620px){.classroom-page .site-header .nav-link{font-size:11px}}
+.classroom-page .ms-readiness label{color:#eef6f8}
+.classroom-page .ms-readiness legend,.classroom-page .ms-readiness small,.classroom-page .ms-limit small{color:#afc3cb}
+.classroom-page .learn-hero h1,.classroom-page .ms-intro h2,.classroom-page .ms-console h3,
+.classroom-page .learn-quiz-heading h2,.classroom-page .quiz-prompt{color:#eef6f8}
+.classroom-page .learn-hero-copy>p:last-child,.classroom-page .ms-lead,
+.classroom-page .ms-explanation,.classroom-page .ms-gps-prompt p,
+.classroom-page .learn-quiz-heading>p:last-child,.classroom-page .quiz-feedback,
+.classroom-page .ms-teaching-note{color:#afc3cb}
+.classroom-page .learn-roadmap li,.classroom-page .ms-limit,.classroom-page .ms-console,
+.classroom-page .ms-readiness,.classroom-page .learn-quiz-card,
+.classroom-page .quiz-answer,.classroom-page .quiz-action{
+  border-color:#294e62;background:#0b1d2b;color:#eef6f8
+}
+.classroom-page .learn-roadmap li[aria-current]{border-color:#25c5d2;background:#123643;color:#eef6f8}
+.classroom-page .ms-status{border-color:#286254;background:#10302e;color:#b7f0dc}
+.classroom-page .ms-status[data-kind="blocked"]{border-color:#76502d;background:#392d20;color:#ffcf8a}
+.classroom-page .ms-button,.classroom-page .ms-quiet-button{border-color:#365668;background:#102638;color:#eef6f8}
+.classroom-page .ms-button:hover:not(:disabled),.classroom-page .ms-quiet-button:hover{border-color:#25c5d2;background:#173447}
+.classroom-page .ms-button-primary,.classroom-page .quiz-action-primary{border-color:#25c5d2;background:#25c5d2;color:#06121d}
+.classroom-page .ms-button-start{border-color:#a8753c;background:#392d20;color:#ffcf8a}
+.classroom-page .ms-button-start:hover:not(:disabled){border-color:#ffbd69;background:#4b3924}
+.classroom-page .learn-coach-note{border-color:#76502d;background:#392d20;color:#f4d6a7}
+.classroom-page .learn-coach-note b{color:#ffcf8a}
+.classroom-page .learn-checkpoint-link{border-color:#286254;background:#10302e;color:#b7f0dc}
+.classroom-page .ms-step{border-color:#294e62;background:#0b1d2b;color:#97afbb}
+.classroom-page .ms-step.is-current{border-color:#25c5d2;background:#123643;color:#eef6f8}
+.classroom-page .ms-step.is-complete{border-color:#286254;background:#10302e;color:#b7f0dc}
+.classroom-page .quiz-answer:hover:not(:disabled){border-color:#25c5d2;background:#173447}
+
+/* Slides retain deck transport and controls while taking the shared site palette. */
+.slides-page{display:flex;flex-direction:column;overflow:hidden;background:#06121d;color:#eef6f8;font-family:Inter,"Segoe UI",Arial,sans-serif}
+.slides-page .site-header{flex:none}
+.slides-page .app{flex:1;min-height:0;height:auto;grid-template-rows:54px minmax(0,1fr) 74px}
+.slides-page .slide{background:#0b1d2b;color:#eef6f8}
+.slides-page .slide.dark{background:#102638;color:#eef6f8}
+.slides-page .slide .eyebrow,.slides-page .slide .step-label,
+.slides-page .slide .phase-label,.slides-page .slide .source-tag,
+.slides-page .slide .side-label{color:#25c5d2}
+.slides-page .slide .lead,.slides-page .slide .story-side p,
+.slides-page .slide .side-list li,.slides-page .slide .flow-step p,
+.slides-page .slide .flow-foot,.slides-page .slide .code-lead,
+.slides-page .slide .fact-list li,.slides-page .slide .phase-tools p,
+.slides-page .slide .limit-list li,.slides-page .slide .closing-copy p{color:#b3c7cf}
+.slides-page .slide .flow-step,.slides-page .slide .flow-grid,
+.slides-page .slide .phases{border-color:#294e62}
+.slides-page .slide .flow-step:not(:first-child),.slides-page .slide .phase:not(:first-child),
+.slides-page .slide .story-side{border-color:#294e62}
+.slides-page .slide .outline-button{border-color:#527180;color:#eef6f8}
+.slides-page .slide .outline-button:hover{background:#173447}
+.slides-page .slide .image-open{color:#7be1d5}
+.slides-page .slide .bottomline{border-color:#294e62;color:#97afbb}
+.slides-page .topbar{color:#a9bdc6}
+@media(max-width:1100px){.slides-page .app{min-height:0}}

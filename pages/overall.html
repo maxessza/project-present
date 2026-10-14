@@ -13,8 +13,7 @@
 <link rel="stylesheet" href="../src/css/navigation.css">
 </head>
 <body class="uplink-preview">
-<nav class="project-entry-nav" aria-label="กลับจุดเริ่มต้น"><a href="../index.html">← เริ่มดู / ทุกหน้า</a></nav>
-  <a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="overall.html" aria-label="Smart Water Boat home">
       <span class="brand-mark" aria-hidden="true">SW</span>
@@ -22,11 +21,14 @@
     </a>
     <nav class="primary-nav" aria-label="Main navigation">
       <a class="nav-link current" href="overall.html" aria-current="page">Overall</a>
-      <a class="nav-link" href="#mission-start">Mission start</a>
       <a class="nav-link" href="waypoints.html">Waypoints</a>
       <a class="nav-link" href="heatmap.html">Heatmap</a>
       <a class="nav-link" href="sensors.html">Sensors</a>
       <a class="nav-link nav-cta" href="slides.html">Slides</a>
+      <a class="nav-link" href="classroom.html">Classroom</a>
+      <a class="nav-link" href="story.html">Story</a>
+      <a class="nav-link" href="heading-pid.html">Heading / PID</a>
+      <a class="nav-link" href="overall.html#ms-uplink-panel">Uplink</a>
     </nav>
   </header>
 
@@ -44,6 +46,11 @@
           <h1 id="ov-title">ให้ภาพเล่าเรื่อง</h1>
           <p>ดูข้อมูล เส้นทาง การสื่อสาร และเงื่อนไขกลับบ้านผ่านภาพสั้น ๆ</p>
           <p class="ov-motion-limit">ภาพเคลื่อนไหวเป็น storyboard ตัวอย่าง · ไม่เชื่อมกับเรือหรือ OPERATE · เวลาเป็น EXAMPLE ไม่ใช่นาฬิกาจริง</p>
+          <nav class="lesson-links" aria-label="Detailed interactive lessons">
+            <a href="classroom.html">Classroom: mission readiness</a>
+            <a href="story.html">Story Lab: START to movement</a>
+            <a href="heading-pid.html">Heading / PID: compare A and B</a>
+          </nav>
         </header>
         <section class="ov-block" id="overview" aria-labelledby="ov-overview-title">
           <div class="ov-section-head">
@@ -174,6 +181,7 @@
         </section>
     <section class="ov-block" id="pid" aria-labelledby="ov-pid-title">
       <div class="ov-section-head"><div><p class="ov-kicker">02 · PID / HEADING</p><h2 id="ov-pid-title">PID ทำให้เรือหันอย่างไร?</h2></div><p>มุมเป้า → error → คำสั่งสองฝั่ง → วัดใหม่</p></div>
+      <p class="ov-detail-link"><a href="heading-pid.html">Open the interactive A/B Heading / PID experiment →</a></p>
       <div class="ov-grid">
         <article class="ov-panel">
           <div class="ov-panel-heading"><span class="ov-number">1</span><h3>เริ่มจากมุมที่ต้องแก้</h3></div>
@@ -541,7 +549,7 @@
           <p class="ms-log-note">เวลาและเลข event เป็นเวลาจำลองในหน้า · แต่ละแถวเก็บ actor/direction, action/decision, readiness และเหตุขวาง, stage transition, ตำแหน่ง schematic (px), และ packet sequence/schema projection</p>
           <ol class="ms-event-log" id="ms-event-log" aria-label="บันทึกเหตุการณ์จำลองตามลำดับเวลา" aria-live="polite"></ol>
         </details>
-      
+
   </details>
 </section>
   </div>

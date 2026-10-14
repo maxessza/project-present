@@ -1,28 +1,31 @@
 # สถานะและขอบเขต
 
-## ผลตรวจด้านซอฟต์แวร์ของงานจัดไฟล์
+## พฤติกรรมปัจจุบัน
 
-- จุดเริ่มต้น `index.html` รวม9หัวข้อ และ8หน้าเนื้อหาจริง; ภาพ โค้ด สไตล์ เอกสาร tests และ tools แยกตามหน้าที่ ไม่มีเว็บต้นฉบับซ้ำอีกชุดใต้ `learning-labs/`
-- Node tests ผ่าน 51/51: 48 tests เดิมและ3สัญญาโครงสร้างใหม่ ตรวจด้วยคำสั่ง `node --test` จากรากโครงการ
-- Chromium browser integration ผ่าน 23 cases: เปิดไฟล์ตรงและ HTTP, ไป/กลับทุกหัวข้อ, ลอง Classroom/quiz, Story, Heading/PID, สไลด์ และส่ง/รับ/ตัดลิงก์/reset ใน Uplink; รวมจอ390pxและโหมด reduced motion การตรวจนี้ไม่ใช่การทดสอบทุกกรณีของระบบเรือ
-- เครื่องมือตรวจลิงก์ผ่าน 149 local references ใน 9 active HTML และ 6 Markdown; รวมพาธภาพใน CSS ที่แก้หลังย้ายไฟล์ ตำแหน่งปัจจุบันของภาพคือ `assets/images/`
-- `FILE_MAP.md` ครอบคลุมทุก65ไฟล์ที่แชร์ในชุด GitHub นี้ (ชุดจัดไฟล์64ไฟล์และ `.gitattributes` สำหรับรักษา bytes ตอน clone) บันทึกไฟล์ต้นทาง39รายการใน `MIGRATION_MAP.json`; core models และ browser packet codec/transport คง bytes เดิม ย้ายตำแหน่งและแก้ resource/module paths ไม่ได้ปรับ logic/packet layout ของ firmware
+- เปิด `index.html` แล้ว redirect ไปยัง `pages/overall.html` ซึ่งเป็นหน้า Overall เดิม พร้อมคง query string และ hash ที่ส่งเข้ามา; fallback มีลิงก์ไป Overall และใช้ palette navy/cyan
+- ทุก active page ใช้ SW header และ navigation ชุดเดียวกัน รวม Overall, Waypoints, Heatmap, Sensors, Slides, Classroom, Story, Heading / PID และ Uplink
+- Overall เชื่อมไปยัง Classroom, Story Lab และการทดลอง Heading / PID; หน้าเหล่านั้นมี context link กลับไปยังส่วน mission readiness หรือ PID ใน Overall
+- `site.css` เป็น shell/tokens หลัก และ `learning-theme.css` กำหนดสีเดียวกันให้ Classroom, Story, Heading / PID และ Slides; `portal.css` ที่ใช้กับ launcher เดิมถูกนำออกหลังเลิกใช้หน้า launcher
 
-ผลข้างต้นเป็นหลักฐานของการจัดโครงสร้างและการเชื่อมไฟล์ ไม่ใช่การอนุมัติอิสระให้ระบบทั้งหมดผ่าน งานตรวจรับอิสระและผลแพ็กเกจรายงานแยกเมื่อส่งมอบ ไม่ใช้เอกสารนี้แทนรายงานตรวจรับ
+## หลักฐานที่บันทึกในรอบแก้ไข
 
-## ขอบเขตที่สำคัญ
+- Contract ของ root ผ่านกับ `file://`: พบ `.site-header` หนึ่งชุด, Overall diagram หนึ่งชุด, navy `rgb(6, 18, 29)` และ `OverallModel` เป็น object
+- Shared-shell regression ที่เพิ่มใหม่ผ่านหลังจากบันทึกผล RED ก่อนแก้ theme
+- `node --test` และ `python tools/check-links.py` ผ่านกับ final bytes; raw outputs และ child exits อยู่ใน handoff evidence
+- Browser integration ผ่าน 40 cases กับ `file://` และ HTTP: เมนูหลักทุกหัวข้อ, ธีม/ตัวอักษร, ลิงก์เข้า PID/Uplink, PID controls/plots, Story, Classroom, Uplink failure/reset, Slides, keyboard และจอ390px; หลักฐานนี้เป็น software integration ไม่ใช่การทดสอบทุกสถานการณ์หรือทุกขนาดจอ
+- Independent review รอบนี้หยุดเมื่อครบ cap300วินาที (exit124) จึงยังไม่ใช่ final acceptance. ผู้ตรวจพบ contrast ของ Classroom และตัวอักษร navbar ไม่ตรงกัน; coordinator ยืนยันด้วย native Chromium RED แล้วแก้เฉพาะ CSS จน GREEN รวมข้อความ readiness/note, navbar และ mobile Slides. ไม่ rerun paid review อัตโนมัติ และสถานะ independent acceptance ของ candidate ปัจจุบันยัง **NOT VERIFIED**
+- หลักฐานเพิ่ม: root query/hash และ context links6cases; native finding regressions6cases; `node --test`53tests และ link checker209references. ผลเหล่านี้ไม่แทนคำรับรอง independent reviewer หรือเรือจริง
 
-- เว็บไซต์เป็นสื่ออธิบาย/แบบจำลอง ไม่ใช่ dashboard ควบคุมเรือจริง
-- Uplink ส่งและถอด bytes จริงระหว่างส่วนของ browser ผ่าน MessageChannel; loss/retry เป็นสิ่งที่จำลอง ไม่มี ESP-NOW/radio หรือสถานีฐานจริง ค่า sensor เป็นตัวอย่างและช่องที่ไม่มีหลักฐานไม่ใช่ค่าที่วัดจริง
-- Heading/PID เป็นแบบจำลองสำหรับเปรียบเทียบการตอบสนอง ไม่ใช่ gain ที่ปรับเทียบและรับรองกับเรือจริง
-- Heatmap เป็นคำอธิบาย ไม่มีชุดข้อมูลภาคสนามหรือ pipeline ทำแผนที่ทำงานในหน้านี้
+## ขอบเขต
 
-## ยังไม่ยืนยัน / ไม่ได้ปิดในงานนี้
+- Classroom, Story, Heading / PID และ Uplink เป็นแบบจำลองใน browser ไม่เชื่อมกับเรือ วิทยุ สถานีฐาน หรือ telemetry จริง
+- Heatmap เป็นคำอธิบาย ไม่มีชุดข้อมูลภาคสนามหรือ pipeline ประมวลผลข้อมูล
+- งานนี้ไม่ปรับ Heading model/controller/renderer, mission logic หรือ Uplink codec/transport behavior/bytes; ไม่ใช่การรับรอง gain กับเรือจริง
+- การตรวจครบทุกขนาดจอ การใช้งานจริงบนเรือ/เซนเซอร์ และ independent acceptance ยังคง **NOT VERIFIED** ในเอกสารนี้; scoped review ของการแก้ shell/theme/navigation ต้องอ่านผลจากรายงานผู้ตรวจ ไม่ใช้ผล browser แทน
 
-- การใช้งานกับเรือ วิทยุ สถานีฐาน เซนเซอร์ firmware และ bench/pond validation เป็น **NOT VERIFIED** สำหรับชุดเว็บไซต์นี้
-- organization PASS ไม่ปิดหรือยกเว้น UI/simulation/firmware/process holds จากรอบก่อน ไม่รับรองความเทียบเท่าของแบบจำลองกับ firmware
-- รายงานเดิมมีประเด็นอ้างอิง/undefined ของสไลด์18 งานนี้ไม่ได้แก้หรือประกาศปิดประเด็นนั้น การลองเลื่อนสไลด์ช่วงต้นไม่ใช่การตรวจทุกสไลด์
-- ผู้ใช้ยังต้องดูความเข้าใจของเพื่อน การอ่านบนจอจริง/projector และการนำเสนอจริง
-- ชุดนี้เผยแพร่เฉพาะ preview branch `preview/interactive-learning-labs` ของ `maxessza/project-present` ตามคำอนุมัติของเจ้าของ ไม่ merge main หรือเปิด public hosting; ดาวน์โหลด ZIP แล้วแตกทั้งชุดก่อนเปิด `index.html` ที่รากโครงการ
-- การรับรองอิสระสุดท้ายยัง **NOT VERIFIED**: รอบตรวจหมดเวลาก่อนปิดกระบวนการครบ การเผยแพร่ preview ไม่ใช่การยกเว้นข้อค้างเดิม
-- ต้นฉบับและต้นแบบก่อนหน้าถูกเก็บแยกโดยไม่แก้ทับ ส่วนขยายการสอนเส้นทางข้อมูล “ตั้งแต่ monitor” ยังไม่ได้เพิ่มใน commit จัดไฟล์นี้ รอยืนยันว่าหมายถึง Monitor ส่วนใด
+## ค้างจากงานก่อนหน้า
+
+- Historical UI/simulation/firmware/process holds ยังคงเป็นประเด็นแยก งาน shell correction นี้ไม่ได้ปิดหรือยกเว้น hold เหล่านั้น
+- รายงานเดิมระบุประเด็นอ้างอิง/undefined ของ slide 18; งานนี้ไม่ได้แก้หรือประกาศปิดประเด็นนั้น
+- ขอบเขต Monitor data pipeline ยังไม่ชัดและไม่ได้ขยายในงานนี้
+- การยืนยันกับผู้เรียน จอ projector และการนำเสนอจริงยังรอการใช้งานจริง

@@ -2,11 +2,11 @@
 
 ## เลือกตำแหน่งแก้ให้ตรงงาน
 
-- โครงหน้าและข้อความประจำหน้า: `pages/<ชื่อหน้า>.html`; หน้าเริ่มต้นและลิงก์ 9 หัวข้ออยู่ที่ `index.html`
+- โครงหน้าและข้อความประจำหน้า: `pages/<ชื่อหน้า>.html`; `index.html` ส่งต่อไปยัง Overall จริงและคง query/hash ส่วน navigation 9 หัวข้ออยู่ใน shell ของแต่ละหน้า
 - การคำนวณและสถานะจำลอง: ไฟล์ `*-model.js` ของหน้านั้น เช่น `src/js/heading/heading-model.js`, `src/js/story/story-model.js`, `src/js/classroom/quiz-model.js` และ `src/js/overall/overall-model.js`
 - การวาดหน้า รับเหตุการณ์ และควบคุมการเล่น: controller ของหน้า เช่น `heading.js`, `story.js`, `classroom/learn.js` และ `overall/overall.js`
 - การเคลื่อนไหว: `src/js/overall/overall-visual-motion.js` สำหรับภาพเคลื่อนไหวของ Overall, `src/js/mission/mission-start.js` สำหรับ storyboard และ `src/js/mission/uplink-motion.js` สำหรับการเดินทางของ packet จำลอง
-- สไตล์: stylesheet เฉพาะหน้าใน `src/css/`; `navigation.css` ดูแลลิงก์กลับหน้าเริ่มต้น, `site.css` ใช้กับหน้าอธิบายชุดเดิม และ `portal.css` ดูแลหน้าแรก
+- สไตล์: `site.css` เป็น shared shell/tokens/navigation ของทุกหน้า, `learning-theme.css` ปรับ Classroom/Story/Heading/Slides ให้ใช้สีเดียวกัน และ stylesheet เฉพาะหน้าดูแล diagrams/controls; `navigation.css` ใช้กับ context links กลับ Overall
 - คำถามและคำตอบแบบทดสอบ: `src/js/classroom/quiz-model.js`; เนื้อหาและลำดับสไลด์: `src/js/slides/slides-data.js`; การแสดงผลสไลด์: `src/js/slides/app.js`
 - ภาพประกอบที่ใช้ร่วมกัน: `assets/images/`
 
@@ -25,7 +25,7 @@
 
 ## เปิดและตรวจ
 
-เปิด `index.html` ได้โดยตรง ไม่ต้องติดตั้งแพ็กเกจ หากต้องการ local server ให้เปิด terminal ที่โฟลเดอร์รากของโครงการแล้วรัน:
+เปิด `index.html` ได้โดยตรง ระบบจะเข้าสู่ `pages/overall.html` โดยส่งต่อ query/hash เดิม ไม่ต้องติดตั้งแพ็กเกจ หากต้องการ local server ให้เปิด terminal ที่โฟลเดอร์รากของโครงการแล้วรัน:
 
 ```sh
 python -m http.server 8000 --bind 127.0.0.1
@@ -36,7 +36,7 @@ python -m http.server 8000 --bind 127.0.0.1
 ## เมื่อเพิ่มหน้าหรือเปลี่ยนพาธ
 
 1. เพิ่ม markup ใต้ `pages/` และระบุ stylesheet/script ที่หน้านั้นใช้ โดยใช้พาธสัมพันธ์จากตำแหน่ง HTML
-2. เพิ่มลิงก์จาก `index.html` และลิงก์กลับ `../index.html` ของหน้าใหม่ผ่านรูปแบบนำทางที่ใช้อยู่
+2. เพิ่มปลายทางใน primary navigation ของ shared shell และเพิ่ม context link กลับ Overall section ที่เกี่ยวข้อง; root `index.html` ใช้เป็น redirect เท่านั้น
 3. วางโค้ดคำนวณไว้ใน model, การผูก DOM ไว้ใน controller, และกฎการแสดงผลไว้ใน CSS ของหน้าที่รับผิดชอบ
 4. วางรูปที่ใช้ร่วมกันไว้ใต้ `assets/images/`; หากแก้ข้อมูลสไลด์ ให้จำไว้ว่าพาธรูปใน `slides-data.js` ถูกตีความเทียบกับ `pages/slides.html`
 5. ปรับการทดสอบที่ตรวจสัญญาของหน้านั้น และอัปเดต [FILE_MAP.md](FILE_MAP.md) ให้ครอบคลุมไฟล์ใหม่

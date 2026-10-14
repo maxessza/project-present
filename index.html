@@ -1,16 +1,28 @@
 <!doctype html>
-<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Water Boat · เริ่มดูโครงงาน</title><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23087b72%22%20d%3D%22M4%205L28%2016L4%2027L10%2016Z%22%2F%3E%3C%2Fsvg%3E"><link rel="stylesheet" href="src/css/portal.css"></head>
-<body><main><header>SMART WATER BOAT / เริ่มดูจากหน้านี้</header>
-<h1>เข้าใจเรือ ด้วยการลองเล่น</h1><p>สื่ออธิบายโครงงานและระบบจำลอง · ไม่ใช่หน้าควบคุมเรือจริง</p>
-<h2>เรียนรู้ด้วยภาพและการทดลอง</h2><nav aria-label="สื่อการเรียนรู้"><a href="pages/classroom.html"><strong>01 · Classroom</strong><span>เริ่มเรียนการเตรียมระบบก่อนออกสำรวจ</span></a>
-<a href="pages/story.html"><strong>02 · Story Lab</strong><span>คำสั่ง → ตรวจเงื่อนไข → การทำงานจริงในแบบจำลอง</span></a>
-<a href="pages/overall.html#ms-uplink-panel"><strong>03 · เรือส่งข้อมูลกลับฝั่ง</strong><span>ดู packet เดินทาง ลองส่งซ้ำและตัดลิงก์</span></a>
-<a href="pages/heading-pid.html"><strong>04 · Heading / PID</strong><span>ปรับแรงแก้ทิศ แล้วเปรียบเทียบการตอบสนอง</span></a></nav>
-<h2>ดูรายละเอียดโครงงาน</h2><nav class="secondary" aria-label="รายละเอียดโครงงาน"><a href="pages/overall.html"><strong>Overall</strong><span>ภาพรวมและการจำลองภารกิจ</span></a>
-<a href="pages/waypoints.html"><strong>Waypoints</strong><span>แนวคิดการวางจุดสำรวจ</span></a>
-<a href="pages/sensors.html"><strong>Sensors</strong><span>การวัดคุณภาพน้ำและการต่อระบบ</span></a>
-<a href="pages/heatmap.html"><strong>Heatmap</strong><span>แนวคิดการแสดงข้อมูลบนแผนที่</span></a>
-<a href="pages/slides.html"><strong>Slides</strong><span>ชุดสไลด์สำหรับนำเสนอ</span></a></nav>
-<p class="warning">เพื่อนที่เพิ่งเปิด: เริ่ม Classroom แล้วลอง Story → ส่งข้อมูลกลับฝั่ง → Heading/PID<br>ค่าตัวอย่างและเวลาสำหรับสอน ไม่ใช่ข้อมูลสดจากเรือ</p>
-<p><a href="README.md">คู่มือเปิดเว็บและเอกสารโครงสร้าง (.md)</a></p></main></body></html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#06121d">
+  <title>Smart Water Boat · Overall</title>
+  <style>
+    :root{color-scheme:dark;font-family:Inter,"Segoe UI",Arial,sans-serif;background:#06121d;color:#eef6f8}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#06121d;line-height:1.55}
+    main{width:min(760px,calc(100% - 40px));margin:12vh auto;padding:28px;border:1px solid #20394a;border-radius:16px;background:#0b1d2b}
+    a{color:#25c5d2}a:focus-visible{outline:3px solid #7be1d5;outline-offset:4px}
+    .brand{display:flex;align-items:center;gap:12px}.mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#25c5d2;color:#06121d;font-weight:850}
+    .brand small{display:block;color:#97afbb;font-size:10px;letter-spacing:.12em}
+  </style>
+  <script>
+    (()=>{const target=new URL("pages/overall.html",location.href);target.search=location.search;target.hash=location.hash;location.replace(target.href)})();
+  </script>
+</head>
+<body>
+  <main>
+    <div class="brand"><span class="mark" aria-hidden="true">SW</span><span><strong>Smart Water Boat</strong><small>FIELD SYSTEMS · SENIOR PROJECT</small></span></div>
+    <h1>กำลังเปิดภาพรวมโครงงาน</h1>
+    <p>หากหน้าไม่เปลี่ยน ให้เปิดภาพรวมโดยตรง:</p>
+    <p><a href="pages/overall.html">ไปยัง Overall · Smart Water Boat</a></p>
+  </main>
+</body>
+</html>
