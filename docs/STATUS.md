@@ -1,31 +1,29 @@
 # สถานะและขอบเขต
 
-## พฤติกรรมปัจจุบัน
+## รูปแบบนำเสนอปัจจุบัน
 
-- เปิด `index.html` แล้ว redirect ไปยัง `pages/overall.html` ซึ่งเป็นหน้า Overall เดิม พร้อมคง query string และ hash ที่ส่งเข้ามา; fallback มีลิงก์ไป Overall และใช้ palette navy/cyan
-- ทุก active page ใช้ SW header และ navigation ชุดเดียวกัน รวม Overall, Waypoints, Heatmap, Sensors, Slides, Classroom, Story, Heading / PID และ Uplink
-- Overall เชื่อมไปยัง Classroom, Story Lab และการทดลอง Heading / PID; หน้าเหล่านั้นมี context link กลับไปยังส่วน mission readiness หรือ PID ใน Overall
-- `site.css` เป็น shell/tokens หลัก และ `learning-theme.css` กำหนดสีเดียวกันให้ Classroom, Story, Heading / PID และ Slides; `portal.css` ที่ใช้กับ launcher เดิมถูกนำออกหลังเลิกใช้หน้า launcher
+- เปิด `index.html` เข้าสู่ Overall เดิมพร้อม query/hash; shared navy/cyan header และเมนูเก้าปลายทางยังอยู่
+- ตัด quiz/คำตอบ/เฉลย/checkpoint/coach ชวนทายจาก Classroom รวม markup, scripts และ styles; ไม่มีการซ่อนด้วย CSS อย่างเดียว
+- ทุกหน้าที่ใช้งานและข้อความสไลด์ใช้หัวข้อบอกเล่าแทนคำถาม; ตัดบทความอ่านต่อใน PID และบทความ firmware/project legacy ใน Overall
+- คงภาพจำลอง ปุ่ม P/I/D, readiness/START, Story, What-if/RTH และ inspector ของ packet/attempt/log ไว้ เพราะเป็นส่วนดูผลและปรับการจำลอง ไม่ใช่การถามผู้ชม
 
-## หลักฐานที่บันทึกในรอบแก้ไข
+## หลักฐานรอบลบคำถาม
 
-- Contract ของ root ผ่านกับ `file://`: พบ `.site-header` หนึ่งชุด, Overall diagram หนึ่งชุด, navy `rgb(6, 18, 29)` และ `OverallModel` เป็น object
-- Shared-shell regression ที่เพิ่มใหม่ผ่านหลังจากบันทึกผล RED ก่อนแก้ theme
-- `node --test` และ `python tools/check-links.py` ผ่านกับ final bytes; raw outputs และ child exits อยู่ใน handoff evidence
-- Browser integration ผ่าน 40 cases กับ `file://` และ HTTP: เมนูหลักทุกหัวข้อ, ธีม/ตัวอักษร, ลิงก์เข้า PID/Uplink, PID controls/plots, Story, Classroom, Uplink failure/reset, Slides, keyboard และจอ390px; หลักฐานนี้เป็น software integration ไม่ใช่การทดสอบทุกสถานการณ์หรือทุกขนาดจอ
-- Independent review รอบนี้หยุดเมื่อครบ cap300วินาที (exit124) จึงยังไม่ใช่ final acceptance. ผู้ตรวจพบ contrast ของ Classroom และตัวอักษร navbar ไม่ตรงกัน; coordinator ยืนยันด้วย native Chromium RED แล้วแก้เฉพาะ CSS จน GREEN รวมข้อความ readiness/note, navbar และ mobile Slides. ไม่ rerun paid review อัตโนมัติ และสถานะ independent acceptance ของ candidate ปัจจุบันยัง **NOT VERIFIED**
-- หลักฐานเพิ่ม: root query/hash และ context links6cases; native finding regressions6cases; `node --test`53tests และ link checker209references. ผลเหล่านี้ไม่แทนคำรับรอง independent reviewer หรือเรือจริง
+- Node: 47 tests ผ่าน ไม่มี failure. จำนวนลดจาก53เพราะนำ7quiz testsและ1coach-style testที่เป็นของ feature ที่เจ้าของสั่งลบออก แล้วเพิ่ม2presentation-only regressions; ไม่ลด assertion ของการจำลองที่ยังใช้งาน
+- Local path/anchor/resource checker: 200 references ผ่าน
+- Chromium: 40 integration cases (file/HTTP, navigation, PID, mission readiness/START/motors/movement/reset, Story, Uplink loss/hold/stale, Slides, keyboard/mobile) +6context links +6contrast/mobile regressions +36rendered presentation checks =88checks ผ่าน
+- Rendered presentation checks ตรวจ8หน้าที่ใช้จริงบน1440px/390px และ20สไลด์; ไม่พบคำถาม/quiz/prediction/read-more UI ตามรูปแบบที่ทดสอบ
+- JavaScript ที่คงอยู่13ไฟล์เหมือน baseline แบบbyte-for-byte รวม calculation models, mission/story controllers, packet codec/transport. อีก2ไฟล์แก้เฉพาะ display strings (PID rendererและslide2); quiz model/adapterถูกลบตามคำขอ
+- Migration map บันทึก37active mappingsและ2historical removal tombstones; FILE_MAPตรงกับ63public files
 
-## ขอบเขต
+## สถานะการยอมรับ
 
-- Classroom, Story, Heading / PID และ Uplink เป็นแบบจำลองใน browser ไม่เชื่อมกับเรือ วิทยุ สถานีฐาน หรือ telemetry จริง
-- Heatmap เป็นคำอธิบาย ไม่มีชุดข้อมูลภาคสนามหรือ pipeline ประมวลผลข้อมูล
-- งานนี้ไม่ปรับ Heading model/controller/renderer, mission logic หรือ Uplink codec/transport behavior/bytes; ไม่ใช่การรับรอง gain กับเรือจริง
-- การตรวจครบทุกขนาดจอ การใช้งานจริงบนเรือ/เซนเซอร์ และ independent acceptance ยังคง **NOT VERIFIED** ในเอกสารนี้; scoped review ของการแก้ shell/theme/navigation ต้องอ่านผลจากรายงานผู้ตรวจ ไม่ใช้ผล browser แทน
+Software checks ข้างต้น PASS. Independent acceptance ยัง **NOT VERIFIED**; ใช้หลักฐานของ coordinator ไม่ใช่ final independent report. ไม่เริ่ม paid review รอบใหม่อัตโนมัติ และไม่ได้ปิด historical review/process/firmware holds
 
-## ค้างจากงานก่อนหน้า
+## ขอบเขตและงานค้างเดิม
 
-- Historical UI/simulation/firmware/process holds ยังคงเป็นประเด็นแยก งาน shell correction นี้ไม่ได้ปิดหรือยกเว้น hold เหล่านั้น
-- รายงานเดิมระบุประเด็นอ้างอิง/undefined ของ slide 18; งานนี้ไม่ได้แก้หรือประกาศปิดประเด็นนั้น
-- ขอบเขต Monitor data pipeline ยังไม่ชัดและไม่ได้ขยายในงานนี้
-- การยืนยันกับผู้เรียน จอ projector และการนำเสนอจริงยังรอการใช้งานจริง
+- การจำลองเป็น browser-only ไม่เชื่อมเรือ วิทยุ หรือ telemetry จริง ไม่รับรอง gains/ขั้นตอน operator หรือการใช้งานภาคสนาม
+- ไม่มีการแก้ firmware, main merge หรือ public hosting ในรอบนี้
+- การตรวจข้อความของslide18ไม่ได้ปิดประเด็น source/undefined ที่มีรายงานเดิม; ไม่รับรองความถูกต้องของทุกเนื้อหาจากการตรวจคำถาม
+- Heatmap ยังไม่มี field-data pipeline; Monitor extension ยังไม่ได้ขยาย
+- ผู้ใช้ยังต้องดูการจัดวางกับจอ/โปรเจกเตอร์ที่ใช้เสนอจริง

@@ -1,8 +1,12 @@
 # Smart Water Boat
 
-This site explains the project and provides browser based learning simulations. Open [index.html](index.html) to reach the existing Overall experience immediately. The root redirect keeps the incoming query string and hash, so links such as `#pid` and `#ms-uplink-panel` still reach their Overall sections.
+This site explains the project and provides interactive browser demonstrations. Open [index.html](index.html) to reach the existing Overall experience immediately. The root redirect keeps the incoming query string and hash, so links such as `#pid` and `#ms-uplink-panel` still reach their Overall sections.
 
 Keep the project folder together after extracting a ZIP. The pages load shared CSS, scripts, and images from `pages/`, `src/`, and `assets/`.
+
+## Presentation mode
+
+The presenter explains through diagrams and controls. Audience quizzes, prediction questions, answer checkpoints and narrative read-more blocks are removed; technical packet/log inspectors and model-only boundaries remain.
 
 ## Navigate the site
 

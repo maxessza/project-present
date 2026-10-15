@@ -26,14 +26,14 @@
       "old_path": "heading.html",
       "new_path": "pages/heading-pid.html",
       "input_sha256": "0f5dfe0e4665250eb86e5ff4ebb6cbef4d3c836f40d454e48c62f1b3daf09840",
-      "output_sha256": "68eff7eeda813becd39e8b795dd53316c845a449ce41c12f9027229184816b15",
+      "output_sha256": "1375743acf61399172dcc56099979bdc4f68d7b9db403158cf94a19aad775b9a",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
       "old_path": "heading.js",
       "new_path": "src/js/heading/heading.js",
       "input_sha256": "fde1a8eb598a09e03dbb23bb8a1ccdc9af630d8585d31f2473e23c0ea11c9e0b",
-      "output_sha256": "fde1a8eb598a09e03dbb23bb8a1ccdc9af630d8585d31f2473e23c0ea11c9e0b",
+      "output_sha256": "3e7e814bf95a3d5366a1aa841cd05a3b87cae64742bd83e6d769497f586c6f8c",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -47,7 +47,7 @@
       "old_path": "index.html",
       "new_path": "pages/overall.html",
       "input_sha256": "e2fa510b6119af788d205e812fd74b2699213e71036bf290dd1444a9f6ac0c7d",
-      "output_sha256": "3645979befde9a5c07c6b582233a5f3dca21923395357aba287ba41050f7a2b9",
+      "output_sha256": "93833b4ce6fc60e8fc6f3120173a9953b59bf655d09875bd2c675707f88551d7",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -61,21 +61,14 @@
       "old_path": "learn.css",
       "new_path": "src/css/learn.css",
       "input_sha256": "c429f9f3c9e857bfdb37d65dd06431a5f5d082679fbe2ed8e7a03b0a6953e7ae",
-      "output_sha256": "c429f9f3c9e857bfdb37d65dd06431a5f5d082679fbe2ed8e7a03b0a6953e7ae",
+      "output_sha256": "fbc039284f46b1d000fbe16049287e413ea874395122b8525d1714350c10c45c",
       "edit_kind": "move_only"
     },
     {
       "old_path": "learn.html",
       "new_path": "pages/classroom.html",
       "input_sha256": "00fdbff063f36f0dd64e045dd8428463677bc586bc319463c0a3739242887098",
-      "output_sha256": "3bdd56f2a604d8d40736ebae60402f6d60b5655253af92d28a891019e386cbb3",
-      "edit_kind": "resource_paths/navigation_only"
-    },
-    {
-      "old_path": "learn.js",
-      "new_path": "src/js/classroom/learn.js",
-      "input_sha256": "b43560d07b1b65572d51e70479baed7f961dc8454682146a7969b507a72a1ae9",
-      "output_sha256": "b43560d07b1b65572d51e70479baed7f961dc8454682146a7969b507a72a1ae9",
+      "output_sha256": "41eb1bf2b5b82a67cc2bcaed990c0b6ae55715d27942144c21de1517bce4d6c0",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -163,13 +156,6 @@
       "edit_kind": "resource_paths/navigation_only"
     },
     {
-      "old_path": "quiz-model.js",
-      "new_path": "src/js/classroom/quiz-model.js",
-      "input_sha256": "670941a9319a4d00d05184fd73fefb6c2df04065ad2decd24d9d7344b588e242",
-      "output_sha256": "670941a9319a4d00d05184fd73fefb6c2df04065ad2decd24d9d7344b588e242",
-      "edit_kind": "resource_paths/navigation_only"
-    },
-    {
       "old_path": "sensors.html",
       "new_path": "pages/sensors.html",
       "input_sha256": "d3d21b3bc978e4ee276ed173458312b8a0cda6388d193066b5332780f0262795",
@@ -187,7 +173,7 @@
       "old_path": "slides-data.js",
       "new_path": "src/js/slides/slides-data.js",
       "input_sha256": "7e14e50027c2cf3939e474697f95fad21a2b538cdd8f1daf17589e3ee457e612",
-      "output_sha256": "f60174ee46e71694a42e9a88f8dc593ade909f64ff91ef7645eef5561874794a",
+      "output_sha256": "3cf5168fb729a5472a776bebb1b2744da17bda1fbc2a5436e61bb41fd7f3340d",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -222,7 +208,7 @@
       "old_path": "story.html",
       "new_path": "pages/story.html",
       "input_sha256": "2b037e855757f691efc70cc958cbc7eb6405690ab6e68199ed8cbb711e93d90a",
-      "output_sha256": "1c6fa1c76fa8cadcd5ae68ed0930dbfe2831e6a8802df3a006e448afc2e953a1",
+      "output_sha256": "208162d41467faed8762e31ed919245606f8c680f467f5863acf5ac98ac3e01e",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -273,6 +259,28 @@
       "input_sha256": "b4bb36c5586f43092389312184be20d17f0103d593202226eacd4731e51bc845",
       "output_sha256": "b4bb36c5586f43092389312184be20d17f0103d593202226eacd4731e51bc845",
       "edit_kind": "move_only"
+    }
+  ],
+  "removed_records": [
+    {
+      "former_mapping": {
+        "old_path": "learn.js",
+        "new_path": "src/js/classroom/learn.js",
+        "input_sha256": "b43560d07b1b65572d51e70479baed7f961dc8454682146a7969b507a72a1ae9",
+        "output_sha256": "b43560d07b1b65572d51e70479baed7f961dc8454682146a7969b507a72a1ae9",
+        "edit_kind": "resource_paths/navigation_only"
+      },
+      "reason": "Owner removed audience quiz feature; not part of current active inventory."
+    },
+    {
+      "former_mapping": {
+        "old_path": "quiz-model.js",
+        "new_path": "src/js/classroom/quiz-model.js",
+        "input_sha256": "670941a9319a4d00d05184fd73fefb6c2df04065ad2decd24d9d7344b588e242",
+        "output_sha256": "670941a9319a4d00d05184fd73fefb6c2df04065ad2decd24d9d7344b588e242",
+        "edit_kind": "resource_paths/navigation_only"
+      },
+      "reason": "Owner removed audience quiz feature; not part of current active inventory."
     }
   ]
 }

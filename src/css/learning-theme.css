@@ -61,32 +61,23 @@ body.classroom-page{background:#06121d;color:#eef6f8;font-family:Inter,"Segoe UI
 @media(max-width:620px){.classroom-page .site-header .nav-link{font-size:11px}}
 .classroom-page .ms-readiness label{color:#eef6f8}
 .classroom-page .ms-readiness legend,.classroom-page .ms-readiness small,.classroom-page .ms-limit small{color:#afc3cb}
-.classroom-page .learn-hero h1,.classroom-page .ms-intro h2,.classroom-page .ms-console h3,
-.classroom-page .learn-quiz-heading h2,.classroom-page .quiz-prompt{color:#eef6f8}
+.classroom-page .learn-hero h1,.classroom-page .ms-intro h2,.classroom-page .ms-console h3{color:#eef6f8}
 .classroom-page .learn-hero-copy>p:last-child,.classroom-page .ms-lead,
 .classroom-page .ms-explanation,.classroom-page .ms-gps-prompt p,
-.classroom-page .learn-quiz-heading>p:last-child,.classroom-page .quiz-feedback,
-.classroom-page .ms-teaching-note{color:#afc3cb}
-.classroom-page .learn-roadmap li,.classroom-page .ms-limit,.classroom-page .ms-console,
-.classroom-page .ms-readiness,.classroom-page .learn-quiz-card,
-.classroom-page .quiz-answer,.classroom-page .quiz-action{
+.classroom-page .ms-teaching-note{color:#afc3cb}.classroom-page .ms-limit,.classroom-page .ms-console,
+.classroom-page .ms-readiness{
   border-color:#294e62;background:#0b1d2b;color:#eef6f8
 }
-.classroom-page .learn-roadmap li[aria-current]{border-color:#25c5d2;background:#123643;color:#eef6f8}
 .classroom-page .ms-status{border-color:#286254;background:#10302e;color:#b7f0dc}
 .classroom-page .ms-status[data-kind="blocked"]{border-color:#76502d;background:#392d20;color:#ffcf8a}
 .classroom-page .ms-button,.classroom-page .ms-quiet-button{border-color:#365668;background:#102638;color:#eef6f8}
 .classroom-page .ms-button:hover:not(:disabled),.classroom-page .ms-quiet-button:hover{border-color:#25c5d2;background:#173447}
-.classroom-page .ms-button-primary,.classroom-page .quiz-action-primary{border-color:#25c5d2;background:#25c5d2;color:#06121d}
+.classroom-page .ms-button-primary{border-color:#25c5d2;background:#25c5d2;color:#06121d}
 .classroom-page .ms-button-start{border-color:#a8753c;background:#392d20;color:#ffcf8a}
 .classroom-page .ms-button-start:hover:not(:disabled){border-color:#ffbd69;background:#4b3924}
-.classroom-page .learn-coach-note{border-color:#76502d;background:#392d20;color:#f4d6a7}
-.classroom-page .learn-coach-note b{color:#ffcf8a}
-.classroom-page .learn-checkpoint-link{border-color:#286254;background:#10302e;color:#b7f0dc}
 .classroom-page .ms-step{border-color:#294e62;background:#0b1d2b;color:#97afbb}
 .classroom-page .ms-step.is-current{border-color:#25c5d2;background:#123643;color:#eef6f8}
 .classroom-page .ms-step.is-complete{border-color:#286254;background:#10302e;color:#b7f0dc}
-.classroom-page .quiz-answer:hover:not(:disabled){border-color:#25c5d2;background:#173447}
 
 /* Slides retain deck transport and controls while taking the shared site palette. */
 .slides-page{display:flex;flex-direction:column;overflow:hidden;background:#06121d;color:#eef6f8;font-family:Inter,"Segoe UI",Arial,sans-serif}

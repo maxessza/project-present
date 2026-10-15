@@ -2,12 +2,14 @@
 
 ## เลือกตำแหน่งแก้ให้ตรงงาน
 
+เว็บนี้เป็นสื่อนำเสนอ: ไม่เพิ่มคำถาม แบบทดสอบ เฉลย prompt ชวนทาย หรือบทความอ่านต่อ ใช้หัวข้อบอกเล่า ภาพจำลองและปุ่มทดลอง; คง inspector/log ที่ใช้ดูสถานะจริงของแบบจำลอง
+
 - โครงหน้าและข้อความประจำหน้า: `pages/<ชื่อหน้า>.html`; `index.html` ส่งต่อไปยัง Overall จริงและคง query/hash ส่วน navigation 9 หัวข้ออยู่ใน shell ของแต่ละหน้า
-- การคำนวณและสถานะจำลอง: ไฟล์ `*-model.js` ของหน้านั้น เช่น `src/js/heading/heading-model.js`, `src/js/story/story-model.js`, `src/js/classroom/quiz-model.js` และ `src/js/overall/overall-model.js`
-- การวาดหน้า รับเหตุการณ์ และควบคุมการเล่น: controller ของหน้า เช่น `heading.js`, `story.js`, `classroom/learn.js` และ `overall/overall.js`
+- การคำนวณและสถานะจำลอง: ไฟล์ `*-model.js` ของหน้านั้น เช่น `src/js/heading/heading-model.js`, `src/js/story/story-model.js` และ `src/js/overall/overall-model.js`
+- การวาดหน้า รับเหตุการณ์ และควบคุมการเล่น: controller ของหน้า เช่น `heading.js`, `story.js`, `mission/mission-start.js` และ `overall/overall.js`
 - การเคลื่อนไหว: `src/js/overall/overall-visual-motion.js` สำหรับภาพเคลื่อนไหวของ Overall, `src/js/mission/mission-start.js` สำหรับ storyboard และ `src/js/mission/uplink-motion.js` สำหรับการเดินทางของ packet จำลอง
 - สไตล์: `site.css` เป็น shared shell/tokens/navigation ของทุกหน้า, `learning-theme.css` ปรับ Classroom/Story/Heading/Slides ให้ใช้สีเดียวกัน และ stylesheet เฉพาะหน้าดูแล diagrams/controls; `navigation.css` ใช้กับ context links กลับ Overall
-- คำถามและคำตอบแบบทดสอบ: `src/js/classroom/quiz-model.js`; เนื้อหาและลำดับสไลด์: `src/js/slides/slides-data.js`; การแสดงผลสไลด์: `src/js/slides/app.js`
+- เนื้อหาและลำดับสไลด์: `src/js/slides/slides-data.js`; การแสดงผลสไลด์: `src/js/slides/app.js`
 - ภาพประกอบที่ใช้ร่วมกัน: `assets/images/`
 
 ข้อมูลและแบบจำลองในไฟล์เหล่านี้ใช้สอนในเบราว์เซอร์ การแก้ packet หรือชื่อโมดูลไม่ทำให้เกิดการเชื่อมต่อวิทยุ/backend หรืออ่านข้อมูลจากเรือจริง
@@ -16,7 +18,7 @@
 
 เรียง `<script>` ใน HTML ให้โมเดลที่ controller ต้องใช้มาก่อน:
 
-- Classroom: `mission-start-model.js` → `mission-start.js` → `quiz-model.js` → `learn.js`
+- Classroom: `mission-start-model.js` → `mission-start.js`
 - Story: `mission-start-model.js` → `story-model.js` → `story.js`; โมเดล Story ใช้โมเดลภารกิจร่วม
 - Heading / PID: `heading-model.js` → `heading.js`
 - Overall: `overall-model.js` → `overall-labs-model.js` → `overall.js` → `overall-labs.js` → `overall-visual-motion.js` → `mission-start-model.js` → `mission-start-telemetry-model.js` → `mission-start.js` → `uplink-motion.js`

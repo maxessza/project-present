@@ -8,7 +8,7 @@
 - `index.html` — redirect แบบเรียบง่ายไปยัง `pages/overall.html`; ส่งต่อ query/hash เดิมและมีลิงก์ fallback ที่เข้าถึงด้วยแป้นพิมพ์ได้
 - `.gitignore` — ละเว้นไฟล์สภาพแวดล้อม Python และ cache (`.env`, `.venv`, `__pycache__`)
 - `.gitattributes` — เก็บ bytes ของไฟล์ตามต้นฉบับ ไม่แปลง line endings ตอน clone เพื่อรักษา hashes ของ source/tests และ migration map
-- `pages/classroom.html` — หน้า Classroom; markup ของ storyboard เตรียมภารกิจ 8 ขั้นและแบบทดสอบ 2 ข้อ โหลดโมเดล/ตัวควบคุมภารกิจและ quiz ตามลำดับ
+- `pages/classroom.html` — หน้า Classroom; markup ของ storyboard เตรียมภารกิจ 8 ขั้น โหลดเฉพาะโมเดลและตัวควบคุมภารกิจ ไม่มีส่วนถามตอบ
 - `pages/heading-pid.html` — หน้า Heading / PID; markup ของหน้าปัด A/B, target, gain controls, transport และกราฟที่ `HeadingLab` วาด
 - `pages/heatmap.html` — หน้าอธิบายการประมาณค่าระหว่างจุดวัดด้วยข้อความและแผนภาพ ไม่มี script หรือชุดข้อมูลที่สร้าง heatmap จริง
 - `pages/overall.html` — หน้า Overall แบบบูรณาการ; markup ของบทเรียน route/task/PID/mission, ตัวอย่างตัวเลข, inspector และแผง Uplink ซึ่งโหลด Overall และ mission scripts
@@ -20,14 +20,14 @@
 ## ภาพประกอบ
 
 - `assets/images/activity-flow.png` — แผนภาพลำดับกิจกรรมในหน้า Waypoints และสไลด์; ใช้เล่า workflow ไม่ได้รันภารกิจ
-- `assets/images/boat-structure.png` — ภาพโครงสร้างเรือใน Overall และสไลด์; เป็นแบบประกอบคำอธิบาย ไม่ใช่การตรวจยืนยันตัวเรือจริง
+- `assets/images/boat-structure.png` — ภาพโครงสร้างเรือในสไลด์; เป็นแบบประกอบคำอธิบาย ไม่ใช่การตรวจยืนยันตัวเรือจริง
 - `assets/images/hardware-wiring.png` — ภาพผังสายเซนเซอร์/โมดูลใน Sensors และสไลด์; เป็นภาพอ้างอิง ไม่ได้อ่านวงจรหรือยืนยัน hardware จริง
 
 ## สไตล์
 
 - `src/css/heading.css` — รูปแบบหน้าปัดสอง lane, กราฟ, gain controls, responsive layout และ reduced-motion ของ Heading / PID
 - `src/css/learning-theme.css` — ใช้ tokens สี navy/cyan เดียวกับเว็บหลักกับ Classroom, Story, Heading / PID และ Slides โดยคงสถานะ A/B และ controls เฉพาะหน้า
-- `src/css/learn.css` — hero, roadmap, พื้นที่อ่านและ quiz ของ Classroom
+- `src/css/learn.css` — หัวข้อสั้น แผนภาพและ controls ของ Classroom
 - `src/css/mission-start.css` — สไตล์เฉพาะ namespace `.mission-start` สำหรับ storyboard readiness, แผนที่เก้าจุด, controls และ telemetry ที่ใช้ใน Classroom/Overall
 - `src/css/navigation.css` — รูปแบบลิงก์ตามบริบทจากบทเรียนกลับไปยังส่วนที่เกี่ยวข้องใน Overall
 - `src/css/overall-visuals.css` — รูปแบบ SVG/diagram และสถานะการเคลื่อนไหวของตัวอย่างภาพใน Overall
@@ -36,10 +36,8 @@
 - `src/css/story.css` — scene panels, SVG, readiness controls, responsive viewport และ reduced-motion ของ Story Lab
 - `src/css/styles.css` — deck, stage, slide layouts, navigation และ responsive rules ของหน้า Slides
 
-## JavaScript: Classroom และ Heading
+## JavaScript: Heading
 
-- `src/js/classroom/learn.js` — DOM adapter/controller ของ quiz; globals `LearnQuizAdapter`, `LearnQuizController`, ฟังก์ชัน `install` และ `render`; อ่าน `LearnQuizModel` และอัปเดตปุ่ม/feedback บน Classroom
-- `src/js/classroom/quiz-model.js` — สถานะและกติกาคำถาม; global `LearnQuizModel`, ฟังก์ชัน `createState`, `answer`, `next`; แยกคำตอบ/feedback/การเลื่อนไปข้อถัดไปจาก DOM
 - `src/js/heading/heading-model.js` — แบบจำลอง yaw/PID สอง lane; global `HeadingModel`, ฟังก์ชัน `wrapError`, `initial`, `control`, `advance`, `createRun`, `stepRun`, `resetRun`; ไม่มี DOM dependency
 - `src/js/heading/heading.js` — controller/renderer ของหน้า Heading; global `HeadingLab`, ฟังก์ชัน `render`, `oneStep`, `syncControls`, `configure`, `frame`, `setPlaying`; ใช้ `HeadingModel`, controls และ SVG/plot ใน `heading-pid.html`
 
@@ -64,14 +62,14 @@
 
 ## Tests และเครื่องมือ
 
+- `tests/presentation-only.test.js` — ป้องกันการใส่คำถาม แบบทดสอบ prompt ชวนทาย และบทความอ่านต่อกลับในหน้าที่ใช้งานและข้อความทุกสไลด์
+
 - `tests/approved-correction.test.js` — ตรวจ storyboard การเลี้ยว/การตอบสนอง yaw, ตำแหน่ง HOME, packet projection, แผง log และ START/readiness/reset
-- `tests/classroom-page.test.js` — ตรวจ markup/สไตล์ Classroom, waypoint grid, ข้อความว่าไม่ใช่สถานะสด และ resource ภายใน
+- `tests/classroom-page.test.js` — ตรวจ waypoint grid, ข้อความว่าไม่ใช่สถานะสด, resource ภายใน และการไม่มี checkpoint
 - `tests/forward-caption.test.js` — ตรวจคำอธิบาย PWM ว่า base ± correction ใช้กับการผสมแรงเดินหน้า ไม่ใช่การหมุนอยู่กับที่
 - `tests/heading-model.test.js` — ตรวจ wrapping มุม, P/I/D, windup, yaw plant, สอง lane, horizon 20 วินาที และ validation ของ input
 - `tests/packet-projection.test.js` — ตรวจการฉาย stage/readiness/route flag จาก packet model
 - `tests/page-identity.test.js` — ตรวจชื่อ/เอกลักษณ์ของหน้า Story และ favicon แบบ inline
-- `tests/quiz-dom.test.js` — ตรวจการแสดงตัวเลือก, retry, next และตัวนับคำถามใน DOM adapter
-- `tests/quiz-model.test.js` — ตรวจลำดับ checkpoint, feedback ของคำตอบผิด และการเลื่อนไปข้อถัดไปเมื่อถูกต้อง
 - `tests/reduced-motion.test.js` — ตรวจว่ากฎ CSS ของ Story ลด/ปิด motion เมื่อผู้ใช้ตั้ง reduced motion
 - `tests/review-ui.test.js` — ตรวจขนาดปุ่มขั้นต่ำ, ตำแหน่ง control บน desktop และ viewport แผนภาพสำหรับจอเล็ก
 - `tests/story-model.test.js` — ตรวจ fixture readiness, การเลือก scene, gate ของ START, effects และ reset ใน Story model
@@ -89,5 +87,5 @@
 - `docs/MIGRATION_MAP.json` — ตารางพาธเดิม→ปัจจุบันพร้อม hash และชนิดการย้าย/แก้ resource
 - `docs/SPEAKER_NOTES.md` — โน้ตผู้บรรยายสไลด์เดิม เก็บเป็นเอกสารประวัติ ไม่ใช่แผนผังสถาปัตยกรรมปัจจุบัน
 - `docs/STATUS.md` — สถานะการตรวจและข้อจำกัดที่ยังค้าง โดยแยก organization evidence ออกจากการตรวจระบบจริง
-- `docs/WEBSITE_GUIDE.md` — วัตถุประสงค์แต่ละหน้าและเส้นทางเรียนรู้ที่แนะนำ
+- `docs/WEBSITE_GUIDE.md` — วัตถุประสงค์แต่ละหน้าและลำดับการนำเสนอและขอบเขตแต่ละหน้า
 - `docs/legacy/mission-start-fragment.html` — HTML fragment เก่าที่เก็บไว้เป็นประวัติ ไม่ใช่หน้าเว็บที่ลิงก์หรือเป็นเจ้าของ interaction ปัจจุบัน

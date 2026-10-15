@@ -1,13 +1,15 @@
 # คู่มือเว็บไซต์
 
-## จุดประสงค์และเส้นทางเรียนรู้
+## จุดประสงค์และลำดับการนำเสนอ
+
+เว็บนี้ไม่มีคำถามชวนผู้ชมตอบ เฉลย หรือปุ่มอ่านบทความต่อ ผู้บรรยายอธิบายผ่านภาพและการเปลี่ยนสถานะ
 
 เว็บนี้ใช้เล่าแนวคิดของโครงงานเรือสำรวจคุณภาพน้ำและให้ลองแบบจำลองในเบราว์เซอร์ ไม่ใช่ dashboard สำหรับควบคุมเรือจริง เปิด `index.html` แล้วจะเข้าสู่หน้า Overall เดิมทันที โดย query และ hash จะถูกส่งต่อไปด้วย ทุกหน้ามีแถบนำทาง Smart Water Boat ชุดเดียวกันซึ่งรวมเก้าปลายทาง: Overall, Waypoints, Heatmap, Sensors, Slides, Classroom, Story, Heading / PID และ Uplink
 
 เริ่มจาก [Overall](../pages/overall.html) เพื่อเห็นภาพรวม จากนั้นใช้ลิงก์ในส่วนที่เกี่ยวข้องเพื่อเปิด [Classroom](../pages/classroom.html), [Story Lab](../pages/story.html) หรือ [Heading / PID](../pages/heading-pid.html) สำหรับการทดลองแบบละเอียด แต่ละบทเรียนมีลิงก์กลับไปยังส่วน mission readiness หรือ PID ใน Overall และ Uplink อยู่ที่ [แผง Uplink](../pages/overall.html#ms-uplink-panel)
 
-1. [Classroom](../pages/classroom.html) สรุปการเตรียมระบบ 8 ขั้นและให้ตอบคำถามตรวจความเข้าใจ 2 ข้อ
-2. [Story Lab](../pages/story.html) ทดลอง 4 ฉาก: คำสั่งถึง gate หรือไม่, เงื่อนไข readiness, การแยก permission ออกจากมอเตอร์และการเคลื่อนที่, และเส้นทางตัวอย่างไป WP1
+1. [Classroom](../pages/classroom.html) แสดงการเตรียมระบบ 8 ขั้นและปรับ readiness/START ได้ ไม่มีแบบทดสอบหรือการถามผู้ชม
+2. [Story Lab](../pages/story.html) ทดลอง 4 ฉาก: เส้นทางคำสั่ง START ผ่าน gate, เงื่อนไข readiness, การแยก permission ออกจากมอเตอร์และการเคลื่อนที่, และเส้นทางตัวอย่างไป WP1
 3. [Uplink ใน Overall](../pages/overall.html#ms-uplink-panel) สร้าง snapshot ตัวอย่างเป็น packet 38 bytes, ส่ง `ArrayBuffer` ผ่าน `MessageChannel` ภายในเบราว์เซอร์ และแสดงผลฝั่งรับ พร้อมจำลอง loss, retry หรือยกเลิกการส่ง ไม่มี radio link จริง
 4. [Heading / PID](../pages/heading-pid.html) เปรียบเทียบแบบจำลองสองชุดที่หันทิศไปยังเป้าหมายเดียวกัน ปรับ P/I/D และดูผลการตอบสนอง
 
