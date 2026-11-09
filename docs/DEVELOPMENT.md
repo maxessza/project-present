@@ -8,6 +8,7 @@
 - การคำนวณและสถานะจำลอง: ไฟล์ `*-model.js` ของหน้านั้น เช่น `src/js/heading/heading-model.js`, `src/js/story/story-model.js` และ `src/js/overall/overall-model.js`
 - การวาดหน้า รับเหตุการณ์ และควบคุมการเล่น: controller ของหน้า เช่น `heading.js`, `story.js`, `mission/mission-start.js` และ `overall/overall.js`
 - การเคลื่อนไหว: `src/js/overall/overall-visual-motion.js` สำหรับภาพเคลื่อนไหวของ Overall, `src/js/mission/mission-start.js` สำหรับ storyboard และ `src/js/mission/uplink-motion.js` สำหรับการเดินทางของ packet จำลอง
+- ฉาก Overall ปัจจุบัน: `src/js/overall/mission-kernel.js` pure model ผ่าน compatibility export `autonomous-mission-model.js`, `mission-transport.js` เป็น MessageChannel owner, `autonomous-mission.js` renderer และ `autonomous-mission.css`; `system/*` เป็น implementation เก่าไม่ mount ใน Overall ดูขอบเขตที่ `docs/AUTONOMOUS_MISSION.md`
 - สไตล์: `site.css` เป็น shared shell/tokens/navigation ของทุกหน้า, `learning-theme.css` ปรับ Classroom/Story/Heading/Slides ให้ใช้สีเดียวกัน และ stylesheet เฉพาะหน้าดูแล diagrams/controls; `navigation.css` ใช้กับ context links กลับ Overall
 - เนื้อหาและลำดับสไลด์: `src/js/slides/slides-data.js`; การแสดงผลสไลด์: `src/js/slides/app.js`
 - ภาพประกอบที่ใช้ร่วมกัน: `assets/images/`
@@ -21,7 +22,7 @@
 - Classroom: `mission-start-model.js` → `mission-start.js`
 - Story: `mission-start-model.js` → `story-model.js` → `story.js`; โมเดล Story ใช้โมเดลภารกิจร่วม
 - Heading / PID: `heading-model.js` → `heading.js`
-- Overall: `overall-model.js` → `overall-labs-model.js` → `overall.js` → `overall-labs.js` → `overall-visual-motion.js` → `mission-start-model.js` → `mission-start-telemetry-model.js` → `mission-start.js` → `uplink-motion.js`
+- Overall: `uplink-motion.js` (codec-only opt-out; ABI bodies unchanged) → `mission-kernel.js` → `autonomous-mission-model.js` → `mission-transport.js` → `autonomous-mission.js`; legacy Overall/mission-start/system controllers are not loaded.
 - Slides: `slides-data.js` → `app.js`
 - Waypoints, Sensors และ Heatmap เป็นหน้าอธิบายที่ไม่มี script เฉพาะหน้า
 
@@ -44,3 +45,10 @@ python -m http.server 8000 --bind 127.0.0.1
 5. ปรับการทดสอบที่ตรวจสัญญาของหน้านั้น และอัปเดต [FILE_MAP.md](FILE_MAP.md) ให้ครอบคลุมไฟล์ใหม่
 
 `docs/legacy/mission-start-fragment.html` เป็น fragment เก่าที่ไม่ใช่หน้าแอปปัจจุบัน อย่านำไปลิงก์เป็นหน้าเริ่มภารกิจที่ใช้งานได้ หากต้องแก้ประสบการณ์ปัจจุบัน ให้แก้หน้า Classroom, Story หรือแผง Uplink ใน Overall ตามเจ้าของเนื้อหา
+
+
+## Drive the integrated mission
+
+Extract the full tree, open `index.html`, use “ตั้งค่าพร้อม”, then “START mission”. START acceptance is stopped; “ขั้นถัดไป” begins GRID and subsequent steps sample/move. Clear water skips the optional spiral; dirty water requires eight valid readings and first-waypoint eligibility. Equation focus is presentation-only. Select transport to inspect TX/RX/decode/render IDs and hex; drop-first retries, drop-all exhausts three attempts, link-off holds stale shore while browser-memory logging continues. Reset retires old callbacks. No actual SD/radio/vessel is accessed.
+
+Run `node --test`, `python tools/check-links.py`, and `git -c core.whitespace=cr-at-eol diff --check`. Browser verification must also drive actual source→bytes→MessageChannel→decoder→DOM, clean/dirty branches, pause/reset and delayed callback retirement. Build/regex checks alone do not prove this. Full anomaly/calibration/hardware validation remain outside this scene.

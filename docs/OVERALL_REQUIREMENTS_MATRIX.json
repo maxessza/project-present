@@ -1,0 +1,335 @@
+{
+  "schema": "overall-original-requirements-matrix/v1",
+  "source_of_truth": "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/REQ.md, C1-C12 (lines 23-34)",
+  "purpose": "Corrected current evidence map for bounded G1-G4 closure; not a declaration that the broader C1-C12 firmware-parity contract is complete.",
+  "overall_status": "HISTORICAL_G1_G4_EVIDENCE_WITH_NEW_UI_REVIEW_PENDING",
+  "independent_review": "NOT VERIFIED for the restructured Overall UI. Prior run82 PASS remains valid only for its frozen historical G1-G4 bytes; it is not inherited by this UI candidate or a whole firmware/hardware certificate.",
+  "current_ui_note": "Confirmed rows below describe the prior G1-G4 source/evidence snapshot, not freshly rerun UI claims. Current function-centered UI contract and evidence live in docs/FUNCTION_CENTERED_OVERALL.md and its linked task-local ledger. Do not rebind the historical review hashes to the new UI.",
+  "requirements": [
+    {
+      "id": "C1",
+      "name": "SOURCE/COVERAGE",
+      "status": "host_checked",
+      "confirmed": [
+        "All18 declared source bindings checked against actual current firmware bytes, function anchors/ranges and actual kernel/policy/GRID caller attribution; source-status regression separates browser memory illustration from an SD recovery port."
+      ],
+      "unknown": [
+        "This is declared-branch provenance and controlled behavioral evidence, not an exhaustive equivalence theorem over every source branch/configuration."
+      ],
+      "excluded": [
+        "Physical sensor, radio, scheduler, storage, and hull behavior."
+      ],
+      "evidence": [
+        "tests/overall-source-bindings.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/SOURCE-BINDINGS.md",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/SOURCE_BINDINGS.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/log-reference-green/stdout.txt"
+      ]
+    },
+    {
+      "id": "C2",
+      "name": "ROUTE/COMMANDS",
+      "status": "host_checked",
+      "confirmed": [
+        "Current station native suite passes42 checks through actual root and MessageChannel, with accepted route/START driving canonical navigation; current policy tests cover intake/readiness/refusal boundaries."
+      ],
+      "unknown": [
+        "Actual station software route-generation algorithm and real MAC/application acknowledgement are outside the supplied browser example."
+      ],
+      "excluded": [
+        "Actual radio delivery and shore-side ingestion."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-station/REPORT.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/node.stdout.txt",
+        "tests/overall-station-browser.py",
+        "tests/mission-policies.test.js"
+      ]
+    },
+    {
+      "id": "C3",
+      "name": "GRID",
+      "status": "host_checked",
+      "confirmed": [
+        "Current full Node run executes production-C++ GRID/controller/Drive comparison (no skipped cases); native mission also preserves canonical signed-PWM-driven motion."
+      ],
+      "unknown": [
+        "Projection and hull response remain schematic; production reference compilation is host evidence, not a firmware image or pond validation."
+      ],
+      "excluded": [
+        "Physical GPS accuracy and calibrated hull response."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/node.stdout.txt",
+        "tests/grid-guidance-native.test.js",
+        "tests/current-grid-guidance.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/autonomous-mission/acceptance.json"
+      ]
+    },
+    {
+      "id": "C4",
+      "name": "SPIRAL GENERATION",
+      "status": "host_checked",
+      "confirmed": [
+        "Current native real SPIRAL journey generates targets incrementally and retains history; kernel planner/runtime code is byte-identical to the protected completed baseline. Source mapping now names navigate/spiralTarget and separates teaching-only makeSpiral."
+      ],
+      "unknown": [
+        "Controlled planner fixtures and native journey do not establish physical GPS/ENU accuracy."
+      ],
+      "excluded": [
+        "Physical GPS/ENU accuracy and hull dynamics."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-explanations/overall-explanations-native.json",
+        "tests/spiral-planner-policy.test.js",
+        "tests/autonomous-mission-model.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/DEPENDENCY_REUSE.json"
+      ]
+    },
+    {
+      "id": "C5",
+      "name": "SPIRAL PROGRESSION",
+      "status": "host_checked",
+      "confirmed": [
+        "Current full Node run includes spiral initialization and planner progression/timeout regression files; unchanged canonical runtime retains distinct FSM entry, planner initialization and Drive readiness."
+      ],
+      "unknown": [
+        "Fixture boundaries do not prove real scheduling jitter or GNSS/pond behavior."
+      ],
+      "excluded": [
+        "Physical navigation accuracy."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/node.stdout.txt",
+        "tests/spiral-initialization-regression.test.js",
+        "tests/spiral-planner-policy.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/DEPENDENCY_REUSE.json"
+      ]
+    },
+    {
+      "id": "C6",
+      "name": "ANOMALY/FSM/SAFETY",
+      "status": "host_checked",
+      "confirmed": [
+        "Current policy suite exercises command/FSM/anomaly/safety guard cases; native read-failure case retains SPIRAL history and enforces acquired-unavailable final0/0 without contradictory movement copy.",
+        "Public safety-loss and GRID route-loss native cases stop at0/0 with a truthful reason; existing compass/history/healthy cases are preserved.",
+        "Actual healthy-input recovery does not clear a latched EMERGENCY STOP: final HARD_STOP and0/0 remain, and the current caption continues explaining the stop. Intentional new RED7/8 then full current GREEN8/8 are retained."
+      ],
+      "unknown": [
+        "Reserved firmware safety flags with no producer and real fault-detection performance are not fabricated by the model."
+      ],
+      "excluded": [
+        "Physical sensor fault rates and real actuator safety."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/node.stdout.txt",
+        "tests/mission-policies.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-explanations/overall-explanations-native.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/latched-stop-red/overall-explanations-native.json"
+      ]
+    },
+    {
+      "id": "C7",
+      "name": "CONTROL/DRIVE",
+      "status": "host_checked",
+      "confirmed": [
+        "Current Node native source comparison exercises GRID/Drive; current canonical heading/model tests execute as part of the full zero-skip run. Native healthy versus acquired-fault cases verify final applied PWM and unchanged controller logic."
+      ],
+      "unknown": [
+        "Toy signed-PWM plant is not calibrated thrust; controlled corpus is not all possible continuous inputs."
+      ],
+      "excluded": [
+        "Calibrated motor/hull behavior."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/node.stdout.txt",
+        "tests/grid-guidance-native.test.js",
+        "tests/autonomous-mission-model.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-explanations/overall-explanations-native.json"
+      ]
+    },
+    {
+      "id": "C8",
+      "name": "SAMPLING/SENSORS",
+      "status": "host_checked",
+      "confirmed": [
+        "Current Node policy/compass/hold regressions execute conversion, validity, publication and initialization cases; actual read-failure native scenario verifies acquired availability rather than presence-only flags."
+      ],
+      "unknown": [
+        "Actual ADC/I2C calibration, NVS values, physical accuracy and real acquisition scheduling remain unknown/excluded."
+      ],
+      "excluded": [
+        "Physical sensor accuracy and actual NVS calibration contents."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/node.stdout.txt",
+        "tests/compass-source-policy.test.js",
+        "tests/mission-policies.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-explanations/overall-explanations-native.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/SOURCE-BINDINGS.md"
+      ]
+    },
+    {
+      "id": "C9",
+      "name": "HOME/RTH",
+      "status": "host_checked",
+      "confirmed": [
+        "Current native low-battery suite passes7 checks from fresh route/START through departure latch, RTH entry, park/arrival dwell and completion; G1 additionally preserves real scan history on native FORCE_RTH."
+      ],
+      "unknown": [
+        "Software fixtures do not establish physical position accuracy or real NVS HOME persistence."
+      ],
+      "excluded": [
+        "Physical position accuracy and real NVS write."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-lowbattery/REPORT.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-explanations/overall-explanations-native.json",
+        "tests/mission-policies.test.js"
+      ]
+    },
+    {
+      "id": "C10",
+      "name": "DATA/LOG",
+      "status": "host_checked",
+      "confirmed": [
+        "Current DATA native suite passes32 checks and independently decodes12 real browser transmissions across the9 report fields; codec/transport bytes and immutable lineage implementations are unchanged. Browser memoryLog remains bounded32 and explicitly reference-only relative to real SD recovery."
+      ],
+      "unknown": [
+        "DataLogger journal/pending-row/recovery/backpressure is an explicitly unimplemented software/storage boundary of the accepted memory illustration; no SD or radio durability claim."
+      ],
+      "excluded": [
+        "SD durability/replay, radio transport delivery, and actual application ingestion."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-data/overall-data-browser.json",
+        "tests/overall-data.test.js",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/SOURCE-BINDINGS.md"
+      ]
+    },
+    {
+      "id": "C11",
+      "name": "NATIVE UI",
+      "status": "host_checked",
+      "confirmed": [
+        "Current fresh native suites pass Overall44, station42, DATA32, retained controls66, low-battery7 and explanation8 checks. The explanation cases include retained-scan RTH, acquired-compass loss, safety stop, unavailable route and still-latched emergency after restoring a healthy input. Desktop/mobile/reduced-motion images and actual controls are saved in the real reports."
+      ],
+      "unknown": [
+        "Owner projector/browser preference and real boat operation remain user checks, not inferred from headless Chromium."
+      ],
+      "excluded": [
+        "Physical boat behavior."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/autonomous-mission/acceptance.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-retained/REPORT.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-data/overall-data-browser.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/final-v4/overall-explanations/overall-explanations-native.json"
+      ]
+    },
+    {
+      "id": "C12",
+      "name": "PRESERVATION/REVIEW",
+      "status": "not_verified",
+      "confirmed": [
+        "Protected-source guard passes14/14 and firmware85 inputs are unchanged; peer/PID/codec/transport and owner dirty/index/HEAD state preserved. Independent verifier run82 is complete PASS for bounded G1-G4 browser closure with runtime55 hashes bound; old failures, quota attempts and stop records are preserved, never retroactively approved."
+      ],
+      "unknown": [
+        "Owner projector/target-browser preference and real bench/pond/physical validation remain outside this bounded software acceptance. Broader complete firmware equivalence is not certified."
+      ],
+      "excluded": [
+        "Commit, push, publication, firmware writes/build/flash, or physical tests."
+      ],
+      "evidence": [
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/BASELINE.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/OWNER_SCOPE.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/builder-activation/CAP.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/DEPENDENCY_REUSE.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/PRESERVATION-v4.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/g2-stop-repair/TERMINAL_TASK_STATE.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/reviewer/LEDGER.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/reviewer/REPORT.md",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/coordinator/CURRENT_READBACK_20261030.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/review-continuation-20261030-1/reviewer/LEDGER.json",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/review-continuation-20261030-1/reviewer/REPORT.md",
+        "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/review-continuation-20261030-1/execution/RESULT_BEFORE_TRANSITION.json"
+      ]
+    }
+  ],
+  "captured_at": "2026-10-30T03:03:53.296913+07:00",
+  "owner_scope": "G1–G4 residual closure of approved browser model; original C1–C12 IDs retained, hardware and unexercised combinations not certified",
+  "review_gate": {
+    "state": "NOT_VERIFIED",
+    "artifact": "D:/Presention/presention-current-grid-ui-20261023/overall-firmware-parity/closure-20261029-231008/review-continuation-20261030-1/reviewer/LEDGER.json",
+    "sha256": "64dca2bdf1e414190cff80113895fcb53aa9b99b5a777720c17acffd0dddc8dd",
+    "task_id": "t_9d7e2b3f",
+    "run_id": 82,
+    "runtime_sha256": {
+      "index.html": "c393726425f3982bf99e1626caed827f940a4e57eee6514290abcd26f0b2fdc5",
+      "pages/classroom.html": "a3afdddb579140ec344a9a2585b3a77d118d388b89906ad53fa306d8d2181595",
+      "pages/heading-pid.html": "b474564917e5a2c909fa133a5ec221e561379e4ceaee1de473b2a00552e2e6ef",
+      "pages/heatmap.html": "03590c4137ca1a191ef54460b3ec7e5c1881da1a020e8aac341563cd54b961a8",
+      "pages/overall.html": "dbab89c25385ee43c70cf95391db5b0f92b9614a043c0913a912c1d4738a39cc",
+      "pages/sensors.html": "f174831d7aeecccacc7713f68f6d4358c5e98bac9d5ad90314e749ad1821e0e0",
+      "pages/slides.html": "d0bd45567ad0cabbefb46d7b06f5ecada7f9d80d6153604c77517a4f7afb6ddb",
+      "pages/story.html": "3d264595009914e4760dbc6838ea8a54b5d20dcea66e7c7384b8e45f6a02bde0",
+      "pages/system-explorer.html": "bd904e3ba86c5d2b5416e3b4c659c9c7ea080501c2f6bdc43b5855b390a0a8c9",
+      "pages/waypoints.html": "c665d6a262d4fcd3a5e9621b989ae3dbf090d5b973f4d9c5f7d65fb71920de48",
+      "src/css/autonomous-mission.css": "4e518c2735d9b31d73b0e4180f86c1087a6e7e16a5551eb1ea2098a1769aa700",
+      "src/css/boat-mission.css": "c71150864cdec9b9603c2740a755b4294e006024641a95f9244cafbe185f9dd2",
+      "src/css/heading.css": "630c8fcd65997823c5a3606b37e620b70972e081d6967e5a9a334c61c699cfa9",
+      "src/css/learn.css": "fbc039284f46b1d000fbe16049287e413ea874395122b8525d1714350c10c45c",
+      "src/css/learning-theme.css": "fdd0d1277dc31f989cc9b2f18c838628b2d80bdf1ebc8b8106d368a028443c05",
+      "src/css/mission-start.css": "155247a88e4cdfca43bd0ad70e9ef98c6adf7bf5fd79a10b4a8fe2fb75676a21",
+      "src/css/navigation.css": "c607055267ea3cec6fa12c341869128a44fa35f78ebfc588ab039a48f4616e4d",
+      "src/css/overall-instrument.css": "bd310b4dbe890d9f6aceeac52f91f3fb987340876a1f67f7fd14f28d14660585",
+      "src/css/overall-visuals.css": "a540c0de87e5f0ec5b0f38a7c78c0ae090183c7746c33499d7e8fd8812bcd298",
+      "src/css/overall.css": "93e63dca14dc846300872f949ba06c16e8313ae7ecfc4a7243be010b2947e6a6",
+      "src/css/site.css": "9796e929eebd56b5d8b056186ee578d068f1d27c839b02b2af91608c34b4f857",
+      "src/css/story.css": "033cc3c890dcc969357079f637d185ae77101c92a89b520d9406998db31600a7",
+      "src/css/styles.css": "42618440d38273291d1eee497e78269b43322cf3e8cee8dce06a3d63422b82c3",
+      "src/css/system-explorer.css": "f96b3d629aefdd106d9f5f7bd07b3ce38a76e19ee089397fdb8d98a1251bcc40",
+      "src/css/system.css": "d2cfea479c0fbfed1b43a8be86bff2afaf7b70a1ed036ae14c2a06bb66ed0ce1",
+      "src/js/explorer/boat-mission-model.js": "07d328da1d098742286947f2817ef3087b3de1eef3358f787c6e13430a3f510a",
+      "src/js/explorer/boat-mission-ui.js": "ce7b94f98fc68ca355f8d06d920fb7aba1b79fcb7b786cf3524d953bfd52c043",
+      "src/js/explorer/system-explorer-model.js": "b1436edfa54a1392f2dc02ca621d7a4933ec7c19737c4b7210a2a144d4e51e79",
+      "src/js/explorer/system-explorer.js": "7daab9ef064d1a2c879d09d3053084b0a484c8309d699494d44dacae3caa7e10",
+      "src/js/heading/heading-model.js": "289f80bdb93b6a851b6c5e920956d350742fd0202052db340f8b8141d79f6c19",
+      "src/js/heading/heading.js": "3e7e814bf95a3d5366a1aa841cd05a3b87cae64742bd83e6d769497f586c6f8c",
+      "src/js/mission/mission-start-model.js": "4d732e0a74be9c609251bc096bdd1257f58ca551df57fcd6b84572be0778955f",
+      "src/js/mission/mission-start-telemetry-model.js": "3b703ebfa57a2bbd997d4df9dc9790294b871780cb86679fa5565a72b6f4014d",
+      "src/js/mission/mission-start.js": "14c283e35add369163922048d5c49be12efa67f8b41a8644506989d9cbfc053b",
+      "src/js/mission/uplink-motion.js": "f497af71539a9e4ea2a1c08d7abf1e955be57e54cd98c964179ba1f4fb428196",
+      "src/js/overall/autonomous-mission-model.js": "535e6bb307a4d6c0741f039a6b18538b88b718bd22030105daf87b4e1595a8ac",
+      "src/js/overall/autonomous-mission.js": "f7599766fa25831bac04b0d35362fae285e74ac61975e2f9f133af3bf7a1b8ae",
+      "src/js/overall/firmware-policy.js": "f3fa0820005bbdf3779d30a91f7188b730231e972eeec4184a4417970aec5c43",
+      "src/js/overall/grid-guidance.js": "e6aff219f4233eab2573415028271cfb548651c1383c39888e1cbb8cc6e78832",
+      "src/js/overall/mission-incoming.js": "95a726ac6055b8b20618f2c4cf78eb78d2b4b26c9fb22d7c643f1895327f7925",
+      "src/js/overall/mission-kernel.js": "664a43e2fbd0febbc63943df65b24f7160584174c3c9183c22163a2f4166042e",
+      "src/js/overall/mission-presentation.js": "a5d709ccc01a19bd5c5de4e5df5e1e8f4da2f9070d0665f9ee05115623b925b0",
+      "src/js/overall/mission-transport.js": "6a04e2e11b6ca9534ac6d3fdc329d5d4b8542992aea04aab7d81b227b8809ac0",
+      "src/js/overall/overall-completion.js": "e5a138eb90f75687075450d593fe4596387fd4b5787384253f632bad2692e7e0",
+      "src/js/overall/overall-labs-model.js": "fe6dada91a427728e62cc2a39781cd2101142db47c5b8e565e4d0e4f0182f788",
+      "src/js/overall/overall-labs.js": "fb94e2d17cdb46aa84f936d17a366e645102f0fdd266afe8f419107a8d008008",
+      "src/js/overall/overall-model.js": "29430d80ea44f1d4c1f61f28446315b7b51a7d59f370e0698bd8cbcc5bd33139",
+      "src/js/overall/overall-visual-motion.js": "41cfaee53931bd93a985decdcc9bd150eec48bdd5660b41204b7a6463e64e5a9",
+      "src/js/overall/overall.js": "67ecab3aa558b5c8a33e63b195e1b8243b12ea92f24165163460262838f57032",
+      "src/js/slides/app.js": "238621ec534b86468321048c47a8ec2ebcbb77dad08d7f1002388331e84b5db0",
+      "src/js/slides/slides-data.js": "3cf5168fb729a5472a776bebb1b2744da17bda1fbc2a5436e61bb41fd7f3340d",
+      "src/js/story/story-model.js": "d053768ff5930073ff374f0d45657c79984a7cec16655f378f9e1e1d63a6ca75",
+      "src/js/story/story.js": "3106ffa8827185ae4d1657598489ada208bc76ed1ddd903a016bd8fadd785e9c",
+      "src/js/system/system-model.js": "99c34c8a16b37b6f83a0ce33fde2f6ebb4c95bb9723a710f7fcbabe05fcffb9e",
+      "src/js/system/system.js": "3058533cf698a9497864f6038e2b7d32edadfd9e1adf8c1dffb09da503852c11"
+    },
+    "scope": "G1-G4 bounded browser",
+    "complete_review": true,
+    "prior_stops_preserved": true
+  },
+  "source_requirement_sha256": "25b6e6395a6056c2a72947910409617fdab8f2e9b546e330ee70ffbc1a192f9d",
+  "test_prerequisites": {
+    "firmware_reference": "Set OVERALL_FIRMWARE_ROOT to the actual read-only firmware checkout. Missing inputs fail explicitly; no silent skipped acceptance.",
+    "node_command": "OVERALL_FIRMWARE_ROOT='C:/Users/Icezy/OneDrive/Desktop/source/1_Firmware' GRID_EVIDENCE_DIR='<new-evidence-dir>' node --test tests/*.test.js",
+    "native_browser": "Installed Python with Playwright/Chromium; each maintained browser script uses --out with a new evidence directory.",
+    "portability_boundary": "Runtime website opens from root index.html. These local acceptance-evidence paths refer to this owner machine, not a portable CI or publication claim."
+  }
+}

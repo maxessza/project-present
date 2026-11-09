@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-uplink-codec-only>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,8 +9,12 @@
   <link rel="stylesheet" href="../src/css/site.css">
   <link rel="stylesheet" href="../src/css/overall.css?v=interactive-labs-1">
   <link rel="stylesheet" href="../src/css/overall-visuals.css?v=picture-first-1">
-  <link rel="stylesheet" href="../src/css/mission-start.css?v=mission-start-1">
+<link rel="stylesheet" href="../src/css/mission-start.css?v=mission-start-1">
+<link rel="stylesheet" href="../src/css/autonomous-mission.css?v=autonomous-mission-1">
 <link rel="stylesheet" href="../src/css/navigation.css">
+<link rel="stylesheet" href="../src/css/overall-instrument.css?v=data-report-2">
+<link rel="stylesheet" href="../src/css/function-centered-overall.css?v=function-center-2">
+<link rel="stylesheet" href="../src/css/function-flow.css?v=function-flow-4">
 </head>
 <body class="uplink-preview">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -25,16 +29,176 @@
       <a class="nav-link" href="heatmap.html">Heatmap</a>
       <a class="nav-link" href="sensors.html">Sensors</a>
       <a class="nav-link nav-cta" href="slides.html">Slides</a>
-      <a class="nav-link" href="classroom.html">Classroom</a>
-      <a class="nav-link" href="story.html">Story</a>
-      <a class="nav-link" href="heading-pid.html">Heading / PID</a>
-      <a class="nav-link" href="overall.html#ms-uplink-panel">Uplink</a>
     </nav>
   </header>
 
   <main id="main">
 
-    <section class="ov-learn" id="learn" lang="th" aria-labelledby="ov-title">
+    <section id="system" class="autonomous-mission" lang="th" data-autonomous-mission data-route-stage="0" aria-labelledby="system-title" hidden>
+      <header class="am-heading">
+        <div><p class="ov-kicker">SMART WATER BOAT · TEACHING MODEL</p><h1 id="system-title">AUTONOMOUS MISSION</h1></div>
+        <p>เส้นทาง → waypoint → heading feedback → มอเตอร์ · ฉากเดียวและสถานะจำลองร่วมกัน</p>
+      </header>
+      <div class="am-layout">
+        <div class="am-scene-column">
+          <div class="am-scene-label"><span id="am-route-provenance">แผนตัวอย่าง 9 จุด · ยังไม่อยู่บนเรือ</span><span>NORTH = 0° · CLOCKWISE</span></div>
+          <div class="am-map-pan" role="region" tabindex="0" aria-label="แผนที่ภารกิจ; เลื่อนในกรอบนี้เพื่อดูฉากทั้งหมดบนจอเล็ก">
+            <svg id="am-map" class="am-map" viewBox="230 95 760 420" role="img" aria-labelledby="am-map-title am-map-desc">
+              <title id="am-map-title">Autonomous mission: supplied route, live boat position and followed trail</title>
+              <desc id="am-map-desc">A single schematic geofence scene. The boat tip marks its integrated position; numbered points are the ordered nine-waypoint sweep.</desc>
+              <defs>
+                <pattern id="am-water-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#40727a" stroke-opacity=".18" stroke-width="1"/></pattern>
+                <marker id="am-route-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4 0 8Z" fill="#72d5c8"/></marker>
+                <marker id="am-target-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5 0 9Z" fill="#ffd17b"/></marker>
+
+                <marker id="am-force-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#ff8e79"/></marker>
+              </defs>
+              <rect x="230" y="95" width="760" height="420" rx="18" fill="#09212d"/>
+              <rect x="230" y="95" width="760" height="420" rx="18" fill="url(#am-water-grid)"/>
+              <rect class="am-geofence" x="285" y="125" width="660" height="370" rx="18"/>
+              <text class="am-zone-label" x="303" y="151">GEOFENCE · SCHEMATIC BOUNDARY</text>
+              <circle id="am-anomaly-zone" cx="555" cy="390" r="28" aria-label="synthetic anomaly region later in route"/>
+              <text class="am-zone-label am-anomaly-label" x="520" y="345">EXAMPLE PLUME</text>
+              <path id="am-route" d="M335 455L440 170L440 280L440 390L665 390L665 280L665 170L890 170L890 280L890 390"/>
+              <path id="am-route-progress" d=""/>
+              <path id="am-trail" d=""/>
+              <g id="am-waypoints" aria-label="Ordered grid waypoint positions">
+                <g class="am-waypoint" data-wp="0" transform="translate(440 170)"><circle r="15"/><text y="5">1</text></g>
+                <g class="am-waypoint" data-wp="1" transform="translate(440 280)"><circle r="15"/><text y="5">2</text></g>
+                <g class="am-waypoint" data-wp="2" transform="translate(440 390)"><circle r="15"/><text y="5">3</text></g>
+                <g class="am-waypoint" data-wp="3" transform="translate(665 390)"><circle r="15"/><text y="5">4</text></g>
+                <g class="am-waypoint" data-wp="4" transform="translate(665 280)"><circle r="15"/><text y="5">5</text></g>
+                <g class="am-waypoint" data-wp="5" transform="translate(665 170)"><circle r="15"/><text y="5">6</text></g>
+                <g class="am-waypoint" data-wp="6" transform="translate(890 170)"><circle r="15"/><text y="5">7</text></g>
+                <g class="am-waypoint" data-wp="7" transform="translate(890 280)"><circle r="15"/><text y="5">8</text></g>
+                <g class="am-waypoint" data-wp="8" transform="translate(890 390)"><circle r="15"/><text y="5">9</text></g>
+              </g>
+              <g id="am-accepted-waypoints" aria-label="จุดสำรวจที่เรือรับและเก็บไว้" hidden></g>
+              <path id="am-station-link" d="M294 430L328 450"/>
+              <g id="am-station-icon" transform="translate(280 408)" aria-hidden="true"><rect x="0" y="0" width="19" height="16" rx="2"/><path d="M4 5h11M4 9h11M4 13h7"/></g>
+              <text id="am-station-label" x="277" y="443">สถานี</text>
+              <circle id="am-station-dot" cx="294" cy="430" r="4" aria-hidden="true"/>
+              <g id="am-home" transform="translate(335 455)"><text y="40">HOME</text></g>
+              <path id="am-target-vector" d=""/>
+
+              <circle id="am-target" cx="335" cy="455" r="22" visibility="hidden"/>
+              <g id="am-spiral-points" aria-hidden="true"></g>
+              <line id="am-force-vector" x1="335" y1="455" x2="335" y2="455" marker-end="url(#am-force-arrow)"/>
+              <g id="am-boat" transform="translate(335 455) rotate(0)" aria-label="ตำแหน่งปลายลูกศรและทิศที่หัวเรือหัน">
+                <path d="M0 -13L8 2L2 -0.5L0 4L-2 -0.5L-8 2Z"/>
+              </g>
+              <text id="am-boat-label" class="am-map-caption" x="350" y="482">เรือ</text>
+              <text class="am-map-caption" x="930" y="482" text-anchor="end">LOCAL SCHEMATIC · NOT GPS SCALE</text>
+            </svg>
+          </div>
+          <ol id="am-station-stages" class="am-station-stages" aria-label="ลำดับข้อมูลจากสถานีถึงเรือ">
+            <li data-station-stage="plan" aria-current="step">สถานีเตรียม</li>
+            <li data-station-stage="send">ส่งจุด</li>
+            <li data-station-stage="receive">ถึงเรือ</li>
+            <li data-station-stage="store">เรือเก็บ</li>
+            <li data-station-stage="start">ตรวจพร้อม · เริ่ม</li>
+          </ol>
+          <p id="am-station-reason" class="am-station-reason" role="status" aria-live="polite">แผนจุดสำรวจตัวอย่างยังอยู่ฝั่งสถานี · เรือยังไม่รับเส้นทาง</p>
+          <small class="am-pan-hint">จังหวะการอธิบายถูกหน่วงให้อ่านทัน ไม่ใช่เวลาส่งวิทยุจริง · จอเล็ก: ปัดหรือเลื่อนในกรอบแผนที่</small>
+        </div>
+        <aside class="am-readout-panel" aria-label="Live mission readouts">
+          <h2 class="sr-only">Live mission readouts</h2>
+          <dl class="am-readouts">
+            <div><dt>MISSION STATE</dt><dd id="am-state">READY</dd></div>
+            <div><dt>CURRENT WAYPOINT</dt><dd id="am-waypoint">WP1 / 9</dd></div>
+            <div><dt>CONTROL TARGET</dt><dd id="am-target-heading">—</dd></div>
+            <div><dt>COMPASS SAMPLE</dt><dd id="am-current-heading">0.0°</dd></div>
+            <div><dt>CONTROL ERROR</dt><dd id="am-heading-error">—</dd></div>
+            <div><dt>REQUEST · L PWM</dt><dd id="am-request-left">0</dd></div>
+            <div><dt>REQUEST · R PWM</dt><dd id="am-request-right">0</dd></div>
+            <div><dt>APPLIED · L PWM</dt><dd id="am-left-pwm">0</dd></div>
+            <div><dt>APPLIED · R PWM</dt><dd id="am-right-pwm">0</dd></div>
+          </dl>
+          <small class="am-pwm-note">GRID: PWM ขอ / PWM หลัง drive shaping แยกกัน · หาร 178 ที่ขอบ plant เพื่อสร้างการตอบสนองสังเคราะห์ · ไม่ใช่แรงขับจริง</small>
+        </aside>
+      </div>
+      <div class="am-transport" aria-label="Mission controls">
+        <div class="am-actions"><button type="button" id="am-start">SIM</button><button type="button" id="am-toggle" aria-label="Pause or resume simulation">PAUSE</button><button type="button" id="am-next">NEXT STEP</button><button type="button" id="am-reset">RESET</button><button type="button" id="am-spiral-demo" title="เริ่มภารกิจใหม่ด้วยน้ำขุ่นสังเคราะห์ในช่วงหลัง WP1 · ใช้เรือและนาฬิกาเดิม">เริ่มใหม่ · ซิมก้นหอย</button></div>
+        <label for="am-speed">SPEED</label><select id="am-speed" aria-label="Simulation speed"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option></select>
+        <output id="am-clock" aria-live="off">0.00 s</output>
+      </div>
+      <div class="am-lens-strip">
+        <div id="am-tabs" class="am-tabs" role="tablist" aria-label="Mission learning modes">
+          <button type="button" role="tab" id="am-tab-route" aria-controls="am-panel" aria-selected="true" tabindex="0" data-mode="ROUTE">ROUTE</button>
+          <button type="button" role="tab" id="am-tab-navigation" aria-controls="am-panel" aria-selected="false" tabindex="-1" data-mode="NAVIGATION">NAVIGATION</button>
+          <button type="button" role="tab" id="am-tab-control" aria-controls="am-panel" aria-selected="false" tabindex="-1" data-mode="CONTROL">CONTROL</button>
+          <button type="button" role="tab" id="am-tab-anomaly" aria-controls="am-panel" aria-selected="false" tabindex="-1" data-mode="ANOMALY">WATER</button>
+          <button type="button" role="tab" id="am-tab-data" aria-controls="am-panel" aria-selected="false" tabindex="-1" data-mode="DATA">ข้อมูลที่ส่ง</button>
+        </div>
+        <div id="am-panel" class="am-panel" role="tabpanel" aria-labelledby="am-tab-route" tabindex="0">
+          <div id="am-route-steps" class="am-route-steps" aria-label="Schematic route generation stages">
+            <button type="button" data-route-step="1" aria-current="step">1 · SCHEMATIC AREA</button>
+            <button type="button" data-route-step="2">2 · SUPPLIED ROUTE</button>
+            <button type="button" data-route-step="3">3 · WAYPOINTS</button>
+            <button type="button" data-route-step="4">4 · CURRENT PATH</button>
+          </div>
+          <p id="am-caption" class="am-caption" aria-live="polite">เส้นทาง waypoint 9 จุดที่ป้อนให้ฉากสาธิต · ไม่อ้างว่า firmware สร้าง grid หรือ geofence นี้</p>
+          <p id="am-navigation-note" class="am-mode-note" hidden>GRID ใช้ตำแหน่งเรือกับ accepted route ปัจจุบัน: LOS มองหน้า 6 m บนช่วงเดิม · reached 3 m / ผ่าน waypoint + 0.5 m พร้อมตรวจ cross-track · bearing → wrap180(target − heading)</p>
+          <div id="am-control-note" class="am-mode-note" hidden><span class="am-control-chain">GRID · current source</span><button id="am-disturbance" type="button" hidden>ADD DISTURBANCE</button><a class="am-pid-link" href="#pid">ดูระบบ PID · ปรับ P / I / D และเทียบ A/B ↓</a><small>GRID ใช้ controller ต่อเนื่อง + rate filtering + joint motor allocation + drive slew/floor/reversal; plant ตอบสนองเชิงสังเคราะห์ · SPIRAL/RTH คง PID เดิม ไม่อ้างว่าเป็น PWM ที่สอบเทียบ</small></div>
+          <div id="am-anomaly-note" class="am-mode-note" hidden>
+            <ol id="am-spiral-stages" class="am-spiral-stages" aria-label="ขั้นตอนการสแกนก้นหอย"><li data-spiral-stage="route">1 · ไป WP1</li><li data-spiral-stage="detect">2 · ตรวจน้ำขุ่น</li><li data-spiral-stage="spiral">3 · สแกนก้นหอย</li><li data-spiral-stage="return">4 · ต่อเส้นทางเดิม</li></ol>
+            <output id="am-anomaly-values">ยังไม่มีตัวอย่างน้ำ</output><button id="am-anomaly-activate" type="button">เปิดตัวอย่างน้ำขุ่นช่วงหลัง WP1</button>
+          </div>
+        </div>
+      </div>
+      <section id="am-explanation" class="am-explanation" aria-labelledby="am-explain-title">
+        <header><h2 id="am-explain-title">อ่านการทำงานในฉากนี้</h2><span>ค่าจำลองจากเรือและนาฬิกาภารกิจชุดเดียวกัน</span></header>
+        <dl><div><dt>1 · รับค่าอะไร</dt><dd id="am-explain-input">—</dd></div><div><dt>2 · ตรวจ / คำนวณอะไร</dt><dd id="am-explain-check">—</dd></div><div><dt>3 · ตัดสินใจอะไร</dt><dd id="am-explain-decision">—</dd></div><div><dt>4 · ผลที่เกิดในฉาก</dt><dd id="am-explain-effect">—</dd></div></dl>
+      </section>
+      <section class="am-data-details" id="am-data-details" aria-labelledby="am-data-title" hidden>
+        <header class="am-data-heading"><div><h2 id="am-data-title">ข้อมูลทั้งหมดในรายงานเรือจำลองถึงฝั่ง</h2><p>เปรียบเทียบค่าบนเรือตอนนี้ รายงานที่กำลังเตรียมหรือส่ง และรายงานล่าสุดที่ฝั่งได้รับ</p></div></header>
+        <p class="am-data-current" id="am-data-current" data-current-readings></p>
+        <p class="am-data-status" id="am-data-received-status" role="status" aria-live="polite"></p>
+        <div class="am-data-table-wrap">
+          <table class="am-data-table" id="am-data-table">
+            <caption>เก้ารายการในรายงานเรือจำลองนี้ · ไม่ใช่รายการทุกชนิดของเรือจริง</caption>
+            <thead><tr><th scope="col">ข้อมูลและความหมาย</th><th scope="col">รายงานที่กำลังเตรียมหรือส่ง<small id="am-outgoing-identity">ยังไม่มีชุดข้อมูล</small></th><th scope="col">รายงานล่าสุดที่ฝั่งได้รับ<small id="am-received-identity">ยังไม่ได้รับ</small></th></tr></thead>
+            <tbody>
+              <tr class="am-data-group"><th colspan="3">หมายเลขชุดข้อมูล</th></tr>
+              <tr data-report-field="sequence_number"><th scope="row"><span>ชุดข้อมูลเลขที่</span><small>ใช้แยกรายงานแต่ละชุด</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr class="am-data-group"><th colspan="3">ตำแหน่งและทิศทาง</th></tr>
+              <tr data-report-field="gps_lat"><th scope="row"><span>ตำแหน่งเหนือ–ใต้</span><small>พิกัดเป็นองศา</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr data-report-field="gps_lon"><th scope="row"><span>ตำแหน่งตะวันออก–ตะวันตก</span><small>พิกัดเป็นองศา</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr class="am-data-group"><th colspan="3">คุณภาพน้ำ</th></tr>
+              <tr data-report-field="water_ph"><th scope="row"><span>ความเป็นกรด–ด่างของน้ำ</span><small>หน่วย pH · อาจรอวัดขณะน้ำนิ่ง ช่วงพักไม่ใช่ค่า 0</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr data-report-field="water_turbidity"><th scope="row"><span>ความขุ่นของน้ำ</span><small>หน่วย NTU · บอกว่าน้ำขุ่นเพียงใด</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr data-report-field="water_temp"><th scope="row"><span>อุณหภูมิน้ำ</span><small>องศาเซลเซียส</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr class="am-data-group"><th colspan="3">สถานะเรือและชุดข้อมูล</th></tr>
+              <tr data-report-field="current_mode"><th scope="row"><span>สิ่งที่เรือกำลังทำ</span><small>บอกว่าเรือกำลังรอ สำรวจตามจุด สแกนก้นหอย หรือกลับจุดเริ่มต้น</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr data-report-field="battery_percent"><th scope="row"><span>แบตเตอรี่คงเหลือ</span><small id="am-battery-note">ค่าตัวอย่างที่ตั้งคงที่ ไม่ใช่การวัดแบตเตอรี่จริง</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+              <tr data-report-field="heading_angle"><th scope="row"><span>ทิศที่หัวเรือหัน</span><small>องศา · เหนือ = 0° และเพิ่มตามเข็มนาฬิกา</small></th><td data-report-value="outgoing">ยังไม่มีชุดข้อมูล</td><td data-report-value="received">ยังไม่ได้รับ</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="am-data-notes" id="am-data-notes">ตำแหน่ง น้ำ และการเคลื่อนที่เป็นข้อมูลจำลอง · ไม่ได้เชื่อมต่อเรือจริง</p>
+      </section>
+      <div class="am-data-line" id="am-data-panel" tabindex="-1" aria-label="สถานะข้อมูลระหว่างเรือจำลองกับฝั่ง">
+        <span id="am-source-value">บนเรือจำลองตอนนี้ · ยังไม่มีข้อมูล</span><span class="am-wire"><i id="am-packet-dot" hidden></i><span id="am-packet-identity">ยังไม่มีชุดข้อมูล</span></span><output id="am-shore-value">ฝั่งยังไม่ได้รับข้อมูลชุดใหม่</output>
+      </div>
+      <p id="am-current-reason" class="am-caption" role="status" aria-live="polite">พร้อม · inputs เป็น synthetic และพร้อมเริ่ม</p>
+      <details class="am-trace-details" id="am-trace-details" hidden>
+        <summary>Current event · source trace</summary>
+        <dl class="am-trace-grid"><div><dt>Event / model time</dt><dd id="am-trace-time">ยังไม่มี event</dd></div><div><dt>Captured inputs</dt><dd id="am-trace-inputs">—</dd></div><div><dt>Predicate / result</dt><dd id="am-trace-predicate">—</dd></div><div><dt>Decision</dt><dd id="am-trace-decision">—</dd></div><div><dt>Output</dt><dd id="am-trace-output">—</dd></div><div><dt>Firmware source / boundary</dt><dd id="am-trace-source">—</dd></div></dl><div id="am-trace-rows"></div>
+      </details>
+      <details class="am-input-details"><summary>ตั้งค่าทดลอง / ขอบเขตแบบจำลอง</summary><div class="am-inputs">
+        <label><input type="checkbox" data-mission-input="gps" checked> Synthetic GPS</label><label><input type="checkbox" data-mission-input="compass" checked> Compass address present</label><label><input type="checkbox" data-mission-input="compassReadOk" checked> Synthetic raw read succeeds</label><label><input type="checkbox" data-mission-input="compassFollowPlant" checked> Generate labeled raw sample from illustrative hull heading · not measured</label><label><input type="checkbox" data-mission-input="compassCalibrationExample"> Example hard-iron bounds only</label><label><input type="checkbox" data-mission-input="route" checked> Supplied route</label><label><input type="checkbox" data-mission-input="safety" checked> Safety NORMAL</label><label><input type="checkbox" data-mission-input="home" checked> HOME (RTH only)</label><label><input type="checkbox" data-mission-input="sensorValid" checked> Valid ADS/temp</label>
+        <label><input type="checkbox" id="am-drop-first"> Drop first attempt</label><label><input type="checkbox" id="am-loss-all"> Total loss</label><label>Packet visual <select id="am-wire-speed"><option value="120">Normal</option><option value="700">Slow</option></select></label>
+      </div><p id="am-water-detail"></p><details class="am-packet-details"><summary>ข้อมูลแพ็กเก็ตดิบ · สำหรับตรวจสอบเท่านั้น</summary><p id="am-byte-detail"></p></details><pre id="am-wire-events" hidden></pre>
+      <div class="am-inputs" aria-label="คำสั่งและเซ็นเซอร์ทดลอง">
+        <button type="button" data-policy-command="FORCE_SPIRAL">FORCE_SPIRAL</button><button type="button" data-policy-command="FORCE_RTH">FORCE_RTH</button><button type="button" data-policy-command="EMERGENCY_STOP">E-STOP</button><button type="button" data-policy-command="CLEAR_ESTOP">CLEAR_ESTOP</button><button type="button" data-policy-command="SET_HOME">SET_HOME · อยู่นิ่ง 5 s</button><button type="button" data-policy-command="START_ARM">START_ARM</button><button type="button" data-policy-command="MISSION_UPLOAD_DONE">Seal upload</button><button type="button" data-policy-command="NORMAL">NORMAL · auto</button><button type="button" data-policy-command="NORMAL" data-manual-speed="100">Manual forward · 500 ms</button>
+        <label>Compass raw X · synthetic signed counts<input data-policy-input="compassRawX" type="number" min="-32768" max="32767" step="1" value="-2019"></label><label>Compass raw Y · synthetic signed counts<input data-policy-input="compassRawY" type="number" min="-32768" max="32767" step="1" value="-328"></label><label>แรงดัน pack หลังกรอง (ตัวอย่าง V)<input data-policy-input="batteryVoltage" type="number" min="0" max="15" step="0.1" value="12.15"></label><label>แรงดัน turbidity (ตัวอย่าง V)<input data-policy-input="turbidityV" type="number" min="0" max="5.25" step="0.01" placeholder="อัตโนมัติตามพื้นที่"></label><label>แรงดัน pH (ตัวอย่าง V)<input data-policy-input="phV" type="number" min="0" max="5.25" step="0.01" value="2.532"></label><label>อุณหภูมิ input °C<input data-policy-input="tempC" type="number" step="1" value="27"></label>
+      </div><p id="am-policy-status" role="status"></p>
+      <p>นาฬิกา mission 50 ms · อ่าน ADS รอบแรกแล้วทุก 250 ms · temperature 750 ms · TX1000ms · memory log50ms ไม่ใช่ SD/replay หรือ FreeRTOS. Compass policy ใช้ raw axes ตัวอย่างผ่าน Compass.cpp: ค่าเริ่มต้นสร้าง raw sample แบบระบุชัดจากทิศของ hull จำลองเพื่อให้วงสอนเดินต่อได้ (ไม่ใช่ข้อมูลวัด); ปิดตัวเลือกนี้เพื่อป้อน X/Y เอง. ใช้ factory hard-iron ±2048, yaw offset −188.6°, declination −0.6°, mirror และ finite-heading gate ตาม config.h; read failure ทำให้ fresh=false และ heading NaN, success รีเซ็ต failCount. Profile hard-iron −1000..1000 / −1200..1200 เป็นตัวเลขสาธิตเท่านั้น ไม่ใช่ค่า NVS จริง; ไม่จำลอง QMC5883P/I2C หรือความแม่นยำทางกายภาพ. Route batch1..12, capacity64, order/duplicate/seal แยกจาก receipt และ ACK delivery. GRID ใช้ LOS6m + continuous steering/surge; SPIRAL ใช้ segment LOS3m + HeadingController/PidController เช่นเดียวกับ RTH; ทุกโหมดผ่าน final DriveController เดียว. WaterAnomalyMonitor มี SMA8, baseline dwell4s, ROC diagnostic/motion, hysteresis10, stale1s, automatic cooldown10min แยก FORCE cooldown. ไม่มีข้อจำกัดหนึ่ง spiral ต่อ mission; automatic clean8s/scan wall240s ใช้ state จริง. แรงดัน/พิกัด/หัวเรือ/plant เป็น injected examples; factory pH calibration เป็นตัวอย่างจาก config ไม่ใช่ค่า NVS ของเรือ. Safety ใช้แรงดันและ load/recovery latch; overcurrent/leak เป็น reserved ไม่ใช่ sensor ที่มีจริง. SET_HOME เก็บ sample5s/250ms อย่างน้อย20/spread≤8m/speed≤1.5km/h ใน STANDBY; เก็บใน browser memory ไม่เขียน NVS. HOME ไม่ใช่ START gate; RTH depart≥12m2s, entry&gt;4m, park≤4mทันที/dwell3s. Route ใช้ schematic0.15m/หน่วย แทน GPS geodesic; ไม่ใช่ firmware debugger หรือการรับรองเรือจริง</p></details>
+      <p class="am-disclaimer">Illustrative plant + local MessageChannel · ไม่ใช่เรือจริง/ESP-NOW · physical/high-risk gate HELD / NOT VERIFIED</p>
+      <details class="am-context-links"><summary>เปิดบทเรียนและหน้ารายละเอียดที่ยังคงไว้</summary><nav aria-label="Contextual learning pages"><a href="waypoints.html">Waypoints lab</a><a href="sensors.html">Sensors lab</a><a href="heading-pid.html">Detailed Heading / PID</a><a href="heatmap.html">Heatmap</a><a href="slides.html">Slides</a></nav></details>
+    </section>
+
+    <section class="ov-learn" id="learn" data-pid-restored lang="th" aria-labelledby="ov-pid-title" hidden>
       <div class="ov-shell">
         <nav class="ov-anchor-nav" aria-label="ส่วนของ Overall">
           <a href="#learn" aria-current="location">LEARN · OVERVIEW</a>
@@ -88,14 +252,14 @@
               <div class="ov-panel-heading"><span class="ov-number">2</span><h3>เส้นทางที่มองเห็นได้</h3></div>
               <figure class="ov-figure">
                 <svg class="ov-route-chart" id="ov-spiral-plot" viewBox="0 0 440 300" role="img" aria-labelledby="ov-spiral-title ov-spiral-desc">
-                  <title id="ov-spiral-title">แผนภาพ GRID เข้าก้นหอย 25 เป้าหมายแล้วกลับ GRID</title>
-                  <desc id="ov-spiral-desc">เส้น GRID นำเข้าสู่ก้นหอย schematic ทวนเข็มนาฬิกา มี 25 จุด รัศมี 4 ถึง 8 เมตรในสามรอบ แล้วกลับ GRID ที่ index เดิม</desc>
-                  <defs><marker id="ov-spiral-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#43d2e8"/></marker></defs>
+                  <title id="ov-spiral-title">ภาพตัวอย่างแยก: GRID ผ่าน WP1 แล้วจึงเริ่ม runtime ที่สร้างเป้าหมาย SPIRAL ทีละจุด</title>
+                  <desc id="ov-spiral-desc">เรือสาธิตเดินทางจาก GRID ผ่าน WP1 ก่อนตรวจ anomaly และ safety; waypointIndex อย่างน้อย 1 หมายถึงผ่าน WP1 แล้ว. เมื่อเข้า SPIRAL จุดอ้างอิงคือ GPS fix ปัจจุบัน ไม่จำเป็นต้องตรง WP1 แล้วจึงต่อ GRID เดิม</desc>
+                  <defs><marker id="ov-grid-route-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#43d2e8"/></marker></defs>
                   <rect x="20" y="18" width="400" height="48" rx="12" fill="#0b2230" stroke="#2a5063"/>
-                  <text x="38" y="48" class="ov-svg-label ov-cyan">GRID</text><path d="M94 42 H391" stroke="#43d2e8" stroke-width="3" marker-end="url(#ov-spiral-arrow)"/>
-                  <circle cx="118" cy="42" r="5" fill="#eaf7f8"/><circle cx="256" cy="42" r="5" fill="#eaf7f8"/><circle cx="374" cy="42" r="5" fill="#eaf7f8"/>
-                  <path d="M220 67 V85" stroke="#ffbd69" stroke-width="2.5" marker-end="url(#ov-spiral-arrow)"/>
-                  <text x="220" y="101" text-anchor="middle" class="ov-svg-label ov-amber">SPIRAL · 25 จุด</text>
+                  <text x="38" y="48" class="ov-svg-label ov-cyan">GRID</text><path d="M118 42 V92 L220 180" fill="none" stroke="#43d2e8" stroke-width="3" stroke-dasharray="5 5" marker-end="url(#ov-grid-route-arrow)"/>
+                  <circle cx="118" cy="42" r="5" fill="#eaf7f8"/><circle cx="118" cy="92" r="7" fill="#0b2230" stroke="#43d2e8" stroke-width="2"/><circle id="ov-wp1-passed" cx="118" cy="92" r="12" fill="none" stroke="#51dfb2" stroke-width="3" opacity="0"/>
+                  <text x="132" y="97" class="ov-svg-label ov-cyan">WP1</text><circle cx="220" cy="180" r="4" fill="#43d2e8"/><text x="322" y="208" class="ov-svg-small">GPS fix ปัจจุบัน</text>
+                  <text x="270" y="101" class="ov-svg-label ov-amber">PREVIEW · รูปทรง 25 จุด</text>
                   <path d="M 260.0,180.0 L 249.5,150.5 L 220.0,136.7 L 188.2,148.2 L 173.3,180.0 L 185.8,214.2 L 220.0,230.0 L 256.5,216.5 L 273.3,180.0 L 258.9,141.1 L 220.0,123.3 L 178.8,138.8 L 160.0,180.0 L 176.4,223.6 L 220.0,243.3 L 266.0,226.0 L 286.7,180.0 L 268.3,131.7 L 220.0,110.0 L 169.3,129.3 L 146.7,180.0 L 167.0,233.0 L 220.0,256.7 L 275.4,235.4 L 300.0,180.0" fill="none" stroke="#ffb35c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                   <circle class="ov-spiral-target" cx="260.0" cy="180.0" r="3.2" />
                   <circle class="ov-spiral-target" cx="249.5" cy="150.5" r="3.2" />
@@ -124,11 +288,13 @@
                   <circle class="ov-spiral-target" cx="300.0" cy="180.0" r="3.2" />
                   <circle cx="220" cy="180" r="3" fill="#43d2e8"/>
                   <text x="330" y="143" class="ov-svg-label ov-cyan">4 → 8 m</text><text x="330" y="165" class="ov-svg-label">3 รอบ</text>
-                  <text x="330" y="205" class="ov-svg-small">ภาพ schematic</text>
+                  <text x="322" y="231" class="ov-svg-small">ภาพ schematic</text>
                 </svg>
-                <figcaption>GRID → SPIRAL → GRID · ภาพ schematic · ไม่ใช่มาตราส่วน</figcaption>
+                <figcaption>ภาพ PREVIEW รูปทรงเต็ม แยกจาก runtime · runtime สร้างเฉพาะเป้าหมายปัจจุบันทีละจุดหลังผ่าน eligibility</figcaption>
               </figure>
-              <p class="ov-panel-note">East = r · cos θ · North = r · sin θ (SVG กลับทิศ y) · จบแล้วใช้ GRID index เดิม</p>
+              <p class="ov-panel-note">waypointIndex ≥ 1 หมายถึงผ่าน WP1 แล้ว ไม่ใช่กำลังมุ่งหน้าไป WP1 · ภาพนี้แสดงขา GRID และหลักฐานผ่านก่อนเริ่มสแกน</p>
+              <p class="ov-panel-note">ผ่าน WP1 อย่างเดียวไม่เริ่ม SPIRAL: ต้องยังอยู่ GRID + anomaly trigger + safety NORMAL · จุดอ้างอิงสแกนคือ GPS fix ปัจจุบันตอนเริ่ม ไม่จำเป็นต้องตรง WP1 · runtime สร้างเป้าหมายทีละจุด; รูปทรงเต็มด้านบนเป็น preview แยกต่างหาก · ภาพตัวอย่าง ไม่ใช่ sensor/GPS สด</p>
+              <p class="ov-panel-note">East = r · cos θ · North = r · sin θ (SVG กลับทิศ y) · เป้าหมายก้นหอยเป็นภาพ schematic</p>
             </article>
             <article class="ov-panel">
               <div class="ov-panel-heading"><span class="ov-number">3</span><h3>ข้อมูลไหลระหว่าง task</h3></div>
@@ -181,7 +347,8 @@
         </section>
     <section class="ov-block" id="pid" aria-labelledby="ov-pid-title">
       <div class="ov-section-head"><div><p class="ov-kicker">02 · PID / HEADING</p><h2 id="ov-pid-title">การควบคุมทิศทางด้วย PID</h2></div><p>มุมเป้า → error → คำสั่งสองฝั่ง → วัดใหม่</p></div>
-      <p class="ov-detail-link"><a href="heading-pid.html">Open the interactive A/B Heading / PID experiment →</a></p>
+      <p class="ov-detail-link"><a href="heading-pid.html">เปิดตัวทดลอง PID เดิม · ปรับ P / I / D · เปรียบเทียบ A/B →</a></p>
+      <p class="ov-panel-note">ตัวทดลอง PID เป็นบททดลองแยก ไม่เปลี่ยนค่าควบคุมของภารกิจ SIM ด้านบน</p>
       <div class="ov-grid">
         <article class="ov-panel">
           <div class="ov-panel-heading"><span class="ov-number">1</span><h3>เริ่มจากมุมที่ต้องแก้</h3></div>
@@ -259,7 +426,7 @@
     </section>
   </div>
 </section>
-<section id="mission-start" class="mission-start container" lang="th" aria-labelledby="ms-heading">
+<section id="mission-start" class="mission-start container" lang="th" aria-labelledby="ms-heading" hidden>
   <div class="ms-intro">
     <div>
       <p class="ms-kicker">FIELD BRIEF · MISSION START</p>
@@ -388,9 +555,9 @@
     </div>
 
     <ol class="um-steps" aria-label="ลำดับการส่ง">
-      <li data-stage="sample">01 <span>ตัวอย่าง</span></li><li data-stage="build">02 <span>สร้าง 38 B</span></li>
-      <li data-stage="io">03 <span>I/O</span></li><li data-stage="transmit">04 <span>ส่งผ่านลิงก์</span></li>
-      <li data-stage="decode">05 <span>ถอดรหัส</span></li><li data-stage="shore">06 <span>จอฝั่ง</span></li>
+      <li data-stage="sample"><b>01</b><span>ตัวอย่าง</span></li><li data-stage="build"><b>02</b><span>bytes</span></li>
+      <li data-stage="io"><b>03</b><span>I/O</span></li><li data-stage="transmit"><b>04</b><span>ส่ง</span></li>
+      <li data-stage="retry"><b>05</b><span>ซ้ำ</span></li><li data-stage="decode"><b>06</b><span>decode</span></li><li data-stage="shore"><b>07</b><span>ฝั่ง</span></li>
     </ol>
 
     <div class="um-pan" role="region" aria-label="แผนภาพการส่งตัวอย่างจากเรือถึงจอฝั่ง" tabindex="0">
@@ -452,10 +619,8 @@
         <text x="868" y="294" text-anchor="middle" class="um-small">จอ shore</text>
 
         <g id="um-packet" class="um-packet" transform="translate(145 178)" aria-hidden="true">
-          <rect x="-42" y="-23" width="84" height="46" rx="12" fill="#ffd18b" stroke="#fff3d3" stroke-width="2"/>
-          <path d="M-25 -9 H-9 M-25 0 H25 M-25 9 H15" stroke="#4f3c26" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="29" cy="-12" r="4" fill="#ee8c4b"/>
-          <text x="0" y="43" text-anchor="middle" class="um-packet-label">38 B</text>
+          <circle r="12" fill="#ff9b45" stroke="#fff0cf" stroke-width="2"/>
+          <text id="um-packet-label" x="0" y="-25" text-anchor="middle" class="um-packet-label">SEQ —</text>
         </g>
       </svg>
       <p class="um-pan-hint">ลากแนวนอนเพื่อดูภาพเต็ม &#8596;</p>
@@ -464,8 +629,17 @@
     <div class="um-proofline" aria-live="polite">
       <div><span>snapshot ตอนส่ง</span><strong data-testid="sample-value">&#8212;</strong></div>
       <div class="um-arrow" aria-hidden="true">&#8594;</div>
-      <div><span>จอฝั่ง · decode callback</span><strong data-testid="shore-value">&#8212;</strong><small id="um-stale" data-testid="stale-label" hidden>ค่ารับล่าสุด · อาจเก่า</small></div>
+      <div><span>จอฝั่ง · decode callback</span><small id="um-rx-sequence">RX SEQ —</small><strong data-testid="shore-value">&#8212;</strong><small id="um-stale" data-testid="stale-label" hidden>ค่ารับล่าสุด · อาจเก่า</small></div>
       <div class="um-packet-size"><b id="um-byte-count">38 B</b><small>little-endian</small></div>
+    </div>
+
+    <div class="um-field-focus">
+      <button id="um-field-spotlight" data-testid="field-spotlight" type="button" aria-pressed="false" aria-expanded="false" aria-controls="um-field-readout">เน้น turbidity · bytes 24–27</button>
+      <dl id="um-field-readout" class="um-field-readout" aria-live="polite" hidden>
+        <div><dt>ตัวอย่าง snapshot</dt><dd id="um-field-source">รอ snapshot / กดส่ง</dd></div>
+        <div><dt>TX · byte 24–27</dt><dd id="um-field-tx">รอสร้าง bytes</dd></div>
+        <div><dt>RX ล่าสุด · bytes → decode</dt><dd id="um-field-rx">รอ receiver callback จริง</dd></div>
+      </dl>
     </div>
 
     <div class="um-controls">
@@ -479,7 +653,7 @@
         <label class="um-check"><input id="um-drop-first" data-testid="drop-first" type="checkbox"> drop ครั้งแรก</label>
         <label class="um-check"><input id="um-link-off" data-testid="link-off" type="checkbox"> ปิดลิงก์จำลอง</label>
       </div>
-      <div class="um-actions"><button id="um-send" data-testid="send-button" type="button">ส่งตัวอย่าง <span aria-hidden="true">&#8594;</span></button><button id="um-reset" data-testid="reset-button" type="button">เริ่มใหม่ ↺</button></div>
+      <div class="um-actions"><label class="um-speed-label" for="um-speed">ความเร็วคำอธิบาย<select id="um-speed" data-testid="speed-input"><option value="normal">ปกติ</option><option value="slow">ช้า</option></select></label><button id="um-send" data-testid="send-button" type="button">ส่งตัวอย่าง <span aria-hidden="true">&#8594;</span></button><button id="um-reset" data-testid="reset-button" type="button">เริ่มใหม่ ↺</button></div>
     </div>
 
     <details class="um-inspector" data-testid="packet-inspector">
@@ -556,15 +730,16 @@
   <p class="ms-teaching-note">ลำดับนี้เป็นแบบจำลองเพื่ออธิบายแนวคิด readiness เท่านั้น · รายละเอียดการเริ่มระบบจริงอาจต่างจากตัวอย่าง</p>
 </section>
     <!-- mission-start.html is embedded here for the existing single-page Overall experience. -->
-    <section class="overall-sim container" id="operate" lang="th" aria-labelledby="sim-title">
-      <div class="sim-intro"><div><p class="eyebrow">OPERATE / Mission simulation</p><h1 id="sim-title">ลำดับการตัดสินใจ<br><span>และการเดินทาง</span></h1><p>เรือผ่าน WP1 แล้วเดินต่อบนแนว GRID; เมื่อพบ anomaly และไม่มี safety stop จึงค่อยเข้า SPIRAL จาก GPS fix ปัจจุบัน</p></div><span class="sim-badge">ข้อมูลจำลอง · ไม่เชื่อมต่อเรือจริง</span></div>
+    <section class="overall-sim container" id="operate" lang="th" aria-labelledby="sim-title" hidden>
+      <div class="sim-intro"><div><p class="eyebrow">OPERATE / Mission simulation</p><h1 id="sim-title">ลำดับการตัดสินใจ<br><span>และการเดินทาง</span></h1><p>ใช้ mission state, route, clock และ pose เดียวกับ SIM ด้านบน · route/START ผ่านช่องทางจำลอง ไม่เชื่อมต่อเรือจริง</p></div><span class="sim-badge">ข้อมูลจำลอง · ไม่เชื่อมต่อเรือจริง</span></div>
       <noscript><p class="note">เปิดใช้งาน JavaScript เพื่อเล่นภารกิจจำลอง</p></noscript>
-      <div class="sim-toolbar"><div class="sim-actions"><button id="sim-start" type="button">เริ่มภารกิจ <span aria-hidden="true">▶</span></button><button id="sim-step" type="button">ดูขั้นถัดไป →</button><button id="sim-reset" type="button">เริ่มใหม่ ↺</button><button id="sim-back" type="button" disabled>ย้อนหนึ่งขั้น ←</button></div><label class="sim-checkpoint">ย้อนดูจุดสำคัญ <select id="sim-checkpoint"><option value="">เลือก checkpoint</option><option value="prepare">เตรียมภารกิจ</option><option value="afterWp1">หลังผ่าน WP1</option><option value="anomaly">คำนวณ anomaly</option><option value="firstSpiralTarget">เป้าหมายก้นหอยแรก</option><option value="resumeGrid">กลับเข้า GRID</option><option value="rth">เริ่ม RTH</option><option value="complete">จบภารกิจ · STANDBY</option></select></label><label class="sim-speed">ความเร็ว <select id="sim-speed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select></label></div>
-      <ol class="sim-storyline" id="sim-storyline" aria-label="ลำดับการตัดสินใจของเรือ"><li data-story="0"><span>01</span><b>ผ่าน WP1</b><small>ยืนยันจุดแรก</small></li><li data-story="1"><span>02</span><b>วิ่งต่อบน GRID</b><small>มุ่งหน้า WP2</small></li><li data-story="2"><span>03</span><b>คำนวณ SMA(8)</b><small id="sim-story-sma">—</small></li><li data-story="3"><span>04</span><b>ตรวจ safety</b><small>จึงเข้า SPIRAL</small></li><li data-story="4"><span>05</span><b>RTH กลับ HOME</b><small>bearing ตรง · หยุดที่ 4 m</small></li></ol>
-      <ol class="sim-fsm" id="sim-fsm" aria-label="ลำดับสถานะ FSM ในตัวอย่างนี้"><li data-fsm-stage="0"><span>01</span><b>GRID_PATROL</b><small>ผ่าน WP1</small></li><li data-fsm-stage="1"><span>02</span><b>SPIRAL_MAPPING</b><small>anomaly + safety ผ่าน</small></li><li data-fsm-stage="2"><span>03</span><b>GRID_PATROL</b><small>กลับ index เดิม</small></li><li data-fsm-stage="3"><span>04</span><b>STATE_RTH</b><small>กลับ SET_HOME</small></li><li data-fsm-stage="4"><span>05</span><b>STANDBY</b><small>arrival gate ผ่าน</small></li></ol>
+      <div class="sim-toolbar"><div class="sim-actions"><button id="sim-start" type="button">เริ่มภารกิจ <span aria-hidden="true">▶</span></button><button id="sim-step" type="button">ดูขั้นถัดไป →</button><button id="sim-reset" type="button">เริ่มใหม่ ↺</button><button id="sim-live" type="button" disabled title="กลับภาพปัจจุบัน โดยไม่ขยับนาฬิกาหรือสถานะภารกิจ">กลับภาพปัจจุบัน · LIVE</button><button id="sim-back" type="button" disabled title="ย้อนดูได้เฉพาะ state ที่บันทึกไว้ · ไม่ย้อนหรือเปลี่ยนภารกิจจริง">ย้อนดูหนึ่งขั้น ←</button></div><label class="sim-checkpoint">ตรวจจุดสำคัญที่พบแล้ว <select id="sim-checkpoint"><option value="">เลือก checkpoint</option><option value="prepare">เตรียมภารกิจ</option><option value="afterWp1">หลังผ่าน WP1</option><option value="anomaly">เริ่ม SPIRAL จาก anomaly</option><option value="firstSpiralTarget">เป้าหมายก้นหอยแรก</option><option value="resumeGrid">กลับเข้า GRID</option><option value="rth">เริ่ม RTH</option><option value="complete">จบภารกิจ · COMPLETE</option></select></label><label class="sim-speed">ความเร็ว <select id="sim-speed"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option></select></label><output id="sim-clock" aria-live="off">0.00 s</output><output id="sim-pose-readout" aria-live="off">335.0, 455.0 · 0.0°</output></div>
+      <p id="sim-history-status" class="sim-reading-note" role="status" aria-live="polite">LIVE · แสดง snapshot ล่าสุดของ mission เดียวกับ SIM</p>
+      <ol class="sim-storyline" id="sim-storyline" aria-label="ลำดับการตัดสินใจจาก mission snapshot"><li data-story="0"><span>01</span><b>เริ่ม / รับ START</b><small>สถานีส่ง route</small></li><li data-story="1"><span>02</span><b>สำรวจ GRID</b><small>ตาม waypoint ที่เรือรับไว้</small></li><li data-story="2"><span>03</span><b>ประเมิน anomaly</b><small id="sim-story-sma">รอ sample จาก mission</small></li><li data-story="3"><span>04</span><b>SPIRAL scan</b><small>เมื่อเงื่อนไขใน model ผ่าน</small></li><li data-story="4"><span>05</span><b>RTH / COMPLETE</b><small>กลับ HOME ตาม mission state</small></li></ol>
+      <ol class="sim-fsm" id="sim-fsm" aria-label="mission mode จาก snapshot จริง"><li data-fsm-stage="0"><span>01</span><b>GRID_PATROL</b><small>ภารกิจ GRID</small></li><li data-fsm-stage="1"><span>02</span><b>SPIRAL_SCAN</b><small>ภารกิจ SPIRAL</small></li><li data-fsm-stage="2"><span>03</span><b>GRID_PATROL</b><small>ต่อ route เดิม</small></li><li data-fsm-stage="3"><span>04</span><b>RETURN_HOME</b><small>กลับ HOME</small></li><li data-fsm-stage="4"><span>05</span><b>STANDBY</b><small>ภารกิจจบ</small></li></ol>
       <div class="sim-layout">
-        <div class="sim-map-card"><div class="sim-map-heading"><div><span class="sim-map-title">เส้นทางสำรวจ · มุมมองด้านบน</span><small>HOME → WP1 → WP2 → … → WP9 → HOME</small></div><span class="sim-count-pill"><b id="sim-count">0 / 9 จุด</b><small>ผ่านจุดแล้ว</small></span></div>
-          <svg id="sim-map" viewBox="0 0 760 500" role="img" aria-labelledby="sim-map-title sim-map-desc"><title id="sim-map-title">เรือเดินตามเส้นทางกวาด 9 จุด</title><desc id="sim-map-desc">HOME อยู่ในเลนด้านล่าง เส้นทางเริ่มจาก HOME ไป WP1 ก่อนยืนยันการเข้าถึง แล้วจึงตรวจความขุ่นจำลอง</desc>
+        <div class="sim-map-card"><div class="sim-map-heading"><div><span class="sim-map-title">เส้นทางสำรวจ · มุมมองด้านบน</span><small>HOME → route ที่เรือยอมรับ → HOME</small></div><span class="sim-count-pill"><b id="sim-count">0 / 0 จุด</b><small>ผ่านจุดแล้ว</small></span></div>
+          <svg id="sim-map" viewBox="0 0 760 500" role="img" aria-labelledby="sim-map-title sim-map-desc"><title id="sim-map-title">ตำแหน่งเรือและเส้นทางที่ mission จำลองรับไว้</title><desc id="sim-map-desc">ภาพแสดง HOME, route ที่เรือยอมรับ, pose และรอยทางจาก mission snapshot เดียวกับ SIM; เป็นแผนภาพพิกัดจำลอง</desc>
             <defs><pattern id="sim-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#183b4e" stroke-width="1"/></pattern><radialGradient id="sim-hotspot"><stop stop-color="#ffb35c" stop-opacity=".27"/><stop offset="1" stop-color="#ffb35c" stop-opacity="0"/></radialGradient></defs>
             <rect width="760" height="500" rx="18" fill="#091f2e"/><rect width="760" height="500" fill="url(#sim-grid)"/>
             <rect x="130" y="80" width="510" height="310" rx="20" fill="#0b2c3c" fill-opacity=".65" stroke="#295668"/>
@@ -573,16 +748,16 @@
             <path d="M151 136 C231 118 296 126 365 146 S531 175 621 143 M150 277 C237 255 302 267 389 291 S533 311 619 282" fill="none" stroke="#55a5a1" stroke-opacity=".11" stroke-width="1"/>
             <text x="145" y="64" class="sim-map-label">SURVEY AREA</text><path d="M700 74 V34 M692 46 L700 34 L708 46" stroke="#779ba9" stroke-width="2" fill="none"/><text x="695" y="24" class="sim-map-label">N</text>
             <circle id="sim-anomaly" cx="220" cy="160" r="85" fill="url(#sim-hotspot)" opacity="0"/>
-            <path id="sim-planned" d="M 610 360 L 420 360 L 220 360 L 220 260 L 420 260 L 610 260 L 610 160 L 420 160 L 220 160" fill="none" stroke="#477281" stroke-opacity=".62" stroke-width="2"/>
+            <path id="sim-planned" d="" fill="none" stroke="#477281" stroke-opacity=".62" stroke-width="2"/>
             <path id="sim-spiral-plan" fill="none" stroke="#ffb35c" stroke-opacity=".82" stroke-width="1.8"/>
             <g id="sim-center" opacity="0"><circle r="13" fill="#ffb35c" fill-opacity=".16" stroke="#ffb35c" stroke-width="1.5"/><circle r="3" fill="#ffd19c"/><path d="M-18 0 H18 M0 -18 V18" stroke="#ffb35c" stroke-width="1.5"/><text x="0" y="-23" text-anchor="middle" class="sim-map-label">GPS FIX</text></g>
             <path id="sim-trail-glow" fill="none" stroke="#42d7c8" stroke-opacity=".14" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path id="sim-trail" fill="none" stroke="#62e3d5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <g id="sim-waypoints"><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="220" cy="160" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="233" y="148">WP 9</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="420" cy="160" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="433" y="148">WP 8</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="610" cy="160" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="623" y="148">WP 7</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="610" cy="260" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="623" y="248">WP 6</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="420" cy="260" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="433" y="248">WP 5</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="220" cy="260" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="233" y="248">WP 4</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="220" cy="360" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="233" y="348">WP 3</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="420" cy="360" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="433" y="348">WP 2</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="610" cy="360" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="623" y="348">WP 1</text></g></g><g id="sim-home-zone" transform="translate(380 440)" opacity="0"><circle r="30" fill="#ffb35c" fill-opacity=".045" stroke="#ffb35c" stroke-opacity=".85" stroke-width="1.5"/><text x="0" y="-36" text-anchor="middle" class="sim-home-zone-label">RTH · ≤ 4 m</text></g><g transform="translate(380 440)"><circle r="18" fill="#143a4b" stroke="#62e3d5"/><path d="M-8 3 V-3 L0 -10 L8 -3 V3 M-4 9 V0 H4 V9" fill="none" stroke="#62e3d5" stroke-width="1.5"/><text x="26" y="5" class="sim-map-label">HOME</text></g>
+            <g id="sim-waypoints" visibility="hidden"><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="220" cy="160" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="233" y="148">WP 9</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="420" cy="160" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="433" y="148">WP 8</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="610" cy="160" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="623" y="148">WP 7</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="610" cy="260" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="623" y="248">WP 6</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="420" cy="260" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="433" y="248">WP 5</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="220" cy="260" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="233" y="248">WP 4</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="220" cy="360" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="233" y="348">WP 3</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="420" cy="360" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="433" y="348">WP 2</text></g><g class="sim-waypoint"><circle class="sim-waypoint-dot" cx="610" cy="360" r="8" fill="#123849" stroke="#6e9aa9" stroke-width="2"/><text class="sim-waypoint-label" x="623" y="348">WP 1</text></g></g><g id="sim-home-zone" transform="translate(380 440)" opacity="0"><circle r="30" fill="#ffb35c" fill-opacity=".045" stroke="#ffb35c" stroke-opacity=".85" stroke-width="1.5"/><text x="0" y="-36" text-anchor="middle" class="sim-home-zone-label">RTH · ≤ 4 m</text></g><g id="sim-home-marker" transform="translate(162 348)"><circle r="18" fill="#143a4b" stroke="#62e3d5"/><path d="M-8 3 V-3 L0 -10 L8 -3 V3 M-4 9 V0 H4 V9" fill="none" stroke="#62e3d5" stroke-width="1.5"/><text x="26" y="5" class="sim-map-label">HOME</text></g>
             <g id="sim-target" opacity="0"><circle r="27" fill="#67ddcc" fill-opacity=".07" stroke="#83efe0" stroke-width="1.5"/><circle r="12" fill="none" stroke="#83efe0" stroke-opacity=".55" stroke-width="1"/><path d="M-34 0 H-21 M21 0 H34 M0 -34 V-21 M0 21 V34" stroke="#83efe0" stroke-width="1.5"/><text x="0" y="-39" text-anchor="middle" class="sim-target-label">TARGET</text></g>
-            <g id="sim-boat" transform="translate(380 440)"><circle class="sim-boat-glow" r="21"/><path d="M0 -17 L9 4 L0 10 L-9 4 Z" fill="#d5fff4" stroke="#06121d" stroke-width="2"/><path d="M0 -11 L4 3 L0 1 Z" fill="#22a89d"/></g>
+            <g id="sim-boat" transform="translate(162 348)"><circle class="sim-boat-glow" r="21"/><path d="M0 -17 L9 4 L0 10 L-9 4 Z" fill="#d5fff4" stroke="#06121d" stroke-width="2"/><path d="M0 -11 L4 3 L0 1 Z" fill="#22a89d"/></g>
           </svg>
           <div class="sim-legend"><span><i class="sim-key planned"></i>เส้นทาง GRID</span><span><i class="sim-key traveled"></i>เดินทางแล้ว</span><span><i class="sim-key abnormal"></i>ค่าผิดปกติจำลอง</span></div>
-          <div class="sim-progress"><div id="sim-progress-fill"></div></div><p class="sim-map-note">รอยทางแสดงเฉพาะ GRID · ช่วง RTH เรือมุ่งตรงตาม bearing ไป HOME โดยซ่อนเส้นเชื่อม · วง 4 m เป็นภาพประกอบ ไม่ใช่มาตราส่วนจริง</p>
+          <div class="sim-progress"><div id="sim-progress-fill"></div></div><p id="sim-map-note" class="sim-map-note">ยังไม่มี route ที่เรือยอมรับ · ตำแหน่งและระยะในภาพเป็นแผนภาพจำลอง ไม่ใช่ GPS จริง</p>
         </div>
         <aside class="sim-thinking" aria-label="สถานะและการตัดสินใจของเรือ"><div class="sim-state-row"><span class="eyebrow">Boat decision</span><span id="sim-playback">พร้อมเริ่ม</span></div><div aria-live="polite" aria-atomic="true"><p id="sim-phase" class="sim-phase">เตรียมภารกิจ</p><h2 id="sim-decision">รอเริ่มการสำรวจ</h2><p id="sim-reason" class="sim-reason">กำหนดเส้นทางไว้ 9 จุด เรือจะตรวจวัดตามจุดและกลับบ้านเมื่อทำภารกิจครบ</p></div>
           <details class="sim-inspector-details"><summary>ดูเงื่อนไขของ step ปัจจุบัน</summary>
@@ -597,7 +772,7 @@
           </details>
           <div class="sim-readings"><div><span>อุณหภูมิ</span><strong id="sim-temp">—</strong><small>°C</small></div><div><span>pH</span><strong id="sim-ph">—</strong><small>pH</small></div><div><span>SMA(8) mean</span><strong id="sim-ntu">—</strong><small>NTU</small></div></div><p class="sim-reading-note" id="sim-reading-note">ยังไม่มีค่าตัวอย่างใน step ปัจจุบัน</p>
           <figure class="sim-sma" id="sim-sma" hidden aria-labelledby="sim-sma-title"><figcaption><span id="sim-sma-title">ตัวอย่างความขุ่นสังเคราะห์ · 8 ค่า</span><b>SMA(8)</b></figcaption><div class="sim-sma-plot" id="sim-sma-plot" role="img" aria-label="กราฟค่าความขุ่นตัวอย่างสังเคราะห์"><span class="sim-sma-threshold"><i id="sim-sma-threshold-label"></i></span><ol id="sim-sma-samples"></ol></div><div class="sim-sma-result"><code><span id="sim-sma-sum">—</span> ÷ <span id="sim-sma-count">—</span> = <strong id="sim-sma-mean">—</strong></code><span id="sim-sma-delta">—</span></div><p id="sim-sma-note">ชุดตัวอย่างนี้เป็นข้อมูลสังเคราะห์สำหรับอธิบายการคำนวณ ไม่ใช่ค่าจากเรือ</p><p class="sim-sma-boundary" id="sim-sma-boundary"></p></figure>
-          <div class="sim-insight"><p class="eyebrow">เหตุผล / การคำนวณ</p><p id="sim-insight">เริ่มภารกิจเพื่อดูเงื่อนไขและการคำนวณทีละช่วง</p></div><p class="sim-rule">ผ่าน WP1 แล้ว · SMA(8) &gt; 50 NTU (หรือ baseline สูงต่อเนื่อง) + safety พร้อม → SPIRAL · 25 เป้าหมายทุก 45° รัศมี 4–8 m · ข้อมูลจำลอง</p>
+          <div class="sim-insight"><p class="eyebrow">เหตุผล / การคำนวณ · ฉากสอนแยก</p><p id="sim-insight">เริ่มภารกิจเพื่อดูเงื่อนไขและการคำนวณทีละช่วง</p></div><p class="sim-rule">ตัวอย่างแยก ไม่ใช่ mission kernel ปัจจุบัน · ผ่าน WP1 เป็นเพียงหนึ่ง gate; SMA(8) &gt; 50 NTU หรือ baseline dwell ร่วมกับเงื่อนไข FSM จึงอาจเข้า SPIRAL · รูปทรง 25 จุดทุก 45° รัศมี 4–8 m เป็น preview เท่านั้น; runtime สร้างและแสดงเป้าหมายปัจจุบันทีละจุด · ข้อมูลสังเคราะห์</p>
         </aside>
       </div>
       <details class="sim-lab" id="whatif-details" lang="th">
@@ -695,20 +870,25 @@
         <p class="sim-lab-note">แหล่งข้อมูลคิวและ mutex: src/main.cpp:L250–253 · ownership, อัตราการทำงาน และการเชื่อมต่อ dashboard ไม่สรุปจากแผนภาพนี้</p>
       </details>
 
-      <div class="sim-bottom"><div><p class="eyebrow">Mission flow</p><ol class="sim-stages" id="sim-stages"><li data-phase="prepare">เตรียม</li><li data-phase="travel">มุ่งหน้า</li><li data-phase="arrive">เข้าถึง WP</li><li data-phase="sample">ตรวจเงื่อนไข</li><li data-phase="spiral">ก้นหอย</li><li data-phase="return">กลับบ้าน</li><li data-phase="done">เสร็จสิ้น</li></ol></div><div class="sim-log-wrap"><p class="eyebrow">Decision history</p><ol id="sim-log" class="sim-log"><li>พร้อมแสดงภารกิจจำลอง</li></ol></div></div>
+      <div class="sim-bottom"><div><p class="eyebrow">Mission flow</p><ol class="sim-stages" id="sim-stages"><li data-phase="prepare">เตรียม</li><li data-phase="travel">มุ่งหน้า</li><li data-phase="arrive">เข้าถึง WP</li><li data-phase="sample">ตรวจเงื่อนไข</li><li data-phase="spiral">ก้นหอย</li><li data-phase="return">กลับบ้าน</li><li data-phase="done">เสร็จสิ้น</li></ol></div><div class="sim-log-wrap" hidden><p class="eyebrow">Decision history</p><ol id="sim-log" class="sim-log"><li>พร้อมแสดงภารกิจจำลอง</li></ol></div></div>
     </section>
 
   </main>
 
   <footer class="site-footer"><div class="container footer-inner"><span>Smart Water Surface Boat · Senior Project · 2026</span><span>Mae Fah Luang University</span></div></footer>
-  <script src="../src/js/overall/overall-model.js?v=decision-inspector-3"></script>
-  <script src="../src/js/overall/overall-labs-model.js?v=interactive-labs-1"></script>
-  <script src="../src/js/overall/overall.js?v=interactive-labs-1"></script>
-  <script src="../src/js/overall/overall-labs.js?v=interactive-labs-1"></script>
-  <script src="../src/js/overall/overall-visual-motion.js?v=learn-storyboard-1"></script>
-  <script src="../src/js/mission/mission-start-model.js?v=mission-start-1"></script>
-  <script src="../src/js/mission/mission-start-telemetry-model.js?v=teaching-uplink-1"></script>
-  <script src="../src/js/mission/mission-start.js?v=mission-start-1"></script>
-  <script src="../src/js/mission/uplink-motion.js?v=message-channel-1"></script>
+  <script src="../src/js/mission/uplink-motion.js?v=codec-only-1"></script>
+  <script src="../src/js/overall/grid-guidance.js?v=current-grid-1"></script>
+  <script src="../src/js/overall/firmware-policy.js?v=continuation-1"></script>
+  <script src="../src/js/overall/mission-kernel.js?v=current-grid-1"></script>
+  <script src="../src/js/overall/autonomous-mission-model.js?v=autonomous-mission-1"></script>
+  <script src="../src/js/overall/mission-transport.js?v=mission-transport-1"></script>
+  <script src="../src/js/overall/mission-incoming.js?v=station-upload-1"></script>
+  <script src="../src/js/overall/mission-presentation.js?v=data-report-1"></script>
+  <script src="../src/js/overall/autonomous-mission.js?v=autonomous-mission-1"></script>
+  <script src="../src/js/overall/overall-visual-motion.js?v=overall-visual-motion-2"></script>
+  <script src="../src/js/overall/overall-labs-model.js?v=overall-labs-1"></script>
+  <script src="../src/js/overall/overall-labs.js?v=overall-labs-1"></script>
+
+  <script src="../src/js/overall/function-centered-overall.js?v=function-center-2"></script>
 </body>
 </html>

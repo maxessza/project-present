@@ -26,7 +26,7 @@
       "old_path": "heading.html",
       "new_path": "pages/heading-pid.html",
       "input_sha256": "0f5dfe0e4665250eb86e5ff4ebb6cbef4d3c836f40d454e48c62f1b3daf09840",
-      "output_sha256": "1375743acf61399172dcc56099979bdc4f68d7b9db403158cf94a19aad775b9a",
+      "output_sha256": "b474564917e5a2c909fa133a5ec221e561379e4ceaee1de473b2a00552e2e6ef",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -40,15 +40,15 @@
       "old_path": "heatmap.html",
       "new_path": "pages/heatmap.html",
       "input_sha256": "c8a2ab9ee66902b1baeae4ec69bce6c7aa45078ec54ba1b01cad9585451fceed",
-      "output_sha256": "35f21e9e9da3c1237d467546295c2da67ca2cc9fb11f382721ddfdef58a1af39",
+      "output_sha256": "03590c4137ca1a191ef54460b3ec7e5c1881da1a020e8aac341563cd54b961a8",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
       "old_path": "index.html",
       "new_path": "pages/overall.html",
       "input_sha256": "e2fa510b6119af788d205e812fd74b2699213e71036bf290dd1444a9f6ac0c7d",
-      "output_sha256": "93833b4ce6fc60e8fc6f3120173a9953b59bf655d09875bd2c675707f88551d7",
-      "edit_kind": "resource_paths/navigation_only"
+      "output_sha256": "ae89d914646a65c3ee88b3b45f22ecf24b4c3e83a90f148f629bf5cf8d17e2c6",
+      "edit_kind": "presentation_feature_integration"
     },
     {
       "old_path": "labs.html",
@@ -68,7 +68,7 @@
       "old_path": "learn.html",
       "new_path": "pages/classroom.html",
       "input_sha256": "00fdbff063f36f0dd64e045dd8428463677bc586bc319463c0a3739242887098",
-      "output_sha256": "41eb1bf2b5b82a67cc2bcaed990c0b6ae55715d27942144c21de1517bce4d6c0",
+      "output_sha256": "a3afdddb579140ec344a9a2585b3a77d118d388b89906ad53fa306d8d2181595",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -89,8 +89,8 @@
       "old_path": "mission-start.css",
       "new_path": "src/css/mission-start.css",
       "input_sha256": "2eb7548c0e08c2ae4f284d975900834096bdd540d9b1ba762887d25c8b7d439b",
-      "output_sha256": "2eb7548c0e08c2ae4f284d975900834096bdd540d9b1ba762887d25c8b7d439b",
-      "edit_kind": "move_only"
+      "output_sha256": "155247a88e4cdfca43bd0ad70e9ef98c6adf7bf5fd79a10b4a8fe2fb75676a21",
+      "edit_kind": "presentation_feature_integration"
     },
     {
       "old_path": "mission-start.html",
@@ -131,7 +131,7 @@
       "old_path": "overall-visual-motion.js",
       "new_path": "src/js/overall/overall-visual-motion.js",
       "input_sha256": "7bc9eec2b0581c5ff6c3ca692d26355cf05e72e80c13bcf07507c28f4f9bd3a3",
-      "output_sha256": "7bc9eec2b0581c5ff6c3ca692d26355cf05e72e80c13bcf07507c28f4f9bd3a3",
+      "output_sha256": "41cfaee53931bd93a985decdcc9bd150eec48bdd5660b41204b7a6463e64e5a9",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -159,7 +159,7 @@
       "old_path": "sensors.html",
       "new_path": "pages/sensors.html",
       "input_sha256": "d3d21b3bc978e4ee276ed173458312b8a0cda6388d193066b5332780f0262795",
-      "output_sha256": "cf1b36f99e547556930a6ee719b37bda745c1279e195d505382f34a6cd2e0d7e",
+      "output_sha256": "f174831d7aeecccacc7713f68f6d4358c5e98bac9d5ad90314e749ad1821e0e0",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -180,7 +180,7 @@
       "old_path": "slides.html",
       "new_path": "pages/slides.html",
       "input_sha256": "df31e879688a3141570ed55789c5a87937ffb72d289808cc845a4810ee6c3118",
-      "output_sha256": "ad847cd3969c0e308ff61923bf6f1a36e803501a981b3dcbbb2419d991dc5551",
+      "output_sha256": "d0bd45567ad0cabbefb46d7b06f5ecada7f9d80d6153604c77517a4f7afb6ddb",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -208,7 +208,7 @@
       "old_path": "story.html",
       "new_path": "pages/story.html",
       "input_sha256": "2b037e855757f691efc70cc958cbc7eb6405690ab6e68199ed8cbb711e93d90a",
-      "output_sha256": "208162d41467faed8762e31ed919245606f8c680f467f5863acf5ac98ac3e01e",
+      "output_sha256": "3d264595009914e4760dbc6838ea8a54b5d20dcea66e7c7384b8e45f6a02bde0",
       "edit_kind": "resource_paths/navigation_only"
     },
     {
@@ -229,14 +229,14 @@
       "old_path": "uplink-motion.js",
       "new_path": "src/js/mission/uplink-motion.js",
       "input_sha256": "1b912783f70ecd522d4603080a4fd8632f3159805f34012c7e06ff29e63685ef",
-      "output_sha256": "1b912783f70ecd522d4603080a4fd8632f3159805f34012c7e06ff29e63685ef",
-      "edit_kind": "resource_paths/navigation_only"
+      "output_sha256": "f497af71539a9e4ea2a1c08d7abf1e955be57e54cd98c964179ba1f4fb428196",
+      "edit_kind": "presentation_feature_integration"
     },
     {
       "old_path": "waypoints.html",
       "new_path": "pages/waypoints.html",
       "input_sha256": "98eea8271abd34bd2c72d676d0d0a4a9374a10bf5775ec4246e8de399721d378",
-      "output_sha256": "88c65f03783f5aee28481f91eb1b2397842695060e05a79ce62f8a0bf1a695f1",
+      "output_sha256": "c665d6a262d4fcd3a5e9621b989ae3dbf090d5b973f4d9c5f7d65fb71920de48",
       "edit_kind": "resource_paths/navigation_only"
     },
     {

@@ -4,7 +4,7 @@
 
 เว็บนี้ไม่มีคำถามชวนผู้ชมตอบ เฉลย หรือปุ่มอ่านบทความต่อ ผู้บรรยายอธิบายผ่านภาพและการเปลี่ยนสถานะ
 
-เว็บนี้ใช้เล่าแนวคิดของโครงงานเรือสำรวจคุณภาพน้ำและให้ลองแบบจำลองในเบราว์เซอร์ ไม่ใช่ dashboard สำหรับควบคุมเรือจริง เปิด `index.html` แล้วจะเข้าสู่หน้า Overall เดิมทันที โดย query และ hash จะถูกส่งต่อไปด้วย ทุกหน้ามีแถบนำทาง Smart Water Boat ชุดเดียวกันซึ่งรวมเก้าปลายทาง: Overall, Waypoints, Heatmap, Sensors, Slides, Classroom, Story, Heading / PID และ Uplink
+เว็บนี้ใช้เล่าแนวคิดของโครงงานเรือสำรวจคุณภาพน้ำและให้ลองแบบจำลองในเบราว์เซอร์ ไม่ใช่ dashboard สำหรับควบคุมเรือจริง เปิด `index.html` แล้วจะเข้าสู่หน้า Overall เดิมทันที โดย query และ hash จะถูกส่งต่อไปด้วย ทุกหน้ามีแถบนำทาง Smart Water Boat ชุดเดียวกัน เหลือห้าเมนูหลัก: Overall, Waypoints, Heatmap, Sensors และ Slides ส่วนภารกิจ, PID และ Uplink ให้เลื่อนดูใน Overall; Classroom, Story และ Heading / PID แบบละเอียดคงไว้ผ่านลิงก์ในเนื้อหา ไม่แยกเป็นเมนูบน
 
 เริ่มจาก [Overall](../pages/overall.html) เพื่อเห็นภาพรวม จากนั้นใช้ลิงก์ในส่วนที่เกี่ยวข้องเพื่อเปิด [Classroom](../pages/classroom.html), [Story Lab](../pages/story.html) หรือ [Heading / PID](../pages/heading-pid.html) สำหรับการทดลองแบบละเอียด แต่ละบทเรียนมีลิงก์กลับไปยังส่วน mission readiness หรือ PID ใน Overall และ Uplink อยู่ที่ [แผง Uplink](../pages/overall.html#ms-uplink-panel)
 
@@ -15,8 +15,11 @@
 
 หน้า [Overall](../pages/overall.html) เป็นบทเรียนบูรณาการ: แสดงภาพจากข้อมูลไปสู่การเดินทาง, ค่าเฉลี่ยความขุ่นจากตัวอย่าง, เส้นทางและลำดับ task, วงสแกนตัวอย่าง, การหันด้วย PID, การเตรียมเริ่มภารกิจ, การฉาย packet telemetry และแผงอธิบายการตัดสินใจ/เดินทางของเรือ เนื้อหานี้รวมทั้งภาพอธิบายและส่วนทดลองที่ขับด้วย JavaScript ในหน้าเดียว และมีลิงก์ไปยังบทเรียนแบบละเอียดโดยตรง
 
+หน้า Overall เริ่มด้วย `#system` ฉากภารกิจ state ร่วม: readiness gate, START, GRID, sample voltage และ rolling SMA, absolute dirty branch ที่ gate ด้วย WP1, SPIRAL, GRID ต่อ, RTH dwell, steering/yaw, packet bytes, MessageChannel receiver decode และ shore render อ่านค่าของสถานะเดียวกันผ่าน equation strip และ controls เล่น/พัก/step/reset, เลือก clock, gains, voltage, link และ drop mode ได้ รายละเอียดสูตรและข้อจำกัดอยู่ใน [EQUATIONS.md](EQUATIONS.md). ฉากนี้เป็น browser demo; เส้นทาง schematic ไม่ถูกขับด้วย yaw และ receiver/log ไม่ใช่ firmware/radio/SD จริง
+
 ## แต่ละส่วนใน Overall ใช้สอนอะไร
 
+- [System mission](../pages/overall.html#system) — เชื่อม readiness, sensor voltage, SMA, decision, schematic route, steering, bytes, independent browser decode และ shore render ใน state เดียว; ใช้สมการที่แทนค่าจาก snapshot ปัจจุบัน
 - [LEARN](../pages/overall.html#learn) — เริ่มจากค่าตัวอย่างไปสู่ค่าเฉลี่ย เส้นทาง และการส่งต่องานระหว่าง task; ใช้ภาพ/การเลื่อนขั้นอธิบายแนวคิด ไม่ได้สร้าง FreeRTOS tasks จริงในเว็บ
 - [PID](../pages/overall.html#pid) — เห็นวงจรทิศเป้าหมาย → มุมคลาดเคลื่อน → P/I/D → คำสั่งมอเตอร์ → วัด heading กลับ; เป็นภาพอธิบาย ไม่ใช่หลักฐานว่า gain พร้อมใช้กับเรือ
 - [เริ่มภารกิจ](../pages/overall.html#mission-start) — ลอง readiness ของ GPS/HOME/route และส่ง START จำลอง เพื่อแยกการรับคำสั่ง การอนุญาต การสั่งมอเตอร์ และการเคลื่อนที่ออกจากกัน

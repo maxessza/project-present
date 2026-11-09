@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#081b25"><title>Smart Water Boat · Boat Mission Simulation</title>
+<link rel="stylesheet" href="../src/css/site.css"><link rel="stylesheet" href="../src/css/system-explorer.css"><link rel="stylesheet" href="../src/css/boat-mission.css">
+<script src="../src/js/explorer/boat-mission-model.js"></script><script src="../src/js/explorer/boat-mission-ui.js" defer></script>
+</head>
+<body class="system-explorer-page">
+<a class="skip-link" href="#main">ข้ามไปยังซิมเรือ</a>
+<header class="sim-app-header">
+ <a class="brand" href="overall.html"><span class="brand-mark" aria-hidden="true">SW</span><span class="brand-copy"><strong>Smart Water Boat</strong><small>MISSION SIMULATOR</small></span></a>
+ <span class="demo-label">ข้อมูลจำลอง · ไม่ได้เชื่อมต่อเรือจริง</span>
+ <details class="site-menu"><summary>หน้าอื่น</summary><nav class="primary-nav" aria-label="เมนูหลัก">
+      <a class="nav-link current" href="overall.html" aria-current="location">Overall</a>
+      <a class="nav-link" href="waypoints.html">Waypoints</a>
+      <a class="nav-link" href="heatmap.html">Heatmap</a>
+      <a class="nav-link" href="sensors.html">Sensors</a>
+      <a class="nav-link nav-cta" href="slides.html">Slides</a>
+    </nav></details>
+</header>
+<main id="main" class="explorer-shell">
+<section id="explorer" class="explorer" data-level="whole" aria-labelledby="main-caption">
+ <header class="sim-heading"><h1 id="main-caption">จำลองภารกิจเรือ</h1><span id="sim-mode-label">พร้อมเริ่ม</span></header>
+ <div class="explorer-layout">
+  <section class="visual-panel" aria-label="ฉากจำลองการเดินเรือ">
+   <div class="scene-hud"><p id="sim-mission-headline">พร้อมเริ่มสำรวจ</p><p id="sim-mission-detail">กด START เพื่อเริ่มภารกิจ</p></div>
+   <div id="scene-pan" class="scene-scroll" role="region" tabindex="0" aria-label="แผนที่ภารกิจ เลื่อนด้วยปุ่มลูกศรบนจอเล็ก"><svg class="scene-svg" viewBox="0 0 1200 680" role="img" aria-labelledby="scene-title scene-description">
+            <title id="scene-title">แผนที่ภารกิจเรือจำลองและ GRID waypoint เก้าจุด</title>
+            <desc id="scene-description">แผนที่เดียวแสดงเรือจำลอง ตำแหน่งเป้าหมาย และรอยทาง; ตำแหน่งกับทิศเชื่อมกับ state เดียวกันทุก focus</desc>
+              <defs>
+                <pattern id="water-grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#1b4051" stroke-width="1" opacity=".48"/></pattern>
+                <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#55d9d8"/></marker>
+                <marker id="survey-direction-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#87e6d9"/></marker>
+                <linearGradient id="hull-fill" x1="0" x2="1"><stop stop-color="#0e4560"/><stop offset=".5" stop-color="#16748a"/><stop offset="1" stop-color="#0e4560"/></linearGradient>
+              </defs>
+              <g id="scene-camera">
+                <rect width="1200" height="680" rx="30" fill="#071a28"/>
+                <rect x="34" y="34" width="1132" height="612" rx="26" fill="#082638" stroke="#245064" stroke-width="2"/>
+                <path d="M35 150C170 108 245 198 370 151S600 107 729 157 980 204 1165 144V645H35Z" fill="#0a3044" opacity=".72"/>
+                <rect x="36" y="35" width="1128" height="610" rx="25" fill="url(#water-grid)" opacity=".7"/>
+                <g id="survey-area">
+                  <rect x="92" y="108" width="710" height="480" rx="24" fill="#0d3549" fill-opacity=".65" stroke="#42b9c4" stroke-width="3" stroke-dasharray="12 11"/>
+                  <text class="map-label map-label-major" x="122" y="145">พื้นที่สำรวจ</text>
+                  <text class="survey-grid-label" x="104" y="175">GRID 3 × 3 · 9 จุด</text>
+                  <g id="survey-coordinate-system" transform="translate(-250 20) scale(1.15)" aria-label="พิกัดเดิม HOME และ WP1 ถึง WP9 ขยายสม่ำเสมอเพื่ออ่านเส้นทาง">
+                  <g id="survey-route-geometry" aria-label="เส้นทางตัวอย่างตามลำดับเดิม WP1 ถึง WP9 · schematic">
+                    <path id="survey-route" d="M335 455L440 170L440 280L440 390L665 390L665 280L665 170L890 170L890 280L890 390" fill="none" stroke="#65d9d7" stroke-width="8" stroke-dasharray="8 10" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/>
+                    <g class="survey-route-arrows" fill="none" stroke="#87e6d9" stroke-width="5" marker-end="url(#survey-direction-arrow)" aria-hidden="true"><path d="M440 218V245"/><path d="M440 328V355"/><path d="M526 390H555"/><path d="M665 347V320"/><path d="M665 237V210"/><path d="M758 170H790"/><path d="M890 218V245"/><path d="M890 328V355"/></g>
+                  </g>
+                  <g class="survey-waypoints" text-anchor="middle" aria-label="เก้า waypoint ตามลำดับเดิม">
+                    <g class="survey-waypoint" data-survey-wp="1" data-source-x="440" data-source-y="170" transform="translate(440 170)"><circle r="16"/><text y="7">1</text></g>
+                    <g class="survey-waypoint" data-survey-wp="2" data-source-x="440" data-source-y="280" transform="translate(440 280)"><circle r="16"/><text y="7">2</text></g>
+                    <g class="survey-waypoint" data-survey-wp="3" data-source-x="440" data-source-y="390" transform="translate(440 390)"><circle r="16"/><text y="7">3</text></g>
+                    <g class="survey-waypoint" data-survey-wp="4" data-source-x="665" data-source-y="390" transform="translate(665 390)"><circle r="16"/><text y="7">4</text></g>
+                    <g class="survey-waypoint" data-survey-wp="5" data-source-x="665" data-source-y="280" transform="translate(665 280)"><circle r="16"/><text y="7">5</text></g>
+                    <g class="survey-waypoint" data-survey-wp="6" data-source-x="665" data-source-y="170" transform="translate(665 170)"><circle r="16"/><text y="7">6</text></g>
+                    <g class="survey-waypoint" data-survey-wp="7" data-source-x="890" data-source-y="170" transform="translate(890 170)"><circle r="16"/><text y="7">7</text></g>
+                    <g class="survey-waypoint" data-survey-wp="8" data-source-x="890" data-source-y="280" transform="translate(890 280)"><circle r="16"/><text y="7">8</text></g>
+                    <g class="survey-waypoint" data-survey-wp="9" data-source-x="890" data-source-y="390" transform="translate(890 390)"><circle r="16"/><text y="7">9</text></g>
+                  </g>
+                  <g id="survey-home-marker" transform="translate(335 455)"><circle r="13"/><path d="M0 -10L-6 7L0 3L6 7Z"/><text x="0" y="31" text-anchor="middle">HOME</text></g>
+                  </g>
+                </g>
+                <g id="shore-station" transform="translate(291.3 109.8) scale(.7)">
+                  <path d="M825 171H1118V562H825Z" fill="#102c3c" stroke="#2b5060" stroke-width="2"/>
+                  <path d="M858 265L971 195L1085 265Z" fill="#16445a" stroke="#5bbac5" stroke-width="3"/>
+                  <rect x="880" y="266" width="182" height="194" rx="12" fill="#0b2130" stroke="#317083" stroke-width="3"/>
+                  <path d="M919 460V333H1023V460M896 310H1045" fill="none" stroke="#70dce0" stroke-width="7"/>
+                  <circle cx="971" cy="291" r="9" fill="#a4efdf"/>
+                  <path d="M971 282V220M950 234Q971 211 992 234M936 219Q971 182 1006 219" fill="none" stroke="#70dce0" stroke-width="4" stroke-linecap="round"/>
+                  <text class="map-label map-label-major" x="971" y="512" text-anchor="middle">สถานีฝั่ง</text>
+                  <text class="map-label" x="971" y="557" text-anchor="middle">สั่งภารกิจ / รับข้อมูล</text>
+                </g>
+                <path id="communication-link" d="M563 282C690 198 790 204 922 282" fill="none" stroke="#55d9d8" stroke-width="4" stroke-dasharray="9 10" marker-end="url(#flow-arrow)"/>
+                <g id="boat-whole">
+                  <path d="M450 190C416 220 374 294 366 365L382 467Q450 507 518 467L534 365C526 294 484 220 450 190Z" fill="url(#hull-fill)" stroke="#9dece4" stroke-width="5"/>
+                  <path d="M450 218C430 251 405 301 399 354H501C495 301 470 251 450 218Z" fill="#133d50" stroke="#4fa4b5" stroke-width="3"/>
+                  <rect x="411" y="368" width="78" height="52" rx="12" fill="#0a2435" stroke="#58becb" stroke-width="3"/>
+                  <text class="boat-label" x="450" y="400" text-anchor="middle">ระบบบนเรือ</text>
+                  <path d="M450 460V517" stroke="#82e6d8" stroke-width="5"/><path d="M438 500L450 517L462 500" fill="none" stroke="#82e6d8" stroke-width="5"/>
+                  <circle cx="450" cy="344" r="20" fill="#0b2636" stroke="#88e8de" stroke-width="4"/>
+                  <path d="M450 344V326M450 344H468" stroke="#88e8de" stroke-width="4"/>
+                  <text class="map-label map-label-major" x="450" y="555" text-anchor="middle">เรือสำรวจ</text>
+                  <g class="context-tag" transform="translate(550 300)"><rect width="102" height="44" rx="12"/><text x="51" y="30" text-anchor="middle">นำทาง</text></g>
+                  <g class="context-tag" transform="translate(518 238)"><rect width="120" height="44" rx="12"/><text x="60" y="30" text-anchor="middle">สื่อสาร</text></g>
+                  <g class="context-tag" transform="translate(500 424)"><rect width="126" height="44" rx="12"/><text x="63" y="30" text-anchor="middle">บันทึกข้อมูล</text></g>
+                </g>
+                <g id="navigation-detail">
+                  <circle cx="450" cy="344" r="102" fill="#062030" fill-opacity=".94" stroke="#54d6dc" stroke-width="5"/>
+                  <circle cx="450" cy="344" r="77" fill="none" stroke="#316476" stroke-width="3" stroke-dasharray="8 8"/>
+                  <path d="M450 246V442M352 344H548" stroke="#315a69" stroke-width="2"/>
+                  <text class="detail-label" x="450" y="230" text-anchor="middle">ทิศเรือ · เซนเซอร์นำทาง</text>
+                  <path d="M410 320L450 278L490 320" fill="none" stroke="#9be9de" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="398" y="347" width="104" height="42" rx="10" fill="#0f3f53" stroke="#63ccd2" stroke-width="3"/>
+                  <text class="detail-label" x="450" y="376" text-anchor="middle">Heading</text>
+                  <text class="detail-note" x="450" y="419" text-anchor="middle">ทิศเป้าหมาย → ทิศจริง</text>
+                </g>
+                <g id="heading-detail">
+                <rect x="250" y="197" width="400" height="380" rx="32" fill="#071b29" stroke="#52c9d2" stroke-width="5"/>
+                  <circle cx="450" cy="340" r="105" fill="#0c2c3c" stroke="#7de3d7" stroke-width="5"/>
+                  <circle cx="450" cy="340" r="77" fill="none" stroke="#477384" stroke-width="3" stroke-dasharray="7 9"/>
+                  <path d="M450 248V432M358 340H542" stroke="#315a69" stroke-width="3"/>
+                  <text class="heading-card-label" x="450" y="239" text-anchor="middle">ทิศเป้าหมาย</text>
+                  <g id="target-ray" transform="translate(450 340) rotate(90)"><path d="M0 5V-82" stroke="#ffcf72" stroke-width="8" stroke-linecap="round"/><path d="M-14 -69L0 -87L14 -69" fill="none" stroke="#ffcf72" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g>
+                  <g id="yaw-arrow" transform="translate(450 340) rotate(0)"><path d="M0 -14L-13 22L0 14L13 22Z" fill="#8ce7dc" stroke="#e7ffff" stroke-width="3"/><path d="M0 16V47" stroke="#8ce7dc" stroke-width="6" stroke-linecap="round"/></g>
+                  <text id="yaw-label" class="heading-card-label" x="450" y="472" text-anchor="middle">ทิศจริง 0.0°</text>
+                    <text id="motor-command-label" class="detail-note" x="450" y="510" text-anchor="middle">คำสั่งมอเตอร์จำลอง · yaw u</text>
+                  <rect x="343" y="521" width="214" height="13" rx="7" fill="#183b4a"/><rect x="343" y="521" width="1" height="13" fill="#557481"/><rect id="motor-fill" x="450" y="521" width="0" height="13" rx="7" fill="#6fe1d5"/>
+                  <text class="detail-note" x="343" y="565" text-anchor="middle">−60</text><text class="detail-note" x="450" y="565" text-anchor="middle">0</text><text class="detail-note" x="557" y="565" text-anchor="middle">+60</text>
+                </g>
+              </g>
+              <g id="mission-dynamics" transform="translate(-250 20) scale(1.15)" aria-label="ตำแหน่งจำลองของเรือ เป้าหมาย และรอยทาง">
+                <path id="sim-trail" d="" fill="none" stroke="#b3fff0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".88"/>
+                <line id="sim-target-line" x1="335" y1="455" x2="440" y2="170" stroke="#ffe082" stroke-width="2.5" stroke-dasharray="7 7" opacity=".9"/>
+                <circle id="sim-target" cx="440" cy="170" r="23" fill="none" stroke="#ffcf72" stroke-width="3"/>
+                <g id="sim-boat" transform="translate(335 455) rotate(0)"><title>ตำแหน่งและหัวเรือจำลอง</title><circle r="14" fill="#05232e" stroke="#e9fffa" stroke-width="2.5"/><path d="M0 -11L8 8L0 4L-8 8Z" fill="#70f0d9" stroke="#eafffa" stroke-width="1.5"/></g>
+              </g>
+              <text id="sim-map-label" x="755" y="140" fill="#edfffa" font-size="15" font-weight="800">LIVE · WP1</text>
+            </svg></div>
+   <div class="sensor-strip" aria-label="สถานะปัจจุบัน"><span id="sim-gps-badge">GPS พร้อม</span><span id="sim-compass-badge">เข็มทิศพร้อม</span><span id="sim-target-badge">เป้าหมาย WP1</span><span id="sim-distance-badge">—</span></div>
+   <p class="scene-pan-hint">เลื่อนฉากซ้าย–ขวา หรือโฟกัสกรอบแล้วใช้ปุ่มลูกศร</p>
+  </section>
+  <aside id="sim-inspector" class="logic-panel" aria-label="รายละเอียดตรรกะ" hidden>
+          <div id="mission-console">
+<button id="sim-close-inspector" class="inspector-close" type="button">ปิดรายละเอียด</button>
+            <p class="story-index">INSPECT · ตรรกะของเรือลำนี้</p>
+            <h2 id="sim-focus-title">เรือหนึ่งลำ · สถานะเดียวกันทุกมุมมอง</h2>
+            <p id="sim-focus-copy">แผนที่และตำแหน่งนี้คงเดิมเมื่อเจาะดู readiness, GPS, compass หรือตัวควบคุม</p>
+            <nav id="mission-focus" aria-label="เลือกส่วนของภารกิจ">
+        <button type="button" data-focus="whole" aria-current="page">ทั้งระบบ</button>
+        <button type="button" data-focus="readiness">ตรวจความพร้อม</button>
+        <button type="button" data-focus="navigation">นำทาง</button>
+        <button type="button" data-focus="gps">GPS</button>
+        <button type="button" data-focus="compass">Compass</button>
+        <button type="button" data-focus="steering">การเลี้ยว</button>
+      </nav>
+<section data-focus-panel="whole">
+              
+              <div class="sim-readouts"><p>FSM<strong id="sim-mode">STANDBY</strong></p><p>จุดถัดไป<strong id="sim-waypoint">WP1 / 9</strong></p><p>ระยะถึงเป้า<strong id="sim-distance">—</strong></p></div>
+              <div class="sim-inputs"><label>ความขุ่น (synthetic NTU)<input id="sim-water-ntu" type="number" min="0" max="1000" step="1" value="5"></label><label><input id="sim-water-valid" type="checkbox" checked> sample ใช้ได้</label></div>
+              <p id="sim-water-summary" class="sim-result"></p>
+              <p class="sim-caveat">detector แบบ partial: rolling SMA 8 ตัวอย่าง และ mean &gt;50 NTU เท่านั้น; ยังไม่รวม baseline dwell, hysteresis, stale evidence, ROC diagnostic. Live SET_HOME capture NOT IMPLEMENTED.</p>
+            </section>
+            <section data-focus-panel="readiness" hidden>
+              <p class="sim-note">START ต้อง NORMAL + GPS valid + compass valid + route sealed/nonempty · HOME ไม่ใช่ gate</p><button id="sim-ready" class="quiet-button" type="button">คืนค่าเซนเซอร์จำลองให้พร้อม</button>
+              <div class="sim-inputs">
+                <label><input id="sim-gps-receiving" type="checkbox" checked> GPS receiver กำลังส่ง</label>
+                <label><input id="sim-gps-location-valid" type="checkbox"> location valid</label>
+                <label>ดาวเทียม <input id="sim-gps-sats" type="number" min="0" max="30" value="0"></label>
+                <label>HDOP <input id="sim-gps-hdop" type="number" min="0" max="99" step="0.01" value="99"></label>
+                <label>อายุ sample (ms) <input id="sim-gps-sample-age" type="number" min="0" value="0"></label>
+                <label><input id="sim-compass-present" type="checkbox"> พบ compass</label>
+                <label><input id="sim-compass-fresh" type="checkbox"> compass สด</label>
+                <label>จำนวน read fail <input id="sim-compass-fail-count" type="number" min="0" max="255" value="0"></label>
+                <label>Heading (°) <input id="sim-compass-heading" type="number" value="0"></label>
+                <label><input id="sim-compass-calibration" type="checkbox"> calibration โหลดแล้ว · diagnostic</label>
+                <label><input id="sim-route-sealed" type="checkbox" checked> route sealed / ไม่ว่าง</label>
+                <label><input id="sim-home-set" type="checkbox"> HOME ที่ตำแหน่งปัจจุบัน · ไม่ใช่ SET_HOME capture</label>
+              </div>
+              <p id="sim-gps-tier" class="sim-result">GPS: SAFE_STOP · ไม่เคยรับ fix ที่ใช้ได้</p>
+              <p id="sim-start-gate" class="sim-result">START gate: ยังไม่ผ่าน</p>
+            </section>
+            <section data-focus-panel="navigation" hidden><p class="sim-note">bearing เป้าหมายเทียบกับ heading ที่อ่านได้ · โค้งบนแผนที่เกิดจาก plant เดียวกับตัวเลข</p></section>
+            <section data-focus-panel="gps" hidden><p class="sim-formula">fix = locationValid ∧ age ≤ 2000 ms ∧ sats ≥ 6 ∧ HDOP &lt; 2 ∧ filterInitialized ∧ ¬faultLatched</p><p class="sim-result" id="sim-gps-detail"></p></section>
+            <section data-focus-panel="compass" hidden><p class="sim-formula">ok = address/present ∧ fresh ∧ failCount &lt; 5 ∧ finite(heading)</p><p class="sim-result" id="sim-compass-detail"></p><p class="sim-note">calibration-loaded แสดงเพื่อวินิจฉัย ไม่ใช่ START gate</p></section>
+            <section data-focus-panel="steering" hidden><p class="sim-formula">error = wrap180(targetBearing − heading); turnRate = clamp(1.6 × error, −40, +40) °/s</p><div class="sim-readouts"><p>เป้าหมาย<strong id="sim-bearing">—</strong></p><p>Heading<strong id="sim-heading">—</strong></p><p>ส่วนต่าง<strong id="sim-error">—</strong></p><p>คำขอเลี้ยว<strong id="sim-turn">—</strong></p></div><p class="sim-note">plant สอนแบบ turn + surge ที่เชื่อมกัน · normalized เท่านั้น ไม่ใช่ PWM/แรงขับจริง และไม่ใช่ full firmware LOS/GRID</p></section>
+            <div class="sim-live-flow"><span id="sim-input-value">INPUT · GPS — / compass —</span><b>→</b><span id="sim-check-value">CHECK · WAIT</span><b>→</b><span id="sim-action-value">ACTION · neutral</span></div>
+            <p id="sim-transition" class="sim-transition" role="status"></p>
+            <div class="sim-safety-actions"><button id="sim-emergency" class="quiet-button" type="button">E-STOP</button><button id="sim-safety-normal" class="quiet-button" type="button">Safety NORMAL</button><button id="sim-clear-estop" class="quiet-button" type="button">ล้าง E-STOP</button><button id="sim-force-spiral" class="quiet-button" type="button">ทดลอง SPIRAL หลัง WP1</button></div>
+            <p class="sim-caveat">ข้อมูลและ plant เป็น synthetic เท่านั้น · ไม่มีการต่อเรือ/GPS/เข็มทิศ/วิทยุจริง</p>
+          </div>
+        </aside>
+ </div>
+ <section id="mission-transport" aria-label="ควบคุมภารกิจ">
+  <div class="transport-main"><button id="sim-start" class="action-button" type="button">START</button><button id="sim-play" class="quiet-button" type="button">เล่นต่อ</button><button id="sim-step" class="quiet-button" type="button">ทีละก้าว</button><button id="sim-reset" class="quiet-button" type="button">เริ่มใหม่</button></div>
+  <div class="transport-options"><label for="sim-speed">ความเร็ว</label><select id="sim-speed"><option value="1">1×</option><option value="4" selected>4×</option><option value="12">12×</option></select><output id="sim-clock">0.00 s</output><button id="sim-inspect" class="quiet-button" type="button" aria-controls="sim-inspector" aria-expanded="false">ดูตรรกะ / เซนเซอร์</button></div>
+ </section>
+ <details class="model-notes"><summary>เกี่ยวกับแบบจำลอง</summary><p>ฉากนี้ใช้ข้อมูลสังเคราะห์และฟิสิกส์การเลี้ยว/เคลื่อนที่แบบย่อ ไม่ใช่ firmware ทั้งชุดหรือการควบคุมเรือจริง · Live SET_HOME capture NOT IMPLEMENTED · ตัวตรวจน้ำใช้ SMA 8 ตัวอย่างและ mean &gt;50 NTU บางเงื่อนไขเท่านั้น ยังไม่รวม baseline dwell, hysteresis, stale evidence และ ROC diagnostic · <a href="heading-pid.html">เปิด Heading / PID lab</a></p></details>
+</section>
+</main>
+</body></html>

@@ -4,6 +4,28 @@
 
 ## จุดเริ่มต้นและหน้าเว็บ
 
+Current activation override: Overall keeps codec-only `uplink-motion.js`, `mission-kernel.js`, compatibility `autonomous-mission-model.js`, incoming/transport/presentation and `autonomous-mission.js` as the sole mission owner. `function-centered-overall.js` subscribes to snapshots for details and operates canonical mission controls for a timed caption tour; current automatic chapters do not yet synchronize the mission explanation focus. Isolated sample/RTH lab adapters remain contextual; `overall-completion.js` and legacy storyboards are not mounted. Legacy entries below describe reusable historical source, not additional active mission owners.
+
+- `src/js/overall/function-centered-overall.js` — current timed nine-caption tour and canonical snapshot details; owns a presentation timeout, not a second mission model. Boot/reset/button fixes are verified separately; a complete causal movie is not yet delivered.
+- `src/css/function-centered-overall.css` — initial builder UI base, overridden by the final flow layer.
+- `src/css/function-flow.css` — final Overall-only hierarchy, causal detail and compact supporting mission layout.
+- `tests/minimal-overall-browser.py` — historical three-area UI contract; its native group locators do not describe the current nine-caption tour. Preserve its results; do not claim it verifies movie playback.
+- `tests/overall-story-boot-browser.py` — current native fresh boot/START regression, including preserved bounded labs and canonical mission-clock progress; requires a new `--out`.
+- `tests/overall-story-reset-browser.py` — native RESET retires the story timeout, returns to intro and permits a fresh START; requires a new `--out`.
+- `tests/overall-story-control-browser.py` — phone touch/off-hover START, PAUSE and RESUME computed-color readability; requires a new `--out`.
+- `tests/overall-function-flow-browser.py` — preserved pre-minimal 63-check interface contract; saved results remain historical, not current three-area/disclosure acceptance.
+- `tests/overall-function-regressions-browser.py` — native F1/F2/F3 regressions: real paused receipt/loss/reset, same-mode contextual PID links, and GRID/SPIRAL/RTH final-drive records; requires a fresh `--out` and preserves raw snapshots.
+- `tests/function-centered-overall-browser.py` — capped builder's historical menu-layout checkpoint; its fixed builder evidence output must not be rerun over retained evidence.
+- `docs/FUNCTION_CENTERED_OVERALL.md` — current activation, operation, verification/evidence and UI-versus-firmware review boundaries.
+
+- `src/js/overall/mission-kernel.js` — canonical50ms state/plant, sample/hold/anomaly/spiral/RTH and frozen operation provenance
+- `src/js/overall/mission-transport.js` — single bounded/coalesced immutable38B MessageChannel lifecycle
+- `src/js/overall/autonomous-mission-model.js` — compatibility export to kernel; historical factory is never invoked
+- `src/js/overall/autonomous-mission.js` — primary scene renderer, controls, source inspector and DATA shore DOM
+- `src/css/autonomous-mission.css` — canonical scene/pan/controls/inspectors
+- `tests/mission-policies.test.js` — behavioral policy/controller RED→GREEN and full plant mission regression
+- `tests/mission-continuation-browser.py` — native single SIM/transport/loss/reset/layout evidence, Python wire decode
+
 - `README.md` — คู่มือเปิดเว็บ เส้นทางเริ่มต้น คำสั่งตรวจในเครื่อง และลิงก์เอกสาร
 - `index.html` — redirect แบบเรียบง่ายไปยัง `pages/overall.html`; ส่งต่อ query/hash เดิมและมีลิงก์ fallback ที่เข้าถึงด้วยแป้นพิมพ์ได้
 - `.gitignore` — ละเว้นไฟล์สภาพแวดล้อม Python และ cache (`.env`, `.venv`, `__pycache__`)
@@ -11,7 +33,7 @@
 - `pages/classroom.html` — หน้า Classroom; markup ของ storyboard เตรียมภารกิจ 8 ขั้น โหลดเฉพาะโมเดลและตัวควบคุมภารกิจ ไม่มีส่วนถามตอบ
 - `pages/heading-pid.html` — หน้า Heading / PID; markup ของหน้าปัด A/B, target, gain controls, transport และกราฟที่ `HeadingLab` วาด
 - `pages/heatmap.html` — หน้าอธิบายการประมาณค่าระหว่างจุดวัดด้วยข้อความและแผนภาพ ไม่มี script หรือชุดข้อมูลที่สร้าง heatmap จริง
-- `pages/overall.html` — หน้า Overall แบบบูรณาการ; markup ของบทเรียน route/task/PID/mission, ตัวอย่างตัวเลข, inspector และแผง Uplink ซึ่งโหลด Overall และ mission scripts
+- `pages/overall.html` — หน้า Overall: ผังฟังก์ชันเป็นทางเข้าหลัก เจาะ input → predicate → output ด้วย snapshot ร่วม; `#system` เป็นหลักฐานจำลองประกอบ ภาพ/controls ที่ซ้ำถูก retire จาก live DOM และไม่ mount OPERATE controller เดิม; หน้าอื่นไม่เปลี่ยน
 - `pages/sensors.html` — หน้าอธิบายเซนเซอร์น้ำและโมดูลสนับสนุนด้วยเนื้อหา/ภาพ ไม่มีการอ่านค่า sensor จากอุปกรณ์
 - `pages/slides.html` — โครงเวทีและ controls ของชุดสไลด์; `slides-data.js` ป้อนข้อมูลให้ `app.js`
 - `pages/story.html` — หน้า Story Lab; เจ้าของ markup ของ 4 ฉาก readiness, permission, motors, movement และแผนภาพเส้นทาง WP1
@@ -33,6 +55,7 @@
 - `src/css/overall-visuals.css` — รูปแบบ SVG/diagram และสถานะการเคลื่อนไหวของตัวอย่างภาพใน Overall
 - `src/css/overall.css` — layout, panels, charts, inspector และ controls ของหน้า Overall
 - `src/css/site.css` — shared tokens, SW shell, touch-sized navigation และ section/card styles ของหน้า active ทั้งหมด
+- `src/css/system.css` — layout responsive และสถานะภาพเฉพาะ `.system-mission`, สมการ, แผนที่, controls และ transport inspector ของฉากใหม่ใน Overall
 - `src/css/story.css` — scene panels, SVG, readiness controls, responsive viewport และ reduced-motion ของ Story Lab
 - `src/css/styles.css` — deck, stage, slide layouts, navigation และ responsive rules ของหน้า Slides
 
@@ -46,7 +69,9 @@
 - `src/js/mission/mission-start-model.js` — สถานะจำลองการเตรียม/เริ่มภารกิจ; global `MissionStartModel`, ฟังก์ชัน `createState`, `advance`, `simulateGpsReady`, `setReadiness`, `acceptStart`, `play`, `pause`, `reset`, `motorsActive`, `boatMoved`; shared โดย Classroom, Story และ Overall
 - `src/js/mission/mission-start-telemetry-model.js` — สร้าง run และฉาย/เก็บ snapshot ของ storyboard เป็นรายละเอียด telemetry/log เพื่อสอน; global `MissionStartTelemetry`, ฟังก์ชัน `createRun`, `project`, `record`; เป็นคนละเส้นทางกับ codec/transport ใน `uplink-motion.js` ซึ่งประกอบ sample และส่ง bytes ของตัวเอง
 - `src/js/mission/mission-start.js` — controller ของ storyboard readiness และการเคลื่อนแผนภาพ; global `MissionStartStoryboard`, ฟังก์ชัน `install`, `recordEvent`, `renderTelemetry`, `listen`, `stopTimer`, `canAnimate`, `schedule`, `tick`, `render`, `toggleTour`; ผูก `MissionStartModel` กับ markup ของ Classroom/Overall
-- `src/js/mission/uplink-motion.js` — controller/renderer ของการส่ง packet บนจอ; global `UplinkMotion`, ฟังก์ชัน `encodeTelemetry`, `decodeTelemetry`, `install`, `initialState`, `renderBytes`, `renderInspector`, `updateShore`, `schedule`, `animatePacket`, `beginRetry`, `receiverCallback`, `send`, `cancelFlight`, `reset`, `verifyInvalidLength`; อ่าน controls ของแผง Overall, สร้าง sample/packet, ใช้ `ArrayBuffer` กับ browser `MessageChannel` และจำลอง loss/retry/stale state โดยไม่ส่งวิทยุ
+- `src/js/mission/uplink-motion.js` — controller/renderer ของแผง Uplink เดิม; global `UplinkMotion` และ additive `window.UplinkCodec` อ้างถึงฟังก์ชันเดิม `encodeTelemetry`/`decodeTelemetry`/`PACKET_BYTES`; codec, layout และ ABI ไม่ถูกเขียนใหม่
+- `src/js/system/system-model.js` — pure CommonJS/browser model ของฉาก mission รวม readiness, route/pose, sample rolling SMA, active formulae, gains, dwell, source snapshot และ browser transport/shore records; global `SystemMissionModel`, ไม่มี DOM dependency
+- `src/js/system/system.js` — namespaced `#system` renderer/controller และ bounded `window.SystemMission` API (`snapshot`, `prepare`, `readiness`, `start`, `step`, `setInput`, `setGains`, `setLink`, `setDrop`, `reset`); ส่ง byte snapshot ผ่าน MessageChannel แล้ว decode จาก callback bytes
 - `src/js/overall/overall-labs-model.js` — คำนวณตัวอย่างและสถานะ lab ของ Overall; global `OverallLabsModel`, ฟังก์ชัน `finiteMean`, `parseSamples`, `evaluateWhatIf`, `getCheckpointIndices`, `finiteDistance`, `createRthState`, `updateRth`; รับข้อมูลตัวอย่างที่ป้อนในหน้า ไม่ใช่ pipeline ภาคสนาม
 - `src/js/overall/overall-labs.js` — adapter/render สำหรับ what-if และ RTH controls; ฟังก์ชัน `announce`, `numberField`, `formatNumber`, `sampleErrorText`, `renderWhatIf`, `rthInputs`, `renderRth`; ใช้ `OverallLabsModel` และ markup ของ Overall
 - `src/js/overall/overall-model.js` — model หลักของ mission/decision visualization ใน Overall; global `OverallModel`, ฟังก์ชัน `analyzeSma`, `generateSpiralTargets`, `createMission`, `add`, `rthStopPoint`; สร้างขั้น/จุดหมายและผลจำลองให้หน้า Overall
@@ -75,6 +100,9 @@
 - `tests/story-model.test.js` — ตรวจ fixture readiness, การเลือก scene, gate ของ START, effects และ reset ใน Story model
 - `tests/story-rework.test.js` — ตรวจ SVG readiness, สถานะมอเตอร์/การเคลื่อน, packet replay และ behavior ของ viewport/control
 - `tests/story-ui.test.js` — ตรวจ 4 ฉาก picture-first, controls และพิกัด route diagram ของ Story
+- `tests/system-model.test.js` — ตรวจ START gate, sample window/eligibility, clean/dirty branch, numeric conversion/navigation/spiral/steering, RTH dwell และ source bytes เทียบกับ decoded shore data
+- `tests/system-integration-regression.test.js` — behavioral regressions for shared HOME, motor sign convention, late-plume resume, current SPIRAL/RTH telemetry, fixed numeric timestep, correct substituted control input and separate decode/render evidence
+- `tests/system-page.test.js` — ตรวจลำดับ `#system`, bounded API hooks, browser MessageChannel/postMessage/decode และ additive codec export
 - `tests/structure.test.js` — ตรวจ root redirect, ลิงก์กลับบริบทใน Overall และ hash ปัจจุบันของ migration map
 - `tests/shared-shell.test.js` — regression contract สำหรับ shared shell, 9 ปลายทาง, dark tokens, touch targets และ context navigation
 - `tests/visual-rework.test.js` — ตรวจ marker รูปลูกศรและขนาด/การตอบสนองของภาพ PWM
@@ -83,6 +111,7 @@
 ## เอกสารและไฟล์ประวัติ
 
 - `docs/DEVELOPMENT.md` — จุดแก้ markup/model/controller/styles/data และวิธีเปิด/ตรวจเว็บ
+- `docs/EQUATIONS.md` — สมการที่ active ใน `#system`, relative source/function provenance และขอบเขต demo เทียบ firmware reference
 - `docs/FILE_MAP.md` — รายการบทบาทของทุกไฟล์ที่แชร์ได้ในโครงการนี้ รวมไฟล์เอกสารฉบับนี้
 - `docs/MIGRATION_MAP.json` — ตารางพาธเดิม→ปัจจุบันพร้อม hash และชนิดการย้าย/แก้ resource
 - `docs/SPEAKER_NOTES.md` — โน้ตผู้บรรยายสไลด์เดิม เก็บเป็นเอกสารประวัติ ไม่ใช่แผนผังสถาปัตยกรรมปัจจุบัน
