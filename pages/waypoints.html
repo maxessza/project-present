@@ -1,89 +1,184 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071827">
-  <meta name="description" content="How the smart water boat lays out waypoints and runs a monitoring mission.">
+  <meta name="description" content="อธิบายการเลือกขอบเขตและสร้างเส้นทาง waypoint 15 จุดของเรือสำรวจน้ำ">
   <title>Waypoints · Smart Water Boat</title>
   <link rel="stylesheet" href="../src/css/site.css">
-<link rel="stylesheet" href="../src/css/navigation.css">
+  <link rel="stylesheet" href="../src/css/navigation.css">
+  <link rel="stylesheet" href="../src/css/waypoints.css">
+  <script src="../src/js/waypoints/waypoints.js" defer></script>
 </head>
-<body>
-<a class="skip-link" href="#main">Skip to content</a>
+<body class="waypoint-page">
+  <nav class="project-entry-nav" aria-label="กลับจุดเริ่มต้น"><a href="../index.html">← เริ่มดู / ทุกหน้า</a></nav>
+  <a class="skip-link" href="#main">ข้ามไปยังเนื้อหา</a>
   <header class="site-header">
-    <a class="brand" href="overall.html" aria-label="Smart Water Boat home"><span class="brand-mark" aria-hidden="true">SW</span><span class="brand-copy"><strong>Smart Water Boat</strong><small>Field Systems · Senior Project</small></span></a>
-    <nav class="primary-nav" aria-label="Main navigation">
+    <a class="brand" href="overall.html" aria-label="Smart Water Boat home">
+      <span class="brand-mark" aria-hidden="true">SW</span>
+      <span class="brand-copy"><strong>Smart Water Boat</strong><small>Field Systems · Senior Project</small></span>
+    </a>
+    <nav class="primary-nav" aria-label="เมนูหลัก">
       <a class="nav-link" href="overall.html">Overall</a>
+      <a class="nav-link" href="overall.html#mission-start">Mission start</a>
       <a class="nav-link current" href="waypoints.html" aria-current="page">Waypoints</a>
       <a class="nav-link" href="heatmap.html">Heatmap</a>
       <a class="nav-link" href="sensors.html">Sensors</a>
       <a class="nav-link nav-cta" href="slides.html">Slides</a>
     </nav>
   </header>
-  <main id="main">
-    <section class="page-hero container">
-      <p class="eyebrow">01 / Route planning</p>
-      <h1>Waypoints turn a survey area into a patrol route</h1>
-      <p class="hero-lead">The dashboard can generate a sweep route from a selected area. The boat then follows ordered GPS points, logs readings along the mission and returns to its recorded home position.</p>
-    </section>
-    <section class="container section section-topline">
-      <div class="section-heading">
-        <p class="eyebrow">Automatic sweep layout</p>
-        <h2>Three lines with three points on each line</h2>
-        <p>The backend divides the selected bounds evenly. For a horizontal survey, each sweep line uses its start, midpoint and end longitude; vertical mode swaps the axes.</p>
-      </div>
-      <div class="metric-band inline-metrics">
-        <div class="metric"><strong>3</strong><span>Sweep lines</span><small>Across the selected area</small></div>
-        <div class="metric"><strong>3</strong><span>Points per line</span><small>Start · middle · end</small></div>
-        <div class="metric"><strong>9</strong><span>Waypoints total</span><small>Automatic sweep layout</small></div>
-      </div>
-      <div class="split-section code-section">
-        <div>
-          <h3>Alternating point order</h3>
-          <p class="body-copy">After each line, the planner reverses the point order. This makes the boat sweep back and forth instead of returning to the same side before every pass.</p>
-          <p class="source-note">Simplified from <code>main.py</code> · <code>/generate_sweep</code>. This is the route-generation logic, not measured field coverage.</p>
-        </div>
-        <pre class="code-window"><code>sweep_lines = [start, middle, end]
-line_points = [start, middle, end]
-direction = 1
 
-for line in sweep_lines:
-    points = line_points if direction == 1 \
-             else reversed(line_points)
-    for point in points:
-        add_waypoint(line, point)
-    direction *= -1</code></pre>
-      </div>
+  <main id="main" class="waypoint-page-content">
+    <section class="page-hero container route-hero">
+      <p class="eyebrow">ROUTE PLANNING · AUTO SWEEP</p>
+      <h1>กำหนดพื้นที่ แล้วสร้างเส้นทาง <span>15 waypoint</span></h1>
+      <p class="hero-lead">หน้า Dashboard รับมุมพื้นที่ 4 จุด จากนั้นส่งขอบเขตให้ backend สร้างแนวกวาด 5 แนว แนวละ 3 จุด เรียงลำดับสลับกลับไปมาให้เรือเดินต่อเนื่อง</p>
+      <div class="route-hero-note"><strong>สิ่งสำคัญ:</strong> เส้นทางนี้เป็นพิกัดตามกรอบละติจูด/ลองจิจูดที่เลือก ไม่ใช่ผลยืนยันความครอบคลุมจริงในแหล่งน้ำ</div>
     </section>
-    <section class="section section-tint">
-      <div class="container split-section">
-        <div>
-          <p class="eyebrow">Mission workflow</p>
-          <h2>Check, patrol, investigate and return</h2>
-          <ol class="plain-steps">
-            <li><strong>Prepare:</strong> define the area, upload waypoints and check GPS, compass and battery.</li>
-            <li><strong>Patrol:</strong> navigate to each waypoint, read water sensors and save the position with the data.</li>
-            <li><strong>Investigate:</strong> if a configured threshold is exceeded, perform a local spiral scan and then resume near the closest waypoint.</li>
-            <li><strong>Return:</strong> navigate to home, stop the motors and finalize the mission log.</li>
-          </ol>
-          <p class="note">The report does not specify a field-tested waypoint spacing or a measured coverage percentage.</p>
+
+    <section class="container route-process-section" aria-labelledby="route-process-title">
+      <div class="section-heading">
+        <p class="eyebrow">THE GENERATION FLOW</p>
+        <h2 id="route-process-title">จากคลิกบนแผนที่ไปเป็นลำดับจุด</h2>
+      </div>
+      <ol class="route-process">
+        <li><span>01</span><h3>เลือกขอบเขต</h3><p>คลิกมุมพื้นที่ 4 จุดใน Sweep Mode เพื่อบอกกรอบสำรวจ</p></li>
+        <li><span>02</span><h3>คำนวณกรอบย่อย</h3><p>Dashboard หา min/max ของ lat/lng แล้วเว้นขอบเข้ามาด้านละ 10%</p></li>
+        <li><span>03</span><h3>สร้าง 5 × 3 จุด</h3><p>ส่งกรอบให้ <code>/generate_sweep</code>; backend วาง 5 แนวและ 3 จุดต่อแนว</p></li>
+        <li><span>04</span><h3>แสดงเส้นทางร่าง</h3><p>รับพิกัดกลับมา วาดหมายเลขกับเส้นเชื่อม แล้วเก็บเป็น draft route</p></li>
+      </ol>
+    </section>
+
+    <section class="section section-tint route-demo-section" aria-labelledby="route-demo-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">INTERACTIVE ROUTE MAP</p>
+          <h2 id="route-demo-title">ดูว่า waypoint ถูกสร้างและเรียงอย่างไร</h2>
+          <p>กดเล่นหรือเลื่อนตัวควบคุมเพื่อดูทีละจุด แผนภาพเป็น schematic ในกรอบสมมติ ไม่ใช่ตำแหน่ง GPS จริง</p>
         </div>
-        <figure class="image-frame">
-          <img src="../assets/images/activity-flow.png" alt="Activity diagram for mission setup, patrol, spiral mapping and return to home">
-          <figcaption>Activity diagram · BETA TEST project report, Figure 3.6</figcaption>
-        </figure>
+
+        <div class="route-lab-grid">
+          <figure class="route-map-frame">
+            <div class="route-map-heading"><span>คลิกแผนที่เพื่อวางจุด หรือเลือก 4 มุมเพื่อสร้าง Auto Sweep</span><span class="route-schematic-tag">SCHEMATIC</span></div>
+            <div class="route-map-scroll" tabindex="0" aria-label="พื้นที่แผนที่สาธิต เลื่อนซ้ายขวาได้บนจอแคบ">
+              <svg class="route-map-svg" viewBox="0 0 750 350" role="img" aria-labelledby="route-svg-title route-svg-desc">
+                <title id="route-svg-title">พื้นที่สาธิตสำหรับวาง waypoint หรือสร้าง Auto Sweep 15 จุด</title>
+                <desc id="route-svg-desc">พื้นที่สาธิตที่คลิกเพื่อวาง waypoint หรือเลือกมุมสี่จุดเพื่อสร้างเส้นทาง Auto Sweep</desc>
+                <defs>
+                  <pattern id="route-grid" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M 26 0 L 0 0 0 26" fill="none" stroke="#183444" stroke-width="1"/></pattern>
+                  <marker id="route-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#54d9ce"/></marker>
+                </defs>
+                <rect x="34" y="24" width="682" height="302" rx="14" class="route-map-bg"/>
+                <rect x="50" y="40" width="650" height="270" rx="8" class="route-survey-boundary"/>
+                <rect x="50" y="40" width="650" height="270" rx="8" fill="url(#route-grid)"/>
+                <text x="54" y="33" class="route-map-label">กรอบพื้นที่ที่เลือก · 100%</text>
+                <rect id="routeBoundsPreview" x="115" y="67" width="0" height="0" rx="5" class="route-inner-boundary" style="display:none"/>
+                <text id="routeBoundsLabel" x="120" y="60" class="route-map-label route-inner-label" style="display:none">กรอบ route หลังเว้นขอบ 10%</text>
+                <polyline id="routePathBase" class="route-path-base" points=""/>
+                <polyline id="routeProgressPath" class="route-path-progress" points="" aria-hidden="true"/>
+                <polyline id="routeCornerOutline" class="route-corner-outline" points=""/>
+                <g id="routeCornerLayer" aria-label="มุมพื้นที่ที่เลือก"></g>
+                <g id="routePointLayer" aria-label="waypoint ที่วางหรือสร้างแล้ว"></g>
+              </svg>
+            </div>
+            <figcaption class="route-map-caption">คลิกในกรอบเพื่อวาง waypoint; เปลี่ยนเป็น Auto Sweep แล้วคลิกมุมพื้นที่ 4 จุดก่อนสั่ง Generate</figcaption>
+            <div class="route-legend"><span><i class="legend-boundary"></i>ขอบเขตแผนภาพ</span><span><i class="legend-inset"></i>กรอบ route ที่สร้าง</span><span><i class="legend-path"></i>เส้นทางตามลำดับ</span><span><i class="legend-start"></i>จุดที่เลือก/เริ่ม</span></div>
+          </figure>
+
+          <aside class="route-control-panel" aria-label="ตัวควบคุมแผนภาพเส้นทาง">
+            <p class="eyebrow">PLACE OR GENERATE</p>
+            <div class="route-mode-controls" role="group" aria-label="เลือกวิธีสร้าง route">
+              <button id="routeManualMode" type="button" class="route-mode-button is-selected" aria-pressed="true">คลิกวาง waypoint</button>
+              <button id="routeSweepMode" type="button" class="route-mode-button" aria-pressed="false">Auto Sweep</button>
+            </div>
+            <p class="route-count"><strong id="routeStepCount" aria-live="polite">0</strong><span id="routeCountLabel">waypoint วางเอง</span></p>
+            <p id="routeStepTitle" class="route-step-title" aria-live="polite">คลิกพื้นที่แผนที่เพื่อวางจุดแรก</p>
+            <p id="routeStepDescription" class="route-step-description">แต่ละคลิกจะเพิ่ม waypoint พร้อมหมายเลขและเส้นเชื่อมตามลำดับ</p>
+            <p id="routeInteractionStatus" class="route-interaction-status" role="status">โหมดวางเอง · คลิกภายในกรอบแผนที่</p>
+            <button id="routeGenerateSweep" class="button route-generate-button" type="button" disabled>เลือกมุม 0 / 4 ก่อน Generate</button>
+            <button id="routeAddPoint" class="button secondary-button route-keyboard-add" type="button">เพิ่มจุดตัวอย่างด้วยปุ่ม</button>
+            <label class="route-range-label" for="routeRange"><span>เล่นตามลำดับ</span><output id="routeRangeOutput" for="routeRange">0 / 0</output></label>
+            <input id="routeRange" type="range" min="0" max="0" value="0" step="1" aria-label="เลือก waypoint ที่ต้องการแสดง" disabled>
+            <div class="route-controls">
+              <button id="routePlay" class="button primary-button" type="button" disabled>เล่นเส้นทาง</button>
+              <button id="routeUndo" class="button secondary-button" type="button" disabled>ย้อนจุดล่าสุด</button>
+              <button id="routeReset" class="button secondary-button" type="button">เริ่มใหม่</button>
+            </div>
+            <div class="route-current-coord">
+              <span class="route-current-label">ตำแหน่งโดยประมาณในกรอบตัวอย่าง</span>
+              <strong id="routeCoordText">ยังไม่มี waypoint</strong>
+              <small>ตำแหน่งในภาพใช้สาธิตเท่านั้น ไม่ใช่พิกัด GPS จริง</small>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
-    <section class="section container">
-      <div class="section-heading"><p class="eyebrow">Navigation inputs</p><h2>GPS locates the boat; the compass guides its heading</h2></div>
-      <div class="system-chain three-chain">
-        <div><span class="chain-index">01</span><h3>Position</h3><p>NEO-8M GPS supplies coordinates for waypoint tracking and route history.</p></div>
-        <div><span class="chain-index">02</span><h3>Heading</h3><p>QMC5883L magnetometer reports compass heading for line-of-sight guidance.</p></div>
-        <div><span class="chain-index">03</span><h3>Correction</h3><p>The report describes PID heading control that adjusts the left and right thrusters.</p></div>
+
+    <section class="container section route-generation-section" aria-labelledby="route-generation-title">
+      <div class="section-heading">
+        <p class="eyebrow">WHAT THE SOURCE DOES</p>
+        <h2 id="route-generation-title">ตัวเลข 5 × 3 มาจากไหน</h2>
+        <p>หน้าเว็บหาขอบเขตจากค่าต่ำสุด/สูงสุดของมุมที่เลือก เว้นขอบเข้ามา 10% แล้ว backend วางแนวที่ 0%, 25%, 50%, 75% และ 100% ของกรอบด้านใน</p>
+      </div>
+      <p class="note route-source-caveat">รายละเอียดจาก source: แม้เลือก 4 มุม ระบบสร้าง route จากกรอบสี่เหลี่ยม min/max ของ lat/lng ไม่ได้ตามขอบ polygon อิสระ; Dashboard ปัจจุบันส่ง orientation แนวตั้ง และ backend ยังไม่ได้ใช้ค่า spacing ที่ประกาศไว้</p>
+      <div class="route-math-grid">
+        <article class="route-math-card"><span class="chain-index">01 · LANES</span><strong>5 แนว</strong><p>แนวตั้งใช้ตำแหน่งลองจิจูด 5 ค่า ส่วนแนวนอนสลับแกนเป็นละติจูด</p></article>
+        <article class="route-math-card"><span class="chain-index">02 · POINTS</span><strong>3 จุดต่อแนว</strong><p>แต่ละแนวใช้ต้นแนว กึ่งกลาง และปลายแนว</p></article>
+        <article class="route-math-card"><span class="chain-index">03 · ORDER</span><strong>สลับทิศทาง</strong><p>แนวถัดไปกลับลำดับจุด จึงเกิดเส้นทางซิกแซ็ก</p></article>
+        <article class="route-math-card route-total-card"><span class="chain-index">TOTAL</span><strong>5 × 3 = 15 จุด</strong><p>เลข waypoint เป็นลำดับเดินทาง ไม่ใช่ความสำคัญของตำแหน่ง</p></article>
+      </div>
+      <div class="route-code-layout split-section">
+        <div>
+          <p class="eyebrow">SIMPLIFIED BACKEND LOGIC</p>
+          <h3>วนทีละแนว แล้วกลับทิศในแนวถัดไป</h3>
+          <p class="body-copy">โค้ดจริงอยู่ที่ <code>main.py</code> ฟังก์ชัน <code>/generate_sweep</code> ส่วน <code>dashboard.html</code> ส่ง orientation เป็นแนวตั้งเมื่อกด Generate Sweep</p>
+          <p class="note">ใน snippet ค่า x/y เป็นสัดส่วนของกรอบก่อนแปลงเป็นละติจูด/ลองจิจูด; backend รองรับแนวนอนด้วย แต่ระยะระหว่างจุดไม่ได้ตั้งเป็นจำนวนเมตร</p>
+        </div>
+        <pre class="code-window"><code>line_positions = [0, .25, .50, .75, 1]
+points_on_line = [0, .50, 1]
+
+for line_index, x in enumerate(line_positions):
+    y_order = reversed(points_on_line)  # เริ่มที่มุมล่างซ้าย = WP1
+    if line_index % 2:
+        y_order = points_on_line
+
+    for y in y_order:
+        add_waypoint(x, y)</code></pre>
+      </div>
+    </section>
+
+    <section class="section section-tint route-method-section" aria-labelledby="route-method-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">TWO WAYS TO PLACE POINTS</p>
+          <h2 id="route-method-title">สร้างอัตโนมัติกับวางเองเป็นคนละโหมด</h2>
+        </div>
+        <div class="route-method-grid">
+          <article class="route-method-card is-auto">
+            <span class="route-method-index">AUTO SWEEP</span>
+            <h3>ให้ระบบสร้างแนวกวาด</h3>
+            <ol><li>เลือก 4 มุมและกด Generate Sweep</li><li>ระบบคำนวณกรอบย่อยและส่งให้ <code>/generate_sweep</code></li><li>backend บันทึกร่าง 15 จุดและส่งลำดับกลับมาให้แผนที่วาด</li></ol>
+            <p class="note">การสร้าง draft route ยังไม่ใช่การสั่งเรือให้ออกเดินทาง</p>
+          </article>
+          <article class="route-method-card">
+            <span class="route-method-index">MANUAL ROUTE</span>
+            <h3>คลิกวาง waypoint ทีละจุด</h3>
+            <ol><li>คลิกบนแผนที่ตามลำดับที่ต้องการ</li><li>Dashboard เชื่อมจุดตามลำดับคลิก</li><li>Save Route ส่งรายการพิกัดไปยัง <code>/save_route</code></li></ol>
+            <p class="route-method-footnote">โหมดนี้ไม่ได้สร้างรูปแบบ 5 แนว × 3 จุดให้อัตโนมัติ</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section route-next-section">
+      <div class="route-next-card">
+        <div><p class="eyebrow">AFTER ROUTE GENERATION</p><h2>เมื่อเริ่มภารกิจ GPS กับเข็มทิศจึงเข้ามาทำงาน</h2><p>จุดที่สร้างเป็นเป้าหมายตามลำดับ ระบบนำทางอ่านตำแหน่ง GPS และใช้ heading เพื่อปรับทิศไปยัง waypoint ปัจจุบัน การสร้างเส้นทางอย่างเดียวไม่ได้ยืนยันว่าเรือถึงจุดหรือเก็บข้อมูลสำเร็จ</p></div>
+        <a class="button primary-button" href="heatmap.html">ต่อไป: Heatmap ทำงานเมื่อใด <span aria-hidden="true">↗</span></a>
       </div>
     </section>
   </main>
-  <footer class="site-footer"><div class="container footer-inner"><span>Waypoints and mission flow · Project report, Chapter 3</span><a href="slides.html">Open the slide presentation ↗</a></div></footer>
+
+  <footer class="site-footer"><div class="container footer-inner"><span>Waypoint generation · อ้างอิง dashboard.html และ main.py</span><a href="slides.html">เปิดสไลด์นำเสนอ ↗</a></div></footer>
 </body>
 </html>

@@ -8,6 +8,8 @@
 - การคำนวณและสถานะจำลอง: ไฟล์ `*-model.js` ของหน้านั้น เช่น `src/js/heading/heading-model.js`, `src/js/story/story-model.js` และ `src/js/overall/overall-model.js`
 - การวาดหน้า รับเหตุการณ์ และควบคุมการเล่น: controller ของหน้า เช่น `heading.js`, `story.js`, `mission/mission-start.js` และ `overall/overall.js`
 - การเคลื่อนไหว: `src/js/overall/overall-visual-motion.js` สำหรับภาพเคลื่อนไหวของ Overall, `src/js/mission/mission-start.js` สำหรับ storyboard และ `src/js/mission/uplink-motion.js` สำหรับการเดินทางของ packet จำลอง
+- Waypoints: `src/js/waypoints/waypoints.js` ควบคุมการวางจุดและเล่น route 15 waypoint ใน schematic
+- Heatmap: `src/js/heatmap/heatmap-lab.js` จำลองเรือและกริดจาก sample NTU สังเคราะห์ใน browser; ไม่เรียก API หรือ backend
 - ฉาก Overall ปัจจุบัน: `src/js/overall/mission-kernel.js` pure model ผ่าน compatibility export `autonomous-mission-model.js`, `mission-transport.js` เป็น MessageChannel owner, `autonomous-mission.js` renderer และ `autonomous-mission.css`; `system/*` เป็น implementation เก่าไม่ mount ใน Overall ดูขอบเขตที่ `docs/AUTONOMOUS_MISSION.md`
 - สไตล์: `site.css` เป็น shared shell/tokens/navigation ของทุกหน้า, `learning-theme.css` ปรับ Classroom/Story/Heading/Slides ให้ใช้สีเดียวกัน และ stylesheet เฉพาะหน้าดูแล diagrams/controls; `navigation.css` ใช้กับ context links กลับ Overall
 - เนื้อหาและลำดับสไลด์: `src/js/slides/slides-data.js`; การแสดงผลสไลด์: `src/js/slides/app.js`
@@ -24,7 +26,9 @@
 - Heading / PID: `heading-model.js` → `heading.js`
 - Overall: `uplink-motion.js` (codec-only opt-out; ABI bodies unchanged) → `mission-kernel.js` → `autonomous-mission-model.js` → `mission-transport.js` → `autonomous-mission.js`; legacy Overall/mission-start/system controllers are not loaded.
 - Slides: `slides-data.js` → `app.js`
-- Waypoints, Sensors และ Heatmap เป็นหน้าอธิบายที่ไม่มี script เฉพาะหน้า
+- Waypoints: `waypoints.js` (standalone browser controller)
+- Heatmap: `heatmap-lab.js` (standalone browser simulation)
+- Sensors เป็นหน้าอธิบายที่ไม่มี script เฉพาะหน้า
 
 ## เปิดและตรวจ
 

@@ -32,12 +32,12 @@ Current activation override: Overall keeps codec-only `uplink-motion.js`, `missi
 - `.gitattributes` — เก็บ bytes ของไฟล์ตามต้นฉบับ ไม่แปลง line endings ตอน clone เพื่อรักษา hashes ของ source/tests และ migration map
 - `pages/classroom.html` — หน้า Classroom; markup ของ storyboard เตรียมภารกิจ 8 ขั้น โหลดเฉพาะโมเดลและตัวควบคุมภารกิจ ไม่มีส่วนถามตอบ
 - `pages/heading-pid.html` — หน้า Heading / PID; markup ของหน้าปัด A/B, target, gain controls, transport และกราฟที่ `HeadingLab` วาด
-- `pages/heatmap.html` — หน้าอธิบายการประมาณค่าระหว่างจุดวัดด้วยข้อความและแผนภาพ ไม่มี script หรือชุดข้อมูลที่สร้าง heatmap จริง
+- `pages/heatmap.html` — หน้าอธิบาย Live Monitor, Final summary และ Mission detail พร้อมเรือจำลอง 15 waypoint และกริด Heatmap จากค่า NTU สังเคราะห์; ไม่มี backend หรือชุดข้อมูลภาคสนาม
 - `pages/overall.html` — หน้า Overall: ผังฟังก์ชันเป็นทางเข้าหลัก เจาะ input → predicate → output ด้วย snapshot ร่วม; `#system` เป็นหลักฐานจำลองประกอบ ภาพ/controls ที่ซ้ำถูก retire จาก live DOM และไม่ mount OPERATE controller เดิม; หน้าอื่นไม่เปลี่ยน
 - `pages/sensors.html` — หน้าอธิบายเซนเซอร์น้ำและโมดูลสนับสนุนด้วยเนื้อหา/ภาพ ไม่มีการอ่านค่า sensor จากอุปกรณ์
 - `pages/slides.html` — โครงเวทีและ controls ของชุดสไลด์; `slides-data.js` ป้อนข้อมูลให้ `app.js`
 - `pages/story.html` — หน้า Story Lab; เจ้าของ markup ของ 4 ฉาก readiness, permission, motors, movement และแผนภาพเส้นทาง WP1
-- `pages/waypoints.html` — หน้าแนวคิดการวางเส้นทาง; มีแผนภาพและ code snippet เพื่ออธิบายแนวกวาด ไม่ได้ประมวลผลเส้นทางภาคสนามในหน้านี้
+- `pages/waypoints.html` — หน้า Auto Sweep 5 แนว × 3 จุด, คลิกวาง manual waypoint, เลือก 4 มุมเพื่อ Generate และเล่นลำดับใน schematic; ไม่ใช้พิกัดจริง
 
 ## ภาพประกอบ
 
@@ -48,6 +48,7 @@ Current activation override: Overall keeps codec-only `uplink-motion.js`, `missi
 ## สไตล์
 
 - `src/css/heading.css` — รูปแบบหน้าปัดสอง lane, กราฟ, gain controls, responsive layout และ reduced-motion ของ Heading / PID
+- `src/css/heatmap-lab.css` — รูปแบบแผนที่จำลองเรือ, controls, sample markers, legend และกริด Heatmap สามมุมมอง
 - `src/css/learning-theme.css` — ใช้ tokens สี navy/cyan เดียวกับเว็บหลักกับ Classroom, Story, Heading / PID และ Slides โดยคงสถานะ A/B และ controls เฉพาะหน้า
 - `src/css/learn.css` — หัวข้อสั้น แผนภาพและ controls ของ Classroom
 - `src/css/mission-start.css` — สไตล์เฉพาะ namespace `.mission-start` สำหรับ storyboard readiness, แผนที่เก้าจุด, controls และ telemetry ที่ใช้ใน Classroom/Overall
@@ -55,6 +56,7 @@ Current activation override: Overall keeps codec-only `uplink-motion.js`, `missi
 - `src/css/overall-visuals.css` — รูปแบบ SVG/diagram และสถานะการเคลื่อนไหวของตัวอย่างภาพใน Overall
 - `src/css/overall.css` — layout, panels, charts, inspector และ controls ของหน้า Overall
 - `src/css/site.css` — shared tokens, SW shell, touch-sized navigation และ section/card styles ของหน้า active ทั้งหมด
+- `src/css/waypoints.css` — แผนที่ route, controls, 15 waypoint, code explanation และ responsive layout ของหน้า Waypoints
 - `src/css/system.css` — layout responsive และสถานะภาพเฉพาะ `.system-mission`, สมการ, แผนที่, controls และ transport inspector ของฉากใหม่ใน Overall
 - `src/css/story.css` — scene panels, SVG, readiness controls, responsive viewport และ reduced-motion ของ Story Lab
 - `src/css/styles.css` — deck, stage, slide layouts, navigation และ responsive rules ของหน้า Slides
@@ -79,6 +81,11 @@ Current activation override: Overall keeps codec-only `uplink-motion.js`, `missi
 - `src/js/overall/overall.js` — controller/renderer หลักของหน้า Overall; global `OverallControls`, ฟังก์ชัน `setText`, `renderSmaChart`, `renderInspector`, `renderFsm`, `renderReadings`, `playback`, `enter`, `draw`, `finish`, `tick`, `pause`, `restoreTo`; ใช้ `OverallModel` และ `OverallLabsModel` เพื่อแสดง state/แผนภาพ
 - `src/js/story/story-model.js` — model ของการทดลอง 4 ฉาก; global `StoryModel`, ฟังก์ชัน `createFixture`, `createStory`, `getSnapshot`, `selectScene`, `setReadiness`, `sendStart`, `nextEffect`, `reset`; ใช้ `MissionStartModel` ผ่าน global ใน browser และ CommonJS fallback ใน tests
 - `src/js/story/story.js` — controller/view ของ Story Lab; globals `StoryLab`, `StoryView`, ฟังก์ชัน `mountStory`, `render`, `missingChecks`, `onClick`, `replayPackets`, `onChange`, `onKeydown`; ใช้ `StoryModel` เพื่อเปลี่ยน readiness, packet และ SVG indicator
+
+## JavaScript: Waypoints และ Heatmap
+
+- `src/js/waypoints/waypoints.js` — controller ของ manual route และ Auto Sweep schematic; เพิ่ม/ย้อน/เล่น waypoint และสร้าง 15 จุดโดยไม่เรียก backend
+- `src/js/heatmap/heatmap-lab.js` — จำลองเรือเริ่มที่ WP1 และแสดง Live, Final 10 × 10 หรือ Mission 40 × 40 จากค่า NTU สังเคราะห์; ใช้ IDW power 2 ใน browser
 
 ## JavaScript: Slides
 

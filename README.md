@@ -16,6 +16,8 @@ The shared Smart Water Boat header keeps five main destinations: Overall, Waypoi
 
 Suggested route: start with [Overall](pages/overall.html), try the [Classroom](pages/classroom.html) and [Story Lab](pages/story.html) mission lessons, explore [Uplink](pages/overall.html#ms-uplink-panel), then compare the [Heading / PID](pages/heading-pid.html) experiment. [Waypoints](pages/waypoints.html), [Sensors](pages/sensors.html), [Heatmap](pages/heatmap.html), and [Slides](pages/slides.html) add project detail.
 
+Waypoints has an interactive manual placement and 15-point Auto Sweep schematic. Heatmap lets the presenter run a boat simulation from WP1 and switch between Live, Final, and Mission views using synthetic sensor values; neither demo connects to the backend or field data.
+
 Overall opens with a shared-state mission demo: adjust readiness, synthetic turbidity voltage, demo gains and transport faults; step or play one mission clock; and follow active equations from the sample buffer through steering and a 38-byte browser MessageChannel receiver. The route interpolation is schematic, GPS/pH/temperature are synthetic, and browser memory does not represent a physical SD card or radio link. See [equation sources and limits](docs/EQUATIONS.md).
 
 Values in the lessons are examples or browser simulation output. The site does not connect to a boat, radio, or shore station, and Heatmap has no field-data pipeline.
