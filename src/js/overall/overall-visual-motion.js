@@ -26,7 +26,15 @@
     [266.0, 226.0], [286.7, 180.0], [268.3, 131.7], [220.0, 110.0], [169.3, 129.3],
     [146.7, 180.0], [167.0, 233.0], [220.0, 256.7], [275.4, 235.4], [300.0, 180.0]
   ];
-  const spiralFrames = [{ stage: 1, kind: 'grid-start', position: [118, 42], label: 'GRID · จุดเริ่มเส้นทาง' }];
+  const spiralFrames = [
+    { stage: 1, kind: 'grid-start', position: [118, 42], label: 'GRID · จุดเริ่มเส้นทาง' },
+    { stage: 2, kind: 'grid-leg', position: [118, 66], label: 'GRID · กำลังเดินทางไป WP1' },
+    { stage: 3, kind: 'wp1-passed', position: [118, 92], label: 'GRID · ผ่าน WP1 แล้ว · index ≥ 1' },
+    { stage: 4, kind: 'grid-continuation', position: [152, 121], label: 'GRID · เดินต่อหลัง WP1' },
+    { stage: 5, kind: 'grid-continuation', position: [186, 150], label: 'GRID · เดินตาม route เดิม' },
+    { stage: 6, kind: 'current-fix', position: [220, 180], label: 'ตำแหน่งปัจจุบัน · จุดอ้างอิงสแกน' },
+    { stage: 7, kind: 'eligibility', position: [220, 180], label: 'ตัดสินใจ · GRID + ผ่าน WP1 + anomaly + safety NORMAL' }
+  ];
   spiralTargets.forEach((position, targetIndex) => spiralFrames.push({
     stage: spiralFrames.length + 1,
     kind: 'spiral-target',
@@ -34,7 +42,7 @@
     position,
     label: `SPIRAL · เป้าหมาย ${targetIndex + 1}/25`
   }));
-  spiralFrames.push({ stage: 27, kind: 'grid-return', position: [374, 42], label: 'กลับ GRID · ใช้ index เดิม' });
+  spiralFrames.push({ stage: spiralFrames.length + 1, kind: 'grid-return', position: spiralTargets[spiralTargets.length - 1], label: 'กลับ GRID · เดินต่อ WP เดิมที่ยังค้าง' });
   storyboards.spiral = Object.freeze({
     id: 'spiral', delayMs: 320,
     targets: Object.freeze(spiralTargets.map(position => Object.freeze(position))),
@@ -177,9 +185,11 @@
         const targets = svg.querySelectorAll('.ov-spiral-target');
         targets.forEach((target, index) => {
           const active = frame && frame.kind === 'spiral-target' && index === frame.targetIndex;
-          target.setAttribute('opacity', frame && frame.kind === 'spiral-target' ? (active ? '1' : '.35') : '1');
-          target.setAttribute('r', active ? '6' : '3.2');
+          target.setAttribute('opacity', frame && frame.kind === 'spiral-target' ? (active ? '1' : '.35') : '.18');
+          target.setAttribute('r', active ? '6' : '2.5');
         });
+        const passedWp1 = svg.querySelector('#ov-wp1-passed');
+        if (passedWp1) passedWp1.setAttribute('opacity', frame && frame.stage >= 3 ? '1' : '0');
         if (frame) setMarker(frame.position, frame.kind === 'spiral-target' ? 'amber' : 'cyan');
         else if (state.marker) state.marker.setAttribute('display', 'none');
       } else if (state.id === 'data' || state.id === 'pwm') {

@@ -1,48 +1,41 @@
-# Smart Water Boat — เริ่มต้นที่นี่
+# Smart Water Boat
 
-เว็บไซต์นี้เป็นสื่ออธิบายโครงงานและแบบจำลองเพื่อการเรียนรู้ เปิด [index.html](index.html) เพื่อเริ่มดูได้ทันที ไม่ต้องติดตั้งแพ็กเกจหรือเรียก backend
+> **Current work-in-progress preview:** see [Overall checkpoint and known limits](docs/PREVIEW_CHECKPOINT.md). This branch is not an independently accepted release.
 
-**ถ้าได้รับ ZIP:** แตกไฟล์ทั้งโครงการก่อน แล้วเปิด `project-present/index.html` อย่าเปิด HTML จากใน ZIP หรือย้ายเฉพาะ HTML ออกมา เพราะหน้าเว็บต้องใช้ไฟล์ใน `pages/`, `src/` และ `assets/` ร่วมกัน
+This site explains the project and provides interactive browser demonstrations. Open [index.html](index.html) to reach the existing Overall experience immediately. The root redirect keeps the incoming query string and hash, so links such as `#pid` and `#ms-uplink-panel` still reach their Overall sections.
 
-```text
-project-present/
-├── index.html       ← จุดเริ่มต้นเดียว รวมลิงก์ทุกหน้า
-├── pages/           ← หน้าเรียนรู้และหน้ารายละเอียดโครงงาน
-├── src/
-│   ├── css/         ← สไตล์แยกตามหน้า/ส่วน
-│   └── js/          ← classroom, heading, mission, overall, slides, story
-├── assets/images/   ← ภาพประกอบที่ใช้ร่วมกัน
-├── docs/            ← จุดประสงค์เว็บ แผนที่ไฟล์ วิธีแก้ และขอบเขต
-├── tests/           ← ตรวจโมเดล UI contract และโครงสร้าง
-└── tools/           ← เครื่องมือตรวจลิงก์สำหรับผู้พัฒนา
-```
+Keep the project folder together after extracting a ZIP. The pages load shared CSS, scripts, and images from `pages/`, `src/`, and `assets/`.
 
-## เส้นทางแนะนำ
+## Presentation mode
 
-เริ่มที่ [Classroom](pages/classroom.html) เพื่อเรียนรู้เงื่อนไขก่อนเริ่มภารกิจ แล้วลอง [Story Lab](pages/story.html) เพื่อแยกคำสั่ง การอนุญาต มอเตอร์ และการเคลื่อนที่ จากนั้นดู [Uplink ใน Overall](pages/overall.html#ms-uplink-panel) เพื่อทดลอง packet จำลองระหว่างเรือกับฝั่ง และปิดท้ายด้วย [Heading / PID](pages/heading-pid.html) เพื่อเปรียบเทียบแบบจำลองการหันทิศ
+The presenter explains through diagrams and controls. Audience quizzes, prediction questions, answer checkpoints and narrative read-more blocks are removed; technical packet/log inspectors and model-only boundaries remain.
 
-หน้า [Overall](pages/overall.html) เป็นบทเรียนภาพรวมที่รวมหลายส่วนของระบบไว้ด้วยกัน ส่วน Waypoints, Sensors, Heatmap และ Slides เป็นหน้าอธิบายประกอบ ดูภาพรวมทุกหน้าและจุดประสงค์ได้ที่ [คู่มือเว็บไซต์](docs/WEBSITE_GUIDE.md)
+## Navigate the site
 
-ค่าที่เห็นในหน้าเว็บเป็นตัวอย่างหรือผลจากแบบจำลองในเบราว์เซอร์ ไม่ใช่ข้อมูลสดจากเรือ ไม่มีการเชื่อมต่อเรือหรือสถานีฐานจริง และไม่มีชุดข้อมูลภาคสนามสำหรับสร้าง Heatmap
+The shared Smart Water Boat header keeps five main destinations: Overall, Waypoints, Heatmap, Sensors, and Slides. Scroll Overall for its mission, PID, and Uplink sections instead of using separate top-level function entries. Classroom, Story Lab, and the detailed Heading / PID lessons are preserved through contextual links inside Overall; those lessons link back to their relevant Overall section.
 
-## เปิดและตรวจในเครื่อง
+Suggested route: start with [Overall](pages/overall.html), try the [Classroom](pages/classroom.html) and [Story Lab](pages/story.html) mission lessons, explore [Uplink](pages/overall.html#ms-uplink-panel), then compare the [Heading / PID](pages/heading-pid.html) experiment. [Waypoints](pages/waypoints.html), [Sensors](pages/sensors.html), [Heatmap](pages/heatmap.html), and [Slides](pages/slides.html) add project detail.
 
-ไม่ต้องติดตั้งอะไรเพื่อเปิด `index.html` โดยตรง หากต้องการดูผ่านเว็บเซิร์ฟเวอร์ ให้รันคำสั่งนี้จากโฟลเดอร์รากของโครงการ:
+Overall opens with a shared-state mission demo: adjust readiness, synthetic turbidity voltage, demo gains and transport faults; step or play one mission clock; and follow active equations from the sample buffer through steering and a 38-byte browser MessageChannel receiver. The route interpolation is schematic, GPS/pH/temperature are synthetic, and browser memory does not represent a physical SD card or radio link. See [equation sources and limits](docs/EQUATIONS.md).
+
+Values in the lessons are examples or browser simulation output. The site does not connect to a boat, radio, or shore station, and Heatmap has no field-data pipeline.
+
+## Open and verify locally
+
+Open `index.html` directly, or run a local server from the project root:
 
 ```sh
 python -m http.server 8000 --bind 127.0.0.1
 ```
 
-จากนั้นเปิด `http://127.0.0.1:8000/` การรันทดสอบที่ใช้ Node.js คือ:
+Then open `http://127.0.0.1:8000/`. Developer checks are `node --test` and `python tools/check-links.py`.
 
-```sh
-node --test
-```
+## Maintainer docs
 
-## เอกสารสำหรับผู้ดูแล
-
-- [แผนที่ไฟล์](docs/FILE_MAP.md) — หน้าที่ของทุกไฟล์ที่แจกจ่าย
-- [แนวทางพัฒนา](docs/DEVELOPMENT.md) — จุดแก้เนื้อหา แบบจำลอง การเคลื่อนไหว สไตล์ และข้อมูล
-- [สถานะและขอบเขต](docs/STATUS.md) — สิ่งที่ยืนยันได้และสิ่งที่ยังรอตรวจ
-- [แผนย้ายไฟล์](docs/MIGRATION_MAP.json) — บันทึกการจับคู่ไฟล์เดิมกับตำแหน่งปัจจุบัน
-- [บันทึกผู้บรรยาย](docs/SPEAKER_NOTES.md) — โน้ตประกอบสไลด์เดิม เก็บไว้เป็นเอกสารประวัติ ไม่ใช่สถาปัตยกรรมปัจจุบัน
+- [File map](docs/FILE_MAP.md)
+- [Website guide](docs/WEBSITE_GUIDE.md)
+- [Development guide](docs/DEVELOPMENT.md)
+- [Status and limits](docs/STATUS.md)
+- [Live mission equations and source limits](docs/EQUATIONS.md)
+- [Migration map](docs/MIGRATION_MAP.json)
+- [Speaker notes](docs/SPEAKER_NOTES.md), retained as historical presentation notes

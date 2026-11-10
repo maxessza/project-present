@@ -6,7 +6,7 @@ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
 const $=id=>document.getElementById(id);
 function render(){
  const names={pOnly:'P-only',oscillate:'แกว่ง',damped:'ลดการแกว่ง','กำหนดเอง':'กำหนดเอง'};
- $('explanation').textContent=`เป้า ${state.config.target}° · A: ${names[Object.entries(M.PRESETS).find(([k,g])=>['p','i','d'].every(t=>g[t]===state.config.a[t]))?.[0]||'กำหนดเอง']} / B: ${names[Object.entries(M.PRESETS).find(([k,g])=>['p','i','d'].every(t=>g[t]===state.config.b[t]))?.[0]||'กำหนดเอง']} · แรงรบกวน ${state.config.wind} หน่วยจำลอง ลองดูจังหวะที่เส้นข้ามศูนย์ และผลของ P / I / D ในระบบตัวอย่างนี้`;
+ $('explanation').textContent=`เป้า ${state.config.target}° · A: ${names[Object.entries(M.PRESETS).find(([k,g])=>['p','i','d'].every(t=>g[t]===state.config.a[t]))?.[0]||'กำหนดเอง']} / B: ${names[Object.entries(M.PRESETS).find(([k,g])=>['p','i','d'].every(t=>g[t]===state.config.b[t]))?.[0]||'กำหนดเอง']} · แรงรบกวน ${state.config.wind} หน่วยจำลอง · กราฟแสดง error เทียบเวลา`;
  const signed=n=>(n<0?'−':'+')+Math.abs(n).toFixed(1);
  for(const lane of ['a','b']){
   const s=state[lane],error=M.wrapError(state.config.target,s.heading);

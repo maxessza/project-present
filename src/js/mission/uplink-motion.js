@@ -1,12 +1,15 @@
 (function (root, factory) {
   const api = factory();
-  if (root && root.document) root.UplinkMotion = api.install(root.document, root);
+  if (root && root.document) {
+    root.UplinkMotion = root.document.documentElement.hasAttribute('data-uplink-codec-only') ? null : api.install(root.document, root);
+    root.UplinkCodec = Object.freeze({ encodeTelemetry: api.encodeTelemetry, decodeTelemetry: api.decodeTelemetry, PACKET_BYTES: api.PACKET_BYTES });
+  }
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : null, function () {
   'use strict';
 
   const PACKET_BYTES = 38;
-  const STAGE_INDEX = { sample: 0, build: 1, io: 2, transmit: 3, retry: 3, decode: 4, shore: 5 };
+  const STAGE_INDEX = { sample: 0, build: 1, io: 2, transmit: 3, retry: 4, decode: 5, shore: 6 };
   const PHASE_LABEL = {
     idle: ['พร้อมส่ง', 'ปรับค่าแล้วกดส่ง เพื่อเริ่มหนึ่งรอบ'],
     sample: ['① เก็บตัวอย่างแล้ว', 'snapshot นี้จะไม่เปลี่ยนระหว่างส่ง'],
@@ -62,6 +65,8 @@
     const linkOffInput = get('um-link-off');
     const sendButton = get('um-send');
     const resetButton = get('um-reset');
+    const speedSelect = get('um-speed');
+    const fieldButton = get('um-field-spotlight');
     const packetNode = get('um-packet');
     const reducedMotion = Boolean(win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches);
     let generation = 0;
@@ -72,12 +77,13 @@
     let currentPromise = null;
     let currentResolve = null;
     let destroyed = false;
+    let fieldSpotlight = false;
 
     let state = initialState();
     function initialState() {
       return { phase: 'idle', outcome: 'idle', sequence: 0, sample: null, decoded: null,
         attempts: [], receiverCallbacks: 0, decodedUpdates: 0, senderDetached: false,
-        senderByteLengthAfterTransfer: null, wireHex: '', shoreValue: null, invalidLengthRejected: false,
+        senderByteLengthAfterTransfer: null, wireHex: '', receivedHex: '', shoreValue: null, invalidLengthRejected: false,
         inFlight: false, eventNo: 0, eventLog: [] };
     }
 
@@ -99,19 +105,28 @@
         cell.setAttribute('height', '7');
         cell.setAttribute('rx', '1');
         cell.dataset.byte = String(byte);
+        cell.dataset.byteOffset = String(index);
+        if (index >= 24 && index <= 27) cell.dataset.fieldOffset = 'water_turbidity';
         cell.setAttribute('fill', byte ? `hsl(170 65% ${35 + byte * 0.16}%)` : '#2a4b59');
+        cell.classList.toggle('is-highlighted', fieldSpotlight && index >= 24 && index <= 27);
         cell.style.animationDelay = `${index * 9}ms`;
         holder.appendChild(cell);
       });
     }
     function setPacketPosition(x) {
       packetNode.setAttribute('transform', `translate(${x} 178)`);
+      get('um-packet-label').setAttribute('y', Number(x) >= 820 ? '-67' : '-25');
     }
-    function setPacketLost(lost) { packetNode.classList.toggle('is-lost', Boolean(lost)); }
+    function setPacketLost(lost) {
+      packetNode.classList.toggle('is-lost', Boolean(lost));
+      packetNode.classList.toggle('is-visible', !lost);
+    }
 
     function setPhase(phase, note) {
       state.phase = phase;
       root.dataset.phase = phase;
+      const phasePosition = { sample: 300, build: 422, io: 485 }[phase];
+      if (Number.isFinite(phasePosition)) setPacketPosition(phasePosition);
       get('um-phase-label').textContent = (PHASE_LABEL[phase] || PHASE_LABEL.idle)[0];
       get('um-phase-note').textContent = note || (PHASE_LABEL[phase] || PHASE_LABEL.idle)[1];
       const current = STAGE_INDEX[phase];
@@ -143,12 +158,33 @@
 
     function renderInspector() {
       get('um-sequence').textContent = state.sequence ? `SEQ ${state.sequence}` : 'SEQ —';
+      get('um-rx-sequence').textContent = state.decoded ? `RX SEQ ${state.decoded.sequence_number}` : 'RX SEQ —';
       get('um-byte-count').textContent = state.wireHex ? '38 B' : '38 B';
       get('um-byte-string').textContent = state.wireHex || 'ยังไม่มี packet';
       get('um-decoded-sequence').textContent = state.decoded ? String(state.decoded.sequence_number) : '—';
       get('um-decoded-turbidity').textContent = state.decoded ? formatNumber(state.decoded.water_turbidity) : '—';
       get('um-decoded-mode').textContent = state.decoded ? String(state.decoded.current_mode) : '—';
       get('um-decode-count').textContent = String(state.decodedUpdates);
+      renderFieldReadout();
+    }
+
+    function renderFieldReadout() {
+      const fieldValue = value => Number.isFinite(value) ? `${formatNumber(value)} NTU` : 'NaN · STANDBY';
+      const fieldHex = value => value ? value.split(' ').slice(24, 28).join(' ') : '';
+      get('um-field-source').textContent = state.sample
+        ? `SEQ ${state.sequence} · ${fieldValue(state.sample.turbidity)}` : 'รอ snapshot / กดส่ง';
+      get('um-field-tx').textContent = state.wireHex
+        ? `TX SEQ ${state.sequence} · ${fieldHex(state.wireHex)}`
+        : state.sample ? 'รอสร้าง packet bytes' : 'รอ bytes จากการส่งจริง';
+      get('um-field-rx').textContent = state.decoded && state.receivedHex
+        ? `RX SEQ ${state.decoded.sequence_number} · ${fieldHex(state.receivedHex)} → ${fieldValue(state.decoded.water_turbidity)}`
+        : 'รอ receiver callback จริง';
+      fieldButton.setAttribute('aria-pressed', String(fieldSpotlight));
+      fieldButton.setAttribute('aria-expanded', String(fieldSpotlight));
+      get('um-field-readout').hidden = !fieldSpotlight;
+      root.querySelectorAll('.um-wire-cells [data-field-offset]').forEach(cell => {
+        cell.classList.toggle('is-highlighted', fieldSpotlight);
+      });
     }
 
     function markStale(value) {
@@ -202,6 +238,7 @@
       state.inFlight = false;
       activeRun = null;
       sendButton.disabled = false;
+      speedSelect.disabled = false;
       if (channel) {
         try { channel.port1.onmessage = null; channel.port2.onmessage = null; channel.port1.close(); channel.port2.close(); } catch (_) { /* already closed */ }
       }
@@ -215,7 +252,7 @@
     function animatePacket(fromX, toX, duration, runId, done) {
       if (reducedMotion || !win.requestAnimationFrame) {
         setPacketPosition(toX);
-        schedule(done, 160, runId);
+        schedule(done, 160 * clockScale(), runId);
         return;
       }
       const startAt = win.performance.now();
@@ -229,6 +266,8 @@
       };
       animationFrame = win.requestAnimationFrame(frame);
     }
+
+    function clockScale() { return speedSelect.value === 'slow' ? 1.8 : 1; }
 
     function finishFailure(run, reason) {
       if (run.id !== generation || !state.inFlight) return;
@@ -253,8 +292,8 @@
       schedule(() => {
         setPacketPosition(145);
         setPacketLost(false);
-        schedule(() => runAttempt(run, run.attemptNumber + 1), reducedMotion ? 120 : 260, run.id);
-      }, reducedMotion ? 120 : 300, run.id);
+        schedule(() => runAttempt(run, run.attemptNumber + 1), (reducedMotion ? 120 : 260) * clockScale(), run.id);
+      }, (reducedMotion ? 120 : 300) * clockScale(), run.id);
     }
 
     function receiverCallback(event, run) {
@@ -272,8 +311,11 @@
       }
       if (record) record.accepted = true;
       state.decoded = decoded;
+      state.receivedHex = hex(event.data);
       renderBytes('um-received-cells', event.data);
       setPhase('decode');
+      setPacketPosition(805);
+      setPacketLost(false);
       appendEvent(`receiver callback decoded sequence ${decoded.sequence_number} · ${formatNumber(decoded.water_turbidity)} NTU`);
       renderInspector();
       schedule(() => {
@@ -282,10 +324,11 @@
         state.outcome = 'received';
         root.dataset.outcome = 'received';
         setPhase('shore');
-        setPacketLost(true);
+        setPacketPosition(868);
+        setPacketLost(false);
         appendEvent(`shore rendered decoded sequence ${decoded.sequence_number}`);
         closeRun({ outcome: 'received', sequence: decoded.sequence_number, decoded: Object.assign({}, decoded) });
-      }, reducedMotion ? 100 : 520, run.id);
+      }, (reducedMotion ? 100 : 520) * clockScale(), run.id);
     }
 
     function runAttempt(run, attemptNumber) {
@@ -296,7 +339,7 @@
       setPhase(attemptNumber === 1 ? 'transmit' : 'retry', `attempt ${attemptNumber}/3 · sequence ${run.packet.sequence_number} · bytes เดิม`);
       setPacketLost(false);
       const modeledDrop = run.linkOff || (run.dropFirst && attemptNumber === 1);
-      animatePacket(145, modeledDrop ? 650 : 790, reducedMotion ? 0 : 1260, run.id, () => {
+      animatePacket(145, modeledDrop ? 650 : 790, (reducedMotion ? 0 : 1260) * clockScale(), run.id, () => {
         if (run.id !== generation || !state.inFlight || !channel) return;
         if (modeledDrop) {
           state.attempts[attemptNumber - 1].modeledDrop = true;
@@ -327,17 +370,19 @@
       const mode = modeInput.value === 'standby' ? 0 : 1;
       const seq = state.sequence + 1;
       const previous = state;
+      const sample = Object.freeze({ turbidity: mode === 0 ? NaN : numeric, selectedTurbidity: numeric, mode });
       state = Object.assign(initialState(), { sequence: seq, receiverCallbacks: previous.receiverCallbacks,
         decodedUpdates: previous.decodedUpdates, shoreValue: previous.shoreValue, decoded: previous.decoded,
-        wireHex: previous.wireHex, eventNo: previous.eventNo, eventLog: previous.eventLog.slice(), outcome: 'sending', inFlight: true,
-        sample: { turbidity: mode === 0 ? NaN : numeric, selectedTurbidity: numeric, mode } });
+        receivedHex: previous.receivedHex, eventNo: previous.eventNo, eventLog: previous.eventLog.slice(), outcome: 'sending', inFlight: true,
+        sample });
       generation += 1;
       const runId = generation;
       state.sequence = seq;
       root.dataset.outcome = 'sending';
       sendButton.disabled = true;
-      setPacketPosition(145);
-      setPacketLost(true);
+      speedSelect.disabled = true;
+      setPacketPosition(300);
+      setPacketLost(false);
       markStale(state.decoded !== null);
       get('um-input-value').textContent = slider.value;
       get('um-svg-value').textContent = mode === 0 ? 'NaN · STANDBY' : `${formatNumber(numeric)} NTU`;
@@ -345,16 +390,18 @@
       get('um-sensor-node').classList.toggle('is-standby', mode === 0);
       doc.querySelector('[data-testid="sample-value"]').textContent = mode === 0 ? 'NaN · STANDBY' : `${formatNumber(numeric)} NTU`;
       get('um-sequence').textContent = `SEQ ${seq}`;
+      get('um-packet-label').textContent = `SEQ ${seq} · ${Number.isFinite(sample.turbidity) ? `${formatNumber(sample.turbidity)} NTU` : 'STANDBY · NaN'}`;
 
       const water = mode === 0 ? NaN : numeric;
-      const packet = { sequence_number: seq, gps_lat: NaN, gps_lon: NaN, water_ph: mode === 0 ? NaN : 7.2,
+      const packet = Object.freeze({ sequence_number: seq, gps_lat: NaN, gps_lon: NaN, water_ph: mode === 0 ? NaN : 7.2,
         water_turbidity: water, water_temp: mode === 0 ? NaN : 22.5, current_mode: mode,
-        battery_percent: 82, heading_angle: NaN };
+        battery_percent: 82, heading_angle: NaN });
       const run = { id: runId, packet, dropFirst: dropInput.checked, linkOff: linkOffInput.checked,
         attemptNumber: 0, encodedBuffer: null, wireBytes: null, wireHex: '' };
       activeRun = run;
       currentPromise = new Promise(resolve => { currentResolve = resolve; });
       setPhase('sample');
+      get('um-byte-cells').replaceChildren();
       appendEvent(`snapshot sample ${formatNumber(water)} NTU · sequence ${seq}`);
       renderInspector();
       schedule(() => {
@@ -377,9 +424,9 @@
           channel.port2.onmessage = event => receiverCallback(event, run);
           if (channel.port2.start) channel.port2.start();
           appendEvent('receiver port ready');
-          schedule(() => runAttempt(run, 1), 470, run.id);
-        }, 550, run.id);
-      }, 650, runId);
+          schedule(() => runAttempt(run, 1), 470 * clockScale(), run.id);
+        }, 550 * clockScale(), run.id);
+      }, 650 * clockScale(), runId);
       return currentPromise;
     }
 
@@ -395,6 +442,7 @@
       setPhase(reason === 'paused' ? 'paused' : 'failed');
       markStale(state.decoded !== null);
       sendButton.disabled = false;
+      speedSelect.disabled = false;
       activeRun = null;
       const resolve = currentResolve;
       currentResolve = null;
@@ -410,12 +458,14 @@
       currentPromise = null;
       activeRun = null;
       state = initialState();
+      fieldSpotlight = false;
       get('um-events').replaceChildren();
       root.dataset.outcome = 'idle';
       slider.value = '42';
       get('um-input-value').textContent = slider.value;
       setPacketPosition(145);
       setPacketLost(true);
+      get('um-packet-label').textContent = 'SEQ —';
       get('um-gauge-fill').setAttribute('width', '0');
       get('um-byte-cells').replaceChildren();
       get('um-received-cells').replaceChildren();
@@ -430,6 +480,7 @@
       linkOffInput.checked = false;
       modeInput.value = 'grid';
       sendButton.disabled = false;
+      speedSelect.disabled = false;
       setPhase('idle');
       renderInspector();
     }
@@ -460,6 +511,7 @@
 
     slider.addEventListener('input', updateInputPreview);
     slider.addEventListener('change', updateInputPreview);
+    fieldButton.addEventListener('click', () => { fieldSpotlight = !fieldSpotlight; renderFieldReadout(); });
     sendButton.addEventListener('click', send);
     resetButton.addEventListener('click', reset);
     const visibilityChange = () => { if (doc.hidden) cancelFlight('paused'); };
@@ -479,7 +531,7 @@
           decoded: state.decoded ? Object.assign({}, state.decoded) : null,
           attempts: state.attempts.map(attempt => Object.assign({}, attempt)), receiverCallbacks: state.receiverCallbacks,
           decodedUpdates: state.decodedUpdates, senderDetached: state.senderDetached,
-          senderByteLengthAfterTransfer: state.senderByteLengthAfterTransfer, wireHex: state.wireHex,
+          senderByteLengthAfterTransfer: state.senderByteLengthAfterTransfer, wireHex: state.wireHex, receivedHex: state.receivedHex,
           shoreValue: state.shoreValue, invalidLengthRejected: state.invalidLengthRejected, inFlight: state.inFlight,
           eventLog: state.eventLog.slice(), pendingTimerCount: timers.size, hasOpenChannel: Boolean(channel) };
       },

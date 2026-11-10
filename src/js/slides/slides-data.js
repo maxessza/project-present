@@ -14,8 +14,8 @@ window.presentationSlides = [
     "eyebrow": "01 / Monitoring need",
     "title": "A single sampling point cannot describe the whole water area",
     "lead": "Temperature, pH and turbidity can differ from one location to another. A fixed station follows its installation point; manual sampling takes time and leaves gaps between visits.",
-    "sideTitle": "The monitoring question",
-    "sideText": "Where are readings changing, and is a change limited to one location or spread across the site?",
+    "sideTitle": "Spatial variation",
+    "sideText": "Location-tagged readings show variation within the surveyed area.",
     "sideItemsLabel": "Parameters measured by the project",
     "sideItems": ["Temperature", "pH", "Turbidity"],
     "footer": "Project rationale · BETA TEST.docx, Chapter 1"

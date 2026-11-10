@@ -2,3 +2,6 @@
 .env.*
 __pycache__/
 .venv/
+
+# Local test/worker output is not part of the website preview.
+/evidence/

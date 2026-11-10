@@ -1,0 +1,62 @@
+@charset "UTF-8";
+/* Simulation first. The inspector overlays the same scene; it never resizes or resets it. */
+.system-explorer-page{background:#081923;color:#e6f3f3;min-height:100svh}
+.sim-app-header{height:68px;display:flex;align-items:center;gap:24px;padding:0 28px;border-bottom:1px solid #1b3540;flex:none}
+.sim-app-header .brand-mark{width:32px;height:32px;border-radius:8px;font-size:12px;box-shadow:none;background:#54ccc5}.brand-copy small{font-size:9px;letter-spacing:.12em}
+.demo-label{margin-left:auto;font-size:12px;color:#91afb8}
+.site-menu{position:relative;font-size:12px;z-index:20}.site-menu summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#bdd1d7;list-style:none}
+.site-menu .primary-nav{position:absolute;right:0;top:42px;display:flex;flex-direction:column;align-items:stretch;width:190px;padding:8px;background:#102a36;border:1px solid #31505c;border-radius:10px;box-shadow:0 12px 36px #0006}
+.site-menu:not([open]) .primary-nav{display:none}.site-menu .nav-link{font-size:13px;padding:9px 12px}
+.explorer-shell{width:calc(100% - 40px);max-width:1800px;padding:0 0 8px;margin:0 auto;flex:1;min-height:0}
+.explorer{gap:10px;min-height:0;position:relative;flex:1}
+.sim-heading{height:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none}
+.sim-heading h1{margin:0;font-size:17px;font-weight:650;letter-spacing:0}
+#sim-mode-label{font-size:11px;color:#8ba8b3;letter-spacing:.08em}
+.explorer-layout{display:block;position:relative;min-height:0;max-height:none!important;flex:1}
+.visual-panel{height:100%;position:relative;padding:0;border:1px solid #24404c;border-radius:12px;background:#0a2330;box-shadow:none;overflow:hidden;justify-content:center}
+.scene-scroll{width:100%;border-radius:0;max-height:none;overflow:auto;scrollbar-width:thin;overscroll-behavior:contain}
+.scene-svg{display:block;width:100%;height:100%;max-height:calc(100svh - 248px);min-height:400px;min-width:0;border-radius:0}
+#scene-camera{transform:none!important;transition:none!important}
+#scene-camera>rect:first-child{fill:#0a2330}#scene-camera>rect:nth-child(2){fill:#0a2330;stroke:none}#scene-camera>path{opacity:.15}#scene-camera>rect:nth-of-type(3){opacity:.15}
+#boat-whole,#navigation-detail,#heading-detail,.context-tag,#communication-link{display:none!important}
+#survey-area{opacity:1!important}#survey-area>rect{fill:none;stroke:#3a6b78;stroke-width:1.5;stroke-dasharray:7 10;opacity:.5}
+#survey-area .map-label{font-size:26px;font-weight:500;fill:#7fabb8}#survey-area .survey-grid-label{font-size:17px;font-weight:500;fill:#658b99}
+#shore-station{opacity:.45!important}#shore-station .map-label-major{font-size:28px}#shore-station .map-label:not(.map-label-major){font-size:21px}
+#survey-route{stroke:#4d929c;stroke-width:3;stroke-dasharray:5 9;opacity:.65}
+.survey-route-arrows{stroke-width:2!important;opacity:.6}
+.survey-waypoint circle{fill:#0a2632;stroke:#76b9bb;stroke-width:1.5}.survey-waypoint text{font-size:20px;font-weight:600;fill:#b4d8d9}.survey-waypoint.is-passed circle{fill:#1a525a}.survey-waypoint.is-current text{fill:#fff1c9}
+#survey-home-marker text{font-size:17px;font-weight:600}#survey-home-marker circle{stroke-width:1.8}
+#mission-dynamics{pointer-events:none}#sim-trail{stroke:#73dbcf;stroke-width:2;vector-effect:non-scaling-stroke;opacity:.85}
+#sim-target{filter:none;stroke:#edc87c;stroke-width:2}#sim-target-line{stroke:#e4c383;opacity:.4;stroke-width:1}
+#sim-boat{filter:drop-shadow(0 2px 5px #0009)}#sim-boat circle{r:17;fill:#0b343f;stroke:#b4f6ea;stroke-width:1.5}#sim-boat path{fill:#95f1df;stroke-width:1.2}
+#sim-map-label{display:none}
+.scene-hud{position:absolute;top:22px;left:24px;z-index:2;pointer-events:none;max-width:70%}
+#sim-mission-headline{font-size:clamp(19px,2vw,28px);font-weight:600;line-height:1.3;margin:0 0 4px;letter-spacing:-.02em}
+#sim-mission-detail{font-size:13px;color:#9abcc7;margin:0;line-height:1.5}
+.sensor-strip{position:absolute;bottom:18px;left:24px;right:24px;display:flex;align-items:center;flex-wrap:wrap;gap:16px;pointer-events:none;font-size:12px;color:#a3c3c9}
+.sensor-strip span[data-ready]::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#6fcab5;margin-right:7px;vertical-align:middle}.sensor-strip span[data-ready=false]::before{background:#e9b478}
+#sim-distance-badge{margin-left:auto;color:#88a8b4;font-variant-numeric:tabular-nums}
+.scene-pan-hint{display:none}
+#mission-transport{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none;min-height:64px;padding:8px 2px;border:0;border-radius:0;background:none}
+.transport-main,.transport-options{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.action-button,.quiet-button{min-height:44px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:none;transition:background .15s,border-color .15s}
+.action-button{min-width:108px;background:#66d4c7;color:#08222b}.action-button:hover{transform:none;background:#8ce6d9}
+.quiet-button{border:1px solid #2d4a57;background:transparent;color:#c2d8df;padding:0 13px}.quiet-button:hover{background:#12313e;border-color:#5c929e}
+button:disabled{opacity:.35;cursor:default;transform:none!important}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #8be8d7;outline-offset:3px}
+#sim-inspect{margin-left:12px}#sim-inspect[aria-expanded=true]{border-color:#7ecfc3;color:#a0e6dc;background:#173b45}
+.transport-options label{font-size:12px;color:#8caab6}#sim-speed{min-height:44px;padding:4px 8px;border:1px solid #2d4a57;border-radius:8px;background:#0b2430;color:#cce4e7;font-size:13px}#sim-clock{font-size:12px;color:#7f9eab;min-width:110px;font-variant-numeric:tabular-nums}
+.model-notes{font-size:11px;color:#7696a4;flex:none}.model-notes summary{cursor:pointer;min-height:24px;width:max-content}.model-notes p{line-height:1.6;max-width:1000px;margin:8px 0;padding-bottom:12px}.model-notes a{color:#8fc9c9}
+#sim-inspector{position:absolute;right:14px;top:14px;bottom:14px;width:min(420px,calc(100% - 28px));z-index:5;background:#0d2430;border:1px solid #35525e;border-radius:12px;box-shadow:0 12px 36px #0005;overflow:auto;padding:20px;scrollbar-width:thin}
+#sim-inspector[hidden],#mission-console [hidden]{display:none!important}
+.inspector-close{float:right;border:0;background:none;color:#a2c7cd;padding:0 0 12px 12px;min-height:44px;cursor:pointer;font:inherit;font-size:12px}
+#mission-console .story-index{font-size:10px;color:#72bdb7;letter-spacing:.08em;margin:5px 0 10px}#mission-console h2{font-size:23px;line-height:1.3;margin:0 0 6px;clear:both}#sim-focus-copy{font-size:13px;line-height:1.5;color:#99b7c3;margin:0 0 16px}
+#mission-focus{display:flex;gap:3px;flex-wrap:wrap;padding:0 0 12px;margin-bottom:12px;border-bottom:1px solid #294550}#mission-focus button{background:none;border:0;min-height:44px;padding:7px 10px;color:#9cbcc7;font:inherit;font-size:12px;cursor:pointer;border-radius:7px}#mission-focus button[aria-current=page]{background:#1c424c;color:#c8f3eb}
+.sim-note,.sim-caveat{font-size:12px;line-height:1.6;color:#91b0bb;margin:10px 0}.sim-caveat{color:#b6a68c}.sim-formula{font:12px/1.7 ui-monospace,Consolas,monospace;overflow-wrap:anywhere;color:#b7dad5;padding:12px 0;border-block:1px solid #294550}
+.sim-readouts{display:flex;gap:14px;margin:12px 0;flex-wrap:wrap}.sim-readouts p{margin:0;color:#8daab7;font-size:11px}.sim-readouts strong{display:block;font-size:18px;color:#e4f4f1;line-height:1.6;font-variant-numeric:tabular-nums}
+.sim-inputs{display:grid;grid-template-columns:1fr;gap:5px;margin:12px 0}.sim-inputs label{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:38px;font-size:12px;line-height:1.4;color:#b4ced5}.sim-inputs label:has(input[type=checkbox]){justify-content:flex-start;gap:9px}.sim-inputs input[type=checkbox]{width:17px;height:17px;accent-color:#76d9c6;flex:none}.sim-inputs input[type=number]{width:90px;min-height:36px;border:1px solid #35515f;border-radius:6px;background:#081f2a;color:#d7eceb;padding:5px 8px;font:inherit}
+.sim-result{font-size:12px;line-height:1.7;color:#acd3d1}.sim-live-flow{display:flex;align-items:center;gap:7px;margin-top:18px;padding-block:12px;border-block:1px solid #294550;font-size:10px;line-height:1.5;color:#a3c5ce}.sim-live-flow span{flex:1;min-width:0;overflow-wrap:anywhere}.sim-live-flow b{color:#76bdb7}
+.sim-transition{font-size:12px;line-height:1.5;color:#c5e3dd;margin:12px 0}.sim-safety-actions{display:flex;flex-wrap:wrap;gap:6px}.sim-safety-actions button{font-size:11px;min-height:44px}#sim-emergency{color:#ecaa9f;border-color:#684a49}
+@media(min-width:1101px){.explorer-layout{height:calc(100svh - 246px);min-height:440px;flex:none}.scene-svg{height:100%;min-height:0;max-height:none}.scene-scroll{height:100%}}
+@media(max-width:760px){.sim-app-header{padding:0 14px;height:60px;gap:10px}.demo-label{font-size:9px;max-width:120px}.brand-copy strong{font-size:12px}.brand-copy small{font-size:8px}.site-menu{font-size:11px}.explorer-shell{width:calc(100% - 24px)}.sim-heading{height:42px}.sim-heading h1{font-size:15px}.visual-panel{height:410px}.scene-scroll{height:100%;max-height:none}.scene-svg{width:900px;min-width:900px;height:510px;min-height:0;max-height:none}.scene-hud{top:16px;left:16px;max-width:88%}#sim-mission-headline{font-size:21px}#sim-mission-detail{font-size:11px}.sensor-strip{left:16px;right:16px;bottom:28px;font-size:10px;gap:9px}#sim-distance-badge{margin-left:0}.scene-pan-hint{display:block;position:absolute;bottom:3px;left:16px;font-size:9px;color:#698e9c;margin:0}#mission-transport{align-items:stretch;flex-direction:column;gap:8px;padding-block:6px}.transport-main,.transport-options{gap:6px;justify-content:space-between}.transport-main button{min-width:0;flex:1;padding-inline:8px;font-size:12px}.transport-options label{font-size:11px}#sim-inspect{margin-left:0;font-size:11px}#sim-clock{min-width:90px;font-size:10px}.model-notes{font-size:10px}#sim-inspector{position:fixed;top:80px;bottom:90px;right:12px;width:calc(100% - 24px);max-width:420px;padding:18px;z-index:15}}
+@media(max-width:760px){.explorer-shell,.explorer-layout{flex:none}#survey-area>.map-label,#survey-area>.survey-grid-label{display:none}}
+@media(prefers-reduced-motion:reduce){.system-explorer-page *{transition:none!important;scroll-behavior:auto!important}}
