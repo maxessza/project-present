@@ -8,36 +8,68 @@
   const point=p=>p?`(${fmt(p.x,1)}, ${fmt(p.y,1)}) หน่วยฉาก`:'ยังไม่มีจุด';
   const pair=p=>p?`${fmt(p.left,0)} / ${fmt(p.right,0)} signed PWM`:'รอคำสั่ง';
   const yes=v=>v?'ใช้ได้':'ยังใช้ไม่ได้';
+  let svgLabelFrame=null;
+  function updateSvgLabelScale(){
+    for(const label of document.querySelectorAll('#am-map text,#fc-nav-segment text,#fc-nav-heading-dial text')){
+      if(!label.dataset.fcBaseFontSize){
+        const authored=parseFloat(getComputedStyle(label).fontSize);
+        if(!Number.isFinite(authored)||authored<=0)continue;
+        label.dataset.fcBaseFontSize=String(authored);
+      }
+      const matrix=label.getScreenCTM?.(),scale=matrix?Math.hypot(matrix.a,matrix.b):0;
+      if(!Number.isFinite(scale)||scale<=0)continue;
+      const authored=Number(label.dataset.fcBaseFontSize),minimum=Math.ceil(12/scale*1000)/1000;
+      const next=`${Math.max(authored,minimum)}px`;
+      if(label.style.fontSize!==next)label.style.fontSize=next;
+      // Keep the enlarged boat caption above HOME without moving either marker.
+      if(label.id==='am-boat-label'&&label.getAttribute('dy')!=='-38')label.setAttribute('dy','-38');
+    }
+  }
+  function scheduleSvgLabelScale(){
+    if(svgLabelFrame!==null)return;
+    svgLabelFrame=window.requestAnimationFrame(()=>{svgLabelFrame=null;updateSvgLabelScale();});
+  }
+  function observeSvgLabelScale(){
+    if('ResizeObserver' in window){
+      const observer=new ResizeObserver(scheduleSvgLabelScale);
+      for(const node of document.querySelectorAll('#fc-movie-stage,#fc-nav-visual,#fc-stage-map,#am-map,#fc-nav-segment,#fc-nav-heading-dial'))observer.observe(node);
+    }
+    window.addEventListener('resize',scheduleSvgLabelScale,{passive:true});
+    scheduleSvgLabelScale();
+  }
   const definitions=[
-    ['setup','01','ภาพรวมทั้งระบบ','สถานี → เรือ → เส้นทาง → ข้อมูลกลับ',['start-readiness','telemetry-lineage'],'ROUTE'],
-    ['sensors','02','ส่งเส้นทางและตรวจพร้อม','route receipt → acceptance → readiness → START',['start-readiness'],'ROUTE'],
-    ['segment','03','ตำแหน่ง · LOS · waypoint','ตำแหน่ง/ทิศ → A→B → จุดเล็ง → ผลผ่าน WP',['compass-acquisition','grid-los-reach'],'NAVIGATION'],
-    ['heading','04','วงควบคุมถึงมอเตอร์','target − measured → controller ตาม mode → requested → applied',['grid-control','spiral-rth-control','grid-drive','drive-interlocks'],'CONTROL'],
-    ['water','05','พักวัดและเผยแพร่ค่า','hold → sample → valid / unavailable → report value',['sensor-conversion','waypoint-water-hold','publication-nan-cache'],'ANOMALY'],
-    ['anomaly','06','เหตุสังเคราะห์ → สแกน → ต่อ route','eligibility → SPIRAL → เก็บ waypoint เดิมไว้กลับต่อ',['anomaly-eligibility','spiral-generation-progress','spiral-return'],'ANOMALY'],
-    ['report','07','ส่งรายงานและรับจริง','immutable snapshot → transport → receiver receipt',['telemetry-lineage','publication-nan-cache','log-lineage'],'DATA'],
-    ['safety','08','กลับ HOME และหยุด','คำสั่ง RTH → departure/arrival gates → final stop',['start-readiness','drive-interlocks','rth-dwell'],'CONTROL']
+    ['setup','01','ภาพรวมทั้งภารกิจ','จากผู้ดูแลถึงเรือและรายงาน',['start-readiness','telemetry-lineage'],'ROUTE'],
+    ['sensors','02','ส่งแผนและตรวจความพร้อม','เรือรับแผนก่อนเริ่มเดินทาง',['start-readiness'],'ROUTE'],
+    ['segment','03','ตามแนวไปจุดสำรวจ','ตำแหน่ง · จุดเล็งนำทาง · ผลถึงจุด',['compass-acquisition','grid-los-reach'],'NAVIGATION'],
+    ['heading','04','ปรับทิศและสั่งมอเตอร์','ทิศเป้า → มอเตอร์ → วัดกลับ',['grid-control','spiral-rth-control','grid-drive','drive-interlocks'],'CONTROL'],
+    ['water','05','พักเรือและวัดน้ำ','pH · ความขุ่น · อุณหภูมิ',['sensor-conversion','waypoint-water-hold','publication-nan-cache'],'ANOMALY'],
+    ['anomaly','06','ตรวจความขุ่นและสแกนเพิ่ม','ฉากสาธิต → จุดสแกน → กลับเส้นเดิม',['anomaly-eligibility','spiral-generation-progress','spiral-return'],'ANOMALY'],
+    ['report','07','ส่งรายงานกลับสถานี','ค่าตัวอย่าง → รับยืนยัน',['telemetry-lineage','publication-nan-cache','log-lineage'],'DATA'],
+    ['safety','08','กลับ HOME และหยุด','สำรวจครบ · ผู้ดูแล · แบตเตอรี่',['start-readiness','drive-interlocks','rth-dwell'],'CONTROL']
   ].map(([id,no,title,subtitle,sources,mode])=>({id,no,title,subtitle,sources,mode}));
   const beats={
-    setup:'ติดตามระบบเดียวกัน: รับคำสั่ง → นำทาง → วัด/ตัดสินใจ → ส่งข้อมูล → กลับ HOME',
-    sensors:'การส่งถึงเรือ การยอมรับเส้นทาง และการอนุญาต START เป็นคนละเหตุการณ์',
-    segment:'ตำแหน่งและทิศที่อ่านได้กำหนดช่วง A→B, จุดเล็ง LOS และการยืนยัน waypoint',
-    heading:'เปรียบเทียบทิศเป้ากับค่าที่อ่าน แล้วดูคำขอแยกจากผลหลัง final drive',
-    water:'ช่วงพักเก็บตัวอย่างแสดงชัดว่า “ยังไม่มีค่า” ไม่ใช่ค่าเป็นศูนย์',
-    anomaly:'ฉากความขุ่นนี้เป็น synthetic input; แสดงผล eligibility และการกลับเข้า route จริง',
-    report:'ส่งแล้วไม่เท่ากับรับแล้ว; ใช้ identity ของรายงานและ callback ที่เกิดจริง',
-    safety:'สั่งกลับก่อนสำรวจครบได้; จบเมื่อ FSM ถึง STANDBY และมอเตอร์หยุดจริงในแบบจำลอง'
+    setup:'ภารกิจเดียว: รับแผน → เดินเรือ → วัดน้ำ → ส่งผล → กลับบ้าน',
+    sensors:'รับแผน ตรวจแผน และตรวจความพร้อมก่อนเริ่มเดินทาง',
+    segment:'WP หมายถึงจุดสำรวจ · LOS คือจุดเล็งนำทางบนแนวไปยังจุดถัดไป',
+    heading:'เทียบทิศที่ต้องการกับทิศที่อ่าน แล้วดูผลที่มอเตอร์และการวัดรอบใหม่',
+    water:'บางค่าต้องพักเรือก่อนอ่าน · “ยังไม่มีค่า” ไม่ใช่ค่า 0',
+    anomaly:'ฉากน้ำขุ่นเป็นข้อมูลตัวอย่างต่อเนื่องเพื่ออธิบายการสแกนครบ ไม่ใช่น้ำจริง',
+    report:'แยกค่าที่ส่งออกจากรายงานที่สถานียืนยันว่าได้รับแล้ว',
+    safety:'กลับก่อนครบได้ตามคำสั่งหรือแบตเตอรี่ต่ำ · เหตุผลต้องไม่ปะปนกับสำรวจครบ'
   };
   const shell=document.createElement('section');shell.id='function-center';shell.className='fc-center';shell.lang='th';
-  shell.innerHTML=`<header class="fc-heading"><div><p class="fc-eyebrow">SMART WATER BOAT · OVERALL SYSTEM</p><h1 id="fc-title">หนึ่งภารกิจ · จากสถานีถึงรายงานบนฝั่ง</h1><p class="fc-lede">START เพื่อดูระบบทำงานผ่านสถานะและเหตุการณ์ของภารกิจเดียวกัน</p></div><a class="fc-back" href="#fc-tour-stages">ดูลำดับทั้งหมด ↑</a></header><div id="fc-controls"></div><section class="fc-tour-overview" aria-label="ลำดับเรื่องราวภารกิจ"><p id="fc-tour-lead">แปดฉาก · event-driven · local illustrative simulation</p><ol id="fc-tour-stages" class="fc-tour-stages"></ol><p id="fc-tour-status" role="status" aria-live="polite">พร้อม · กด START เพื่อเริ่มภารกิจและภาพยนตร์</p></section><p class="fc-step-note" id="fc-step-note">START เริ่มภารกิจเดียวกัน · PAUSE หยุด model clock/pose; ข้อความอธิบายไม่ขยับเรือ</p><nav id="function-overview" aria-label="ลำดับการนำชม"><div class="fc-lane" id="fc-inputs"></div><p class="fc-join">เส้นทางที่เรือรับไว้ + ตำแหน่ง/ทิศที่ใช้ได้ ↓</p><div class="fc-lane fc-backbone" id="fc-backbone"></div><p class="fc-feedback">↖ feedback: ตำแหน่งและทิศรอบใหม่ → คำนวณซ้ำ · เมื่อผ่าน WP จึงเปลี่ยนช่วงเส้นทาง</p><div class="fc-lane fc-support" id="fc-support"></div><p class="fc-concurrency">น้ำ / รายงาน / safety เชื่อมกับภารกิจหลัก แต่มีเงื่อนไขและรอบทำงานของตนเอง — ผังนี้ไม่ใช่ลำดับเวลา FreeRTOS</p></nav><section class="fc-detail" aria-labelledby="fc-detail-title"><p id="fc-tour-beat" class="fc-tour-beat"></p><p id="fc-breadcrumb"></p><h2 id="fc-detail-title"></h2><p id="fc-short-purpose"></p><div id="fc-simple"><section><h3>ข้อมูลเข้า</h3><p id="fc-simple-input"></p><small id="fc-simple-input-note"></small></section><section><h3>ระบบทำอะไร</h3><p id="fc-simple-logic"></p></section><section><h3>ผลที่ส่งต่อ</h3><p id="fc-simple-output"></p><small id="fc-simple-output-note"></small></section></div><details id="fc-technical"><summary>ดูสูตร ค่าละเอียด และเครื่องมือจำลอง</summary><p id="fc-purpose"></p><div class="fc-facts"><section><h3>รับค่าอะไร</h3><dl id="fc-input-values"></dl></section><section><h3>คำนวณ / ตรวจเงื่อนไข</h3><p id="fc-rule"></p><pre id="fc-formula"></pre></section><section><h3>ส่งผลลัพธ์ให้ใคร</h3><dl id="fc-output-values"></dl><p id="fc-consumer"></p></section></div><p id="fc-data-time"></p><div class="fc-actions" id="fc-actions"></div><details id="fc-source"><summary>หลักฐาน source และค่าที่ใช้คำนวณล่าสุด</summary><div id="fc-provenance"></div></details><div id="fc-references"></div></details></section><p class="fc-boundary">ข้อมูลสังเคราะห์ · พิกัดฉาก 0.15 เมตร/หน่วย แทน GPS จริง · การเคลื่อนที่และ MessageChannel ไม่ใช่เรือจริงหรือ ESP-NOW · ยังไม่ยืนยันความปลอดภัยภาคสนาม</p>`;
+  shell.innerHTML=`<header class="fc-heading"><div><p class="fc-eyebrow">SMART WATER BOAT · OVERALL SYSTEM</p><h1 id="fc-title">ภารกิจเดียว · จากจุดสำรวจสู่รายงานบนฝั่ง</h1><p class="fc-lede">เริ่มชม แล้วติดตามเรือรับแผน นำทาง วัดน้ำ ส่งผล และกลับจุดเริ่มต้น</p></div><a class="fc-back" href="#fc-tour-stages">ดูลำดับทั้งหมด ↑</a></header><div id="fc-controls"></div><section class="fc-tour-overview" aria-label="ลำดับเรื่องราวภารกิจ"><p id="fc-tour-lead">เลือกจุดสำรวจ → ส่งแผน → เริ่มเมื่อพร้อม → ดูผล → กลับและหยุด · แบบจำลองในเบราว์เซอร์</p><ol id="fc-tour-stages" class="fc-tour-stages"></ol><p id="fc-tour-status" role="status" aria-live="polite">พร้อม · กด START เพื่อเริ่มชมภารกิจ</p></section><p class="fc-step-note" id="fc-step-note">พักแล้วนาฬิกาและตำแหน่งเรือหยุด · เปลี่ยนฉากเพื่อดูคำอธิบาย โดยไม่เริ่มภารกิจใหม่</p><nav id="function-overview" aria-label="ลำดับการนำชม"><div class="fc-lane" id="fc-inputs"></div><p class="fc-join">เส้นทางที่เรือรับไว้ + ตำแหน่ง/ทิศที่ใช้ได้ ↓</p><div class="fc-lane fc-backbone" id="fc-backbone"></div><p class="fc-feedback">↖ feedback: ตำแหน่งและทิศรอบใหม่ → คำนวณซ้ำ · เมื่อผ่าน WP จึงเปลี่ยนช่วงเส้นทาง</p><div class="fc-lane fc-support" id="fc-support"></div><p class="fc-boundary">น้ำ / รายงาน / safety เชื่อมกับภารกิจหลัก แต่มีเงื่อนไขและรอบทำงานของตนเอง — ผังนี้ไม่ใช่ลำดับเวลา FreeRTOS</p></nav><section class="fc-detail" aria-labelledby="fc-detail-title"><p id="fc-tour-beat" class="fc-tour-beat"></p><p id="fc-detail-counter"></p><h2 id="fc-detail-title"></h2><p id="fc-short-purpose"></p><div id="fc-simple"><section><h3>ข้อมูลเข้า</h3><p id="fc-simple-input"></p><small id="fc-simple-input-note"></small></section><section><h3>ระบบทำอะไร</h3><p id="fc-simple-logic"></p></section><section><h3>ผลที่ส่งต่อ</h3><p id="fc-simple-output"></p><small id="fc-simple-output-note"></small></section></div><details id="fc-technical"><summary>ดูสูตร ค่าละเอียด และเครื่องมือจำลอง</summary><p id="fc-purpose"></p><div class="fc-facts"><section><h3>รับค่าอะไร</h3><dl id="fc-input-values"></dl></section><section><h3>ตรวจ / ตัดสินใจอะไร</h3><p id="fc-rule"></p><pre id="fc-formula"></pre><p id="fc-consumer"></p></section><section><h3>ผลที่ส่งต่อ</h3><dl id="fc-output-values"></dl></section></div><p id="fc-data-time"></p><details id="fc-source"><summary>แหล่งอ้างอิงและขอบเขต</summary><div id="fc-provenance"></div></details></details><div class="fc-actions" id="fc-actions"></div></section><p class="fc-boundary fc-simple-boundary">ตัวเลขและการเคลื่อนที่ในหน้านี้เป็นแบบจำลองเพื่ออธิบายแนวคิด · ไม่ใช่ข้อมูลสดจากเรือ</p>`;
+  const intro=document.createElement('section');intro.id='fc-intro-brief';intro.setAttribute('aria-label','เป้าหมายและผู้ใช้ระบบ');
+  intro.innerHTML='<p class="fc-intro-purpose"><strong>แนวคิดโครงงาน:</strong> ให้เรือสำรวจคุณภาพน้ำหลายจุด และส่งค่าพร้อมตำแหน่งกลับสถานี เพื่อให้ผู้ดูแลเปรียบเทียบข้อมูลแต่ละบริเวณ — ไม่ได้วินิจฉัยว่าน้ำปลอดภัยจากค่าเดียว</p><div class="fc-intro-columns"><section><h2>ใครทำอะไร</h2><p><strong>ผู้ดูแลที่สถานี</strong> เลือกจุด ส่งแผน เริ่มเมื่อเรือพร้อม ดูรายงาน และสั่งกลับหรือหยุดได้</p><p><strong>เรือ</strong> รับและตรวจแผน ใช้ GPS กับเข็มทิศนำทาง วัดน้ำ ส่งรายงาน แล้วกลับจุด HOME</p></section><section><h2>ข้อมูลที่เก็บ</h2><ul><li><strong>pH</strong> — ความเป็นกรด–ด่าง</li><li><strong>ความขุ่น (NTU)</strong> — อนุภาคที่ทำให้น้ำขุ่น</li><li><strong>อุณหภูมิ (°C)</strong> — ความร้อนของน้ำ</li></ul><p>แต่ละรายงานผูกกับตำแหน่งและสถานะเรือ</p></section></div><p class="fc-intro-boundary">ภาพยนตร์ใช้ตัวอย่างสังเคราะห์ในเบราว์เซอร์ รวมฉากน้ำขุ่นเพื่อให้เห็นการสแกนครบ — ไม่ได้เชื่อมเรือ เซ็นเซอร์ วิทยุ หรือระบบแผนที่จริง</p>';
+  shell.insertBefore(intro,shell.querySelector('#fc-controls'));
   main.insertBefore(shell,root);
   // Retire duplicate live storyboards, preserving only bounded specialized inspectors.
   const labs=[['water',$('whatif-details')],['safety',$('rth-lab-details')]].filter(([,node])=>node);
-  for(const [owner,node] of labs){node.dataset.functionReference=owner;$('fc-references').append(node);}
+  for(const [owner,node] of labs){node.dataset.functionReference=owner;$('fc-technical').append(node);}
   for(let node=root.nextElementSibling;node;){const next=node.nextElementSibling;node.remove();node=next;}
   root.hidden=false;root.classList.add('fc-evidence');
   $('am-disturbance').hidden=false;
-  let selected='setup',latest=mission.snapshot(),generation=null,minimalReady=false,tourState='idle',tourIndex=0,tourTimer=null,movieStarted=false,autoHold=false,internalHoldAction=false;
+  let selected='setup',latest=mission.snapshot(),generation=null,minimalReady=false,tourState='idle',tourIndex=0,tourTimer=null,movieStarted=false,autoHold=false,internalHoldAction=false,demoTurbidity=null;
   function lineItems(id,items){const dl=$(id);dl.replaceChildren();for(const [label,value] of items){const group=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=String(value);group.append(dt,dd);dl.append(group);}}
   function content(s){
     const active=s.mode==='GRID_PATROL'&&s.hasNavigationTarget,los=s.los,i=s.waypointIndex;
@@ -71,7 +103,7 @@
   function render(){
     const d=definitions.find(x=>x.id===selected),s=latest,c=content(s);
     shell.dataset.selected=selected;root.dataset.selectedFunction=selected;
-    $('fc-tour-beat').textContent=beats[selected];$('fc-breadcrumb').textContent=`ช่วง ${d.no} / 09 · ${d.subtitle}`;$('fc-detail-title').textContent=d.title;$('fc-purpose').textContent=c.purpose;
+    $('fc-tour-beat').textContent=beats[selected];$('fc-detail-counter').textContent=`ช่วง ${d.no} / 08 · ${d.subtitle}`;$('fc-detail-title').textContent=d.title;$('fc-purpose').textContent=c.purpose;
     lineItems('fc-input-values',c.input);$('fc-rule').textContent=c.rule;$('fc-formula').textContent=c.formula;lineItems('fc-output-values',c.output);$('fc-consumer').textContent=c.consumer;
     $('fc-data-time').textContent=`สถานะปัจจุบัน ${fmt(s.clockMs/1000)} s · snapshot ${s.snapshotId} · ช่องที่ระบุ “รอบล่าสุด” อ่านจากบันทึกการคำนวณรอบนั้น ไม่ใช่การนำค่าปัจจุบันมาคำนวณใหม่`;
     $('fc-provenance').replaceChildren();
@@ -105,7 +137,7 @@
     $('fc-controls').after(stage);
     const navVisual=document.createElement('section');navVisual.id='fc-nav-visual';navVisual.className='fc-nav-visual';navVisual.hidden=true;
     navVisual.setAttribute('aria-labelledby','fc-nav-title');
-    navVisual.innerHTML='<header><div><h3 id="fc-nav-title">เรือวิ่งตามช่วง · แล้วจึงรับ WP</h3><p id="fc-nav-event">รอรอบนำทาง GRID ที่บันทึกไว้</p></div><span class="fc-nav-live-label">ภาพจาก event จริงของแบบจำลอง</span></header><div class="fc-nav-grid"><div class="fc-nav-track"><div class="fc-nav-track-heading"><strong>ช่วงปัจจุบัน A → B</strong><span>ภาพย่อตามแนวช่วง</span></div><svg id="fc-nav-segment" viewBox="0 0 320 104" role="img" aria-labelledby="fc-nav-segment-title fc-nav-segment-desc"><title id="fc-nav-segment-title">ตำแหน่งเรือ จุดฉาย จุดเล็ง LOS และเขตรับ waypoint</title><desc id="fc-nav-segment-desc">เส้น active segment A ถึง B; P แสดงตำแหน่งในรอบ GRID ที่บันทึก, เส้นตั้งคือ cross-track, เพชรคือจุดเล็ง LOS, วงรอบ B คือเขตรับ WP 3 เมตร</desc><line id="fc-nav-segment-line" x1="26" y1="48" x2="280" y2="48"/><circle id="fc-nav-acceptance" cx="280" cy="48" r="12"/><line id="fc-nav-cross" x1="120" y1="36" x2="120" y2="48"/><circle id="fc-nav-projection" cx="120" cy="48" r="3"/><circle id="fc-nav-pose" cx="120" cy="36" r="4"/><path id="fc-nav-los" d="M180 42L186 48L180 54L174 48Z"/><circle id="fc-nav-end" cx="280" cy="48" r="3"/><text id="fc-nav-a-label" x="26" y="91">A</text><text id="fc-nav-b-label" x="280" y="91">B · WP</text></svg><div class="fc-nav-legend"><span><i class="fc-nav-key-segment"></i>A→B</span><span><i class="fc-nav-key-pose"></i>P เรือ</span><span><i class="fc-nav-key-projection"></i>จุดฉาย / cross</span><span><i class="fc-nav-key-los"></i>LOS aim</span><span><i class="fc-nav-key-zone"></i>วงรับ WP</span></div><p id="fc-nav-cross-label" class="fc-nav-cross-label">cross-track: —</p></div><div class="fc-nav-feedback"><div class="fc-nav-heading-block"><div><strong>ทิศเป้าหมาย → Compass</strong><small id="fc-nav-heading-values">รอ GRID control</small></div><svg id="fc-nav-heading-dial" viewBox="0 0 96 96" role="img" aria-label="ทิศเป้าหมายและทิศ Compass ในรอบควบคุม"><circle cx="48" cy="48" r="32"/><text x="48" y="11">N</text><line id="fc-nav-heading-target" x1="48" y1="48" x2="48" y2="20"/><line id="fc-nav-heading-measured" x1="48" y1="48" x2="48" y2="20"/><circle cx="48" cy="48" r="3"/></svg></div><div class="fc-nav-motors"><strong>คำสั่ง PWM หลัง drive</strong><div class="fc-nav-motor-row"><span>ซ้าย</span><div class="fc-nav-meter"><i id="fc-nav-left-fill"></i></div><output id="fc-nav-left-value">—</output></div><div class="fc-nav-motor-row"><span>ขวา</span><div class="fc-nav-meter"><i id="fc-nav-right-fill"></i></div><output id="fc-nav-right-value">—</output></div><small>signed PWM เป็นคำสั่งซอฟต์แวร์ · ไม่ใช่แรงขับที่วัดได้</small></div></div></div><div class="fc-nav-wp-result"><strong id="fc-nav-outcome">รอการตรวจ WP</strong><span>เข้าเขต 3 m + เดินหน้าขั้นต่ำ · หรือเลยปลาย ≥ 0.5 m และ |cross| ≤ 3 m</span></div>';
+    navVisual.innerHTML='<header><div><h3 id="fc-nav-title">เรือวิ่งตามช่วง · แล้วจึงรับ WP</h3><p id="fc-nav-event">รอรอบนำทาง GRID ที่บันทึกไว้</p></div><span class="fc-nav-live-label">ภาพจาก event จริงของแบบจำลอง</span></header><div class="fc-nav-grid"><div class="fc-nav-track"><div class="fc-nav-track-heading"><strong>ช่วงปัจจุบัน A → B</strong><span>ภาพย่อตามแนวช่วง</span></div><svg id="fc-nav-segment" viewBox="0 0 320 104" role="img" aria-labelledby="fc-nav-segment-title fc-nav-segment-desc"><title id="fc-nav-segment-title">ตำแหน่งเรือ จุดฉาย จุดเล็ง LOS และเขตรับ waypoint</title><desc id="fc-nav-segment-desc">เส้น active segment A ถึง B; P แสดงตำแหน่งในรอบ GRID ที่บันทึก, เส้นตั้งคือ cross-track, เพชรคือจุดเล็ง LOS, วงรอบ B คือเขตรับ WP 3 เมตร</desc><line id="fc-nav-segment-line" x1="26" y1="48" x2="280" y2="48"/><circle id="fc-nav-acceptance" cx="280" cy="48" r="12"/><line id="fc-nav-cross" x1="120" y1="36" x2="120" y2="48"/><circle id="fc-nav-projection" cx="120" cy="48" r="3"/><circle id="fc-nav-pose" cx="120" cy="36" r="4"/><path id="fc-nav-los" d="M180 42L186 48L180 54L174 48Z"/><circle id="fc-nav-end" cx="280" cy="48" r="3"/><text id="fc-nav-a-label" x="26" y="91">A</text><text id="fc-nav-b-label" x="280" y="91">B · WP</text></svg><div class="fc-nav-legend"><span><i class="fc-nav-key-segment"></i>A→B</span><span><i class="fc-nav-key-pose"></i>P เรือ</span><span><i class="fc-nav-key-projection"></i>จุดฉาย / cross</span><span><i class="fc-nav-key-los"></i>LOS aim</span><span><i class="fc-nav-key-zone"></i>วงรับ WP</span></div><p id="fc-nav-cross-label" class="fc-nav-cross-label">cross-track: —</p></div><div class="fc-nav-feedback"><div class="fc-nav-heading-block"><div><strong>ทิศเป้าหมาย → Compass</strong><small id="fc-nav-heading-values">รอ GRID control</small></div><svg id="fc-nav-heading-dial" viewBox="0 0 96 96" role="img" aria-label="ทิศเป้าหมายและทิศ Compass ในรอบควบคุม"><circle cx="48" cy="48" r="32"/><text x="48" y="20">N</text><line id="fc-nav-heading-target" x1="48" y1="48" x2="48" y2="20"/><line id="fc-nav-heading-measured" x1="48" y1="48" x2="48" y2="27"/><circle cx="48" cy="48" r="2.5"/></svg></div><div class="fc-nav-motors"><strong>คำสั่ง PWM หลัง drive</strong><div class="fc-nav-motor-row"><span>ซ้าย</span><div class="fc-nav-meter"><i id="fc-nav-left-fill"></i></div><output id="fc-nav-left-value">—</output></div><div class="fc-nav-motor-row"><span>ขวา</span><div class="fc-nav-meter"><i id="fc-nav-right-fill"></i></div><output id="fc-nav-right-value">—</output></div><small>signed PWM เป็นคำสั่งซอฟต์แวร์ · ไม่ใช่แรงขับที่วัดได้</small></div></div><div class="fc-nav-wp-result"><strong id="fc-nav-outcome">รอการตรวจ WP</strong><span>เข้าเขต 3 m + เดินหน้าขั้นต่ำ · หรือเลยปลาย ≥ 0.5 m และ |cross| ≤ 3 m</span></div></div>';
     stage.insertBefore(navVisual,$('fc-causal-flow'));
     const map=document.createElement('div');map.id='fc-map';map.className='fc-live-map';
     map.append(root.querySelector('.am-layout'),$('am-data-panel'),$('am-current-reason'));
@@ -133,6 +165,7 @@
       event.preventDefault();select(buttons[next].dataset.movieChapter);buttons[next].focus();
     });
     minimalReady=true;
+    observeSvgLabelScale();
   }
   function renderMinimal(){
     if(!minimalReady)return;
@@ -140,8 +173,10 @@
     shell.dataset.view=visible?'movie':'intro';shell.dataset.chapter=d.id;
     $('fc-movie-stage').hidden=!visible;root.hidden=false;$('function-overview').hidden=true;
     $('fc-nav-visual').hidden=!visible||!['segment','heading'].includes(selected);renderNavVisual(s);
-    $('fc-tour-status').textContent=!visible?'พร้อม · กด START เพื่อเริ่มภารกิจและภาพยนตร์':autoHold?'คำอธิบายค้างที่ event นี้ · mission clock/pose หยุด · receipt ที่เริ่มส่งแล้วอาจจบระหว่างพัก':tourState==='paused'?'พักโดยผู้ชม · clock/pose คงเดิม · กด RESUME เพื่อเดินหน้าต่อ':tourState==='finished'?'จบที่ผลลัพธ์ซึ่งเกิดจริง · แบบจำลองหยุดและ applied output เป็นศูนย์':`ฉาก ${d.no}/08 · ${d.title} · model ${fmt(s.clockMs/1000)} s`;
-    $('fc-tour-lead').textContent=visible?'เลือกฉากเพื่อเปลี่ยนมุมอธิบาย · แผนที่และเรือยังเป็น mission สดชุดเดิม ไม่ย้อนตำแหน่ง':'แปดฉาก · event-driven · local illustrative simulation';
+    $('fc-intro-brief').hidden=visible;
+    $('am-start').textContent='START';$('am-toggle').textContent=s.playing?'พัก':'เล่นต่อ';$('am-next').textContent='ทีละจังหวะ';$('am-reset').textContent='เริ่มใหม่';
+    $('fc-tour-status').textContent=!visible?'พร้อมชม · กด START เพื่อเริ่มภารกิจจำลอง':autoHold?'พักคำอธิบาย · เวลาและตำแหน่งเรือหยุด':tourState==='paused'?'พักโดยผู้ชม · กด เล่นต่อ เพื่อเดินหน้าต่อ':tourState==='finished'?'จบจากผลที่เกิดในแบบจำลอง · เรือหยุดแล้ว':`ฉาก ${d.no}/08 · ${d.title} · เวลา ${fmt(s.clockMs/1000)} วินาที`;
+    $('fc-tour-lead').textContent=visible?'เปลี่ยนฉากเพื่อดูคำอธิบาย · แผนที่ยังเป็นภารกิจเดิม ไม่ย้อนตำแหน่ง':'เลือกจุดสำรวจ → ส่งแผน → เริ่มเมื่อพร้อม → ดูผล → กลับและหยุด · แบบจำลองในเบราว์เซอร์';
     for(const [i,item] of [...$('fc-tour-stages').children].entries()){
       item.classList.toggle('is-complete',visible&&i<index);
       item.classList.toggle('is-current',visible&&i===index);
@@ -149,44 +184,45 @@
       if(visible&&i===index){item.setAttribute('aria-current','step');button.setAttribute('aria-current','step');}
       else{item.removeAttribute('aria-current');button.removeAttribute('aria-current');}
     }
-    $('fc-stage-counter').textContent=`${d.no} / 08 · ${s.latestEvent?`EV-${s.latestEvent.id}`:'WAITING FOR EVENT'}`;
+    $('fc-stage-counter').textContent=`ฉาก ${d.no} / 08`;
     $('fc-stage-title').textContent=d.title;
-    $('fc-stage-caption').textContent=`${s.missionState} · ${s.stationStage} · view = live lens; ไม่ได้ย้อน/ย้ายเรือ`;
-    $('fc-stage-proof').textContent=s.latestEvent?`EV-${s.latestEvent.id} · model ${s.latestEvent.atMs} ms · snapshot ${s.snapshotId} · ${s.latestEvent.decision}`:`ยังไม่มี tick event · ${s.lastEvent||'รอ START'}`;
+    $('fc-stage-caption').textContent='แผนที่และคำอธิบายใช้ภารกิจจำลองชุดเดียวกัน · เปลี่ยนฉากไม่ย้ายเรือ';
+    $('fc-stage-proof').textContent='ค่าที่แสดงมาจากสถานะล่าสุดของแบบจำลอง ไม่ใช่ข้อมูลสดจากเรือ';
     const receivedRoute=s.incoming.received.find(item=>item.kind==='route-upload');
     const appliedRoute=s.incoming.applied.find(item=>item.kind==='route-upload');
     const control=s.rows.find(row=>row.key==='grid-control'||row.key==='spiral-rth-control');
     const trigger=s.rows.find(row=>row.key==='anomaly-eligibility'&&row.predicate.result===true);
     const rx=s.transport.rx,tx=s.transport.latestTx;
     const scene={
-      setup:[`สถานี ${s.stationPlan.length} จุด · เรือ ${s.acceptedRoute.length} จุด`,`route receipt → readiness → feedback → report · tasks มีรอบของตนเอง`,`${s.mode} · ${s.transport.receipts} receipt ใน browser`],
-      sensors:[receivedRoute?`${receivedRoute.messageId} · route ${receivedRoute.routeId}`:'route ยังไม่ถึงเรือ',`accepted ${appliedRoute?`${s.acceptedRoute.length} จุด · sealed ${s.routeSealed}`:'ยังไม่มี apply'} · START แยกจาก route`,`station ${s.stationStage} · ${s.stationReason}`],
-      segment:[`P ${point(s.acquiredPosition)} · Compass ${Number.isFinite(s.acquiredHeading)?`${fmt(s.acquiredHeading)}°`:'unavailable'}`,s.los?.valid?`A→B · along ${fmt(s.los.alongTrackM)} m · cross ${fmt(s.los.crossTrackM)} m · LOS ${fmt(s.los.bearingDeg)}°`:'ยังไม่มี segment/LOS ที่ใช้ได้',`WP${Math.min(s.waypointIndex+1,s.acceptedRoute.length)} · ${s.waypointIndex} ผ่าน · ${s.lastEvent||'รอ acceptance'}`],
-      heading:[control?`target ${fmt(control.inputs.targetDeg)}° · measured ${Number.isFinite(control.inputs.headingDeg)?`${fmt(control.inputs.headingDeg)}°`:'unavailable'} · error ${fmt(control.inputs.headingError)}°`:`${s.controllerKind} · รอ control row`,`${s.controllerKind} · GRID ไม่ใช่ PID แบบเดียวกับ SPIRAL/RTH`,`request ${pair(s.requestedPwm)} → applied ${pair(s.appliedPwm)} · ${s.driveDecision?.stopReason||'—'}`],
-      water:[`ADS-${s.sampleId} · NTU ${Number.isFinite(s.water.ntu)?`${fmt(s.water.ntu)} NTU`:'unavailable'} · pH ${Number.isFinite(s.water.ph)?fmt(s.water.ph,2):'unavailable'}`,`hold ${s.hold.phase} · SMA ${s.anomaly.window.length}/8 · applied ${pair(s.appliedPwm)}`,`snapshot ${s.snapshotId} · published NTU ${Number.isFinite(s.water.ntu)?fmt(s.water.ntu):'unavailable'} · pH missing ≠ 0`],
-      anomaly:[`synthetic input ${s.anomaly.armed?'armed':'off'} · region ${s.anomaly.used?'entered':'not entered'}`,trigger?`SMA ${fmt(trigger.inputs.mean)} NTU · WP gate ${trigger.inputs.passedFirst} · source eligibility passed`:`SMA ${s.anomaly.window.length}/8 · GRID ${s.waypointIndex>=1} · safety ${s.safetyState}`,`${s.missionState} · SPIRAL ${s.anomaly.spiralIndex}/25 · pending WP ${s.anomaly.interruptedIndex===null?'—':s.anomaly.interruptedIndex+1}`],
-      report:[`snapshot ${s.snapshotId} · sample ${s.sampleId} · TX ${tx?`SEQ${tx.seq}`:'none'}`,`transport ${s.transport.phase} · sender SEQ ${tx?.seq??'—'} · RX.sequence ${rx?.sequence??'—'}`,rx?`receipt RX.sequence=${rx.sequence} · sample ${rx.sampleId} · snapshot ${rx.snapshotId} · memory log ${s.logId}`:'ยังไม่ได้รับ callback · ค่า shore คง unavailable'],
-      safety:[`cause ${s.returnCause||s.lastCommand?.code||'route not complete'} · HOME ${s.inputs.home?'set':'unavailable'} · ${Number.isFinite(s.homeDistanceM)?fmt(s.homeDistanceM):'—'} m`,`departed ${s.rth.departed} · arrival dwell ${s.rth.arrivalMs}/3000 ms · ${s.missionState}`,`FSM ${s.mode} · stop ${s.driveDecision?.stopReason||'—'} · applied ${pair(s.appliedPwm)}`]
+      setup:[`สถานีเตรียม ${s.stationPlan.length} จุดสำรวจตัวอย่าง`,`เรือรับแผน ตรวจความพร้อม แล้วจึงเริ่ม`,`เรือพร้อมเริ่ม · ตำแหน่งและทิศจะป้อนการนำทาง`],
+      sensors:[receivedRoute?'แผนจุดสำรวจมาถึงเรือแล้ว':'รอแผนจากสถานี',`ตรวจและเก็บ ${appliedRoute?s.acceptedRoute.length:0} จุด · คำสั่งเริ่มแยกจากแผน`,`เริ่มได้เมื่อ GPS เข็มทิศ และเงื่อนไขขับพร้อม`],
+      segment:[`ตำแหน่งเรือ P · ทิศ ${Number.isFinite(s.acquiredHeading)?`${fmt(s.acquiredHeading)}°`:'ยังไม่มีค่าที่ใช้ได้'}`,s.los?.valid?`ฉาย P ลง A→B · คลาดจากแนว ${fmt(s.los.crossTrackM,1)} m · เล็งนำหน้า ${fmt(s.guidanceDistanceM,1)} m`:'รอตำแหน่งและช่วงเส้นทางที่ใช้ได้',`ติดตามจุดสำรวจ ${Math.min(s.waypointIndex+1,s.acceptedRoute.length||1)} · รับจุดเมื่อเข้าเกณฑ์ระยะและความคืบหน้า`],
+      heading:[control?`ทิศเป้า ${fmt(control.inputs.targetDeg)}° · ทิศที่อ่าน ${Number.isFinite(control.inputs.headingDeg)?`${fmt(control.inputs.headingDeg)}°`:'ยังไม่มีค่า'} · คลาด ${fmt(control.inputs.headingError)}°`:'รอทิศเป้าและทิศที่อ่านได้',`${s.controllerKind.startsWith('GRID')?'GRID ปรับการเลี้ยวและความเร็วต่อเนื่อง':'โหมดนี้ใช้ตัวควบคุมทิศของตนเอง'} · GRID ไม่ใช่ PID แบบเดียวกับสแกน/กลับบ้าน`,`ขอ ${s.requestedPwm.left}/${s.requestedPwm.right} → จ่ายจริง ${s.appliedPwm.left}/${s.appliedPwm.right} PWM · วัดทิศใหม่`],
+      water:[`pH ${Number.isFinite(s.water.ph)?fmt(s.water.ph,2):'ยังไม่มีค่า'} · ความขุ่น ${Number.isFinite(s.water.ntu)?`${fmt(s.water.ntu)} NTU`:'ยังไม่มีค่า'} · อุณหภูมิ ${Number.isFinite(s.water.temp)?`${fmt(s.water.temp,1)} °C`:'ยังไม่มีค่า'}`,s.hold.phase==='none'?'น้ำนิ่งบางช่วงจึงพักขับก่อนอ่านค่า':'พักขับเพื่อให้น้ำนิ่ง แล้วเก็บค่าตามช่วงวัด',`ค่าที่ยังอ่านไม่ได้แสดงว่าไม่มีค่า · ไม่แทนด้วย 0`],
+      anomaly:[`น้ำขุ่นตัวอย่างสังเคราะห์ · ${demoTurbidity?'เปิดค้างตลอดฉาก':'ใช้ค่าที่ผู้ชมกำหนด'}`,trigger?`ค่าเฉลี่ย ${fmt(trigger.inputs.mean)} NTU · ผ่านจุดแรกและเงื่อนไขตรวจพบ`:`เฉลี่ย 8 ตัวอย่าง · รอผ่านจุดแรกและเกณฑ์ตรวจจับ`,`สแกน ${Math.min(s.anomaly.spiralIndex,25)}/25 · จะกลับไปต่อจุดสำรวจเดิม ${s.anomaly.interruptedIndex===null?'—':s.anomaly.interruptedIndex+1}`],
+      report:[`ค่าที่วัดพร้อมตำแหน่ง · รายงานล่าสุด ${tx?'เตรียมส่งแล้ว':'กำลังรอบันทึก'}`,`ส่งผ่านช่องทางจำลองในเบราว์เซอร์ · รอฝั่งยืนยัน`,rx?'ฝั่งได้รับและแสดงรายงานแล้ว':'ยังไม่ได้รับ · ไม่ถือว่าค่าส่งแล้วถึงฝั่ง'],
+      safety:[`ผู้ดูแลสั่งกลับได้ทุกเมื่อ · แบตเตอรี่ต่ำให้กลับก่อน`,`กลับ HOME แล้วรออยู่ในเขตปลายทางตามเวลาที่กำหนด`,`สาเหตุ: ${s.returnCause==='route-complete'?'สำรวจครบ 9 จุด':s.returnCause==='lowbattery'?'แบตเตอรี่ต่ำ':s.returnCause==='forced'?'ผู้ดูแลสั่งกลับ':'กำลังทำภารกิจ'} · จ่าย ${s.appliedPwm.left}/${s.appliedPwm.right} PWM`]
     }[selected];
-    const labels={setup:['ส่วนประกอบ','การเชื่อมต่อ','สถานะร่วม'],sensors:['ส่งจากฝั่ง','ตรวจบนเรือ','ผล acceptance'],segment:['สิ่งที่อ่านได้','เรขาคณิตนำทาง','การตัดสินใจ WP'],heading:['เป้าหมาย/feedback','controller mode-specific','คำขอ → final drive'],water:['ค่าตัวอย่าง','hold / detector','ค่าที่เผยแพร่'],anomaly:['input สังเคราะห์','eligibility / gate','FSM / route เดิม'],report:['snapshot ที่ส่ง','transport / identity','receipt / log boundary'],safety:['คำสั่ง / HOME','departure / arrival','ผลหยุดจริง']}[selected];
+    const labels={setup:['ผู้ดูแลเตรียมอะไร','เรือตรวจอะไร','จึงเกิดอะไร'],sensors:['แผนจากสถานี','การตรวจบนเรือ','พร้อมเริ่มเมื่อใด'],segment:['ตำแหน่งและทิศ','หาแนวและจุดเล็ง','การรับจุดสำรวจ'],heading:['ทิศเป้ากับทิศที่อ่าน','ปรับการบังคับ','มอเตอร์และการวัดรอบใหม่'],water:['ค่าที่วัด · หน่วย','พักและอ่านค่า','ค่าที่ส่งต่อ'],anomaly:['ตัวอย่างน้ำขุ่น','ตรวจค่าและเงื่อนไข','สแกนและกลับเส้นทาง'],report:['รายงานจากเรือ','ส่งและรอการยืนยัน','ผลที่สถานีได้รับ'],safety:['คำสั่งและแบตเตอรี่','กลับถึง HOME','เหตุผลและการหยุด']}[selected];
     ['input','check','output'].forEach((key,i)=>{$(`fc-${key}-label`).textContent=labels[i];$(`fc-${key}-value`).textContent=scene[i];});
     $('fc-causal-flow').dataset.chapter=selected;
     $('fc-report-inventory').hidden=!visible||selected!=='report';$('am-data-details').hidden=!visible||selected!=='report';
     const anomalyButton=$('am-anomaly-activate'),forceButton=$('fc-force-rth');
     anomalyButton.hidden=!visible||index<4||index>5;forceButton.hidden=!visible||index<6;
-    $('fc-stage-action-note').textContent=selected==='anomaly'?'ANOMALY ใช้ปุ่ม native synthetic input; ไม่บังคับ FSM':selected==='safety'?'RTH ใช้คำสั่ง public FORCE_RTH; ไม่มีการย้าย pose/FSM':'การอธิบายหยุดนาฬิกาไว้เมื่อจับ event; report callback ที่เริ่มแล้วอาจจบระหว่างพัก';
+    $('fc-stage-action-note').textContent=selected==='anomaly'?(demoTurbidity?'ฉากสาธิตใช้อินพุตความขุ่นสังเคราะห์ต่อเนื่อง · ไม่ใช่เซ็นเซอร์จริง':'ใช้อินพุตที่ผู้ชมตั้งไว้ · ฉากนี้ไม่สั่งข้ามเงื่อนไขตรวจจับ'):selected==='safety'?'การกลับก่อนครบเป็นคนละเหตุผลกับสำรวจครบ · ไม่มีคำสั่งกลับอัตโนมัติเพื่อเร่งภาพยนตร์':'คำอธิบายอ้างอิงค่าล่าสุด · การพักหยุดนาฬิกาและตำแหน่ง';
     const copy={
-      setup:['มองทั้งระบบเป็นวงจรเดียว',[`${s.stationPlan.length} จุด`,'route ตัวอย่างจากฝั่ง'],'ข้อมูล การตัดสินใจ และผลต่อเนื่องกัน',[`${s.acceptedRoute.length} จุดที่รับแล้ว`,s.stationReason]],
-      sensors:['แผนที่ต้องถึงเรือก่อนเริ่ม',[receivedRoute?.messageId||'ยังไม่มี route receipt','identity จาก receiver'],'แยก receipt, acceptance และ START',[appliedRoute?`${s.acceptedRoute.length} จุด · sealed ${s.routeSealed}`:'รอ acceptance',s.stationStage]],
-      segment:['ตำแหน่ง/ทิศป้อนการนำทาง',[point(s.acquiredPosition),'ตำแหน่งแบบจำลอง ไม่ใช่ GPS จริง'],'project P ลง segment แล้วคำนวณ LOS/WP',[s.los?.valid?`${fmt(s.los.bearingDeg)}°`:'ยังไม่มี LOS ที่ใช้ได้','bearing ที่ส่งให้ control']],
-      heading:['ทิศเป้ากับค่าที่อ่านสร้าง error',[control?`${fmt(control.inputs.headingError)}°`:'รอ control row','error จากรอบล่าสุด'],'controller ตามโหมด แล้ว final drive ตรวจคำขอ',[pair(s.appliedPwm),'applied เป็นผลสุดท้ายในแบบจำลอง']],
-      water:['อ่านค่าและคุณภาพแยกกัน',[`ADS-${s.sampleId}`,Number.isFinite(s.water.ntu)?`${fmt(s.water.ntu)} NTU`:'NTU unavailable'],'hold และเงื่อนไข quiet gate ก่อนเผยแพร่',[s.hold.phase,`pH ${Number.isFinite(s.water.ph)?fmt(s.water.ph,2):'ยังไม่มีค่า'}`]],
-      anomaly:['เปิดเฉพาะ synthetic input',[s.anomaly.armed?'armed · ตัวอย่างสังเคราะห์':'ยังไม่เปิด','ไม่ใช่ sensor สด'],'FSM ใช้จริง trigger + WP1 + safety',[s.missionState,`SPIRAL ${s.anomaly.spiralIndex}/25 · index ค้าง ${s.anomaly.interruptedIndex??'—'}`]],
-      report:['ใช้ snapshot ที่ TX สร้าง',[tx?`SEQ ${tx.seq} · snapshot ${tx.snapshotId}`:'ยังไม่มี TX','immutable transport payload'],'รับจาก receiver callback ก่อนแสดง',[rx?`RX.sequence ${rx.sequence}`:'ยังไม่ได้รับ',s.transport.phase]],
-      safety:['RTH อาจเกิดก่อน survey ครบ',[s.returnCause||'รอคำสั่ง/route complete','ไม่อ้างว่าสำรวจครบ'],'arrival dwell แล้ว FSM จึงหยุด',[s.missionState,`${s.driveDecision?.stopReason||'—'} · ${pair(s.appliedPwm)}`]]
+      setup:['เรือสำรวจน้ำหลายตำแหน่ง',[`${s.stationPlan.length} จุดตัวอย่าง`,'แนวคิดไม่ใช่ผลวัดภาคสนาม'],'แผน → ตรวจพร้อม → สำรวจ → รายงาน → กลับ',[`${s.acceptedRoute.length} จุดที่เรือรับ`,'แบบจำลองเบราว์เซอร์']],
+      sensors:['แผนต้องถึงและถูกตรวจ',[receivedRoute?'แผนมาถึงเรือแล้ว':'รอแผนจากสถานี','ยังไม่เท่ากับเริ่มเดินเรือ'],'เริ่มเมื่อเงื่อนไขความพร้อมผ่าน',[appliedRoute?`${s.acceptedRoute.length} จุดที่เรือเก็บไว้`:'รอตรวจแผน','คำสั่งเริ่มแยกจากการส่งแผน']],
+      segment:['ตำแหน่งและทิศกำหนดทาง',[s.los?.valid?`คลาดแนว ${fmt(s.los.crossTrackM,1)} m`:'รอตำแหน่งที่ใช้ได้','ภาพระนาบตัวอย่าง ไม่ใช่พิกัดจริง'],'คำนวณจุดเล็งบนช่วง A→B',[s.los?.valid?`${fmt(s.los.bearingDeg)}°`:'รอจุดเล็ง','เรือใช้ทิศนี้ไปยังจุดสำรวจ']],
+      heading:['เทียบทิศที่ต้องการกับที่อ่าน',[control?`คลาด ${fmt(control.inputs.headingError)}°`:'รอข้อมูลทิศ','ค่าจากรอบควบคุมล่าสุด'],'ตัวควบคุมโหมดนั้นปรับมอเตอร์',[`${s.appliedPwm.left}/${s.appliedPwm.right} PWM`,'ค่าที่จ่ายแล้วในแบบจำลอง']],
+      water:['สามค่ามีคนละความหมาย',[`pH ${Number.isFinite(s.water.ph)?fmt(s.water.ph,2):'ยังไม่มีค่า'}`,`ขุ่น ${Number.isFinite(s.water.ntu)?`${fmt(s.water.ntu)} NTU`:'ยังไม่มีค่า'} · ${Number.isFinite(s.water.temp)?`${fmt(s.water.temp,1)} °C`:'อุณหภูมิยังไม่มีค่า'}`],'พักเรือก่อนอ่านบางค่า',[s.hold.phase==='none'?'ยังไม่ถึงช่วงพัก':'กำลังพัก/วัด',`ค่าที่ไม่มีไม่เท่ากับ 0`]],
+      anomaly:['เปิดฉากตัวอย่างให้เห็นครบ',[demoTurbidity?'น้ำขุ่นสังเคราะห์ต่อเนื่อง':'อินพุตตามที่ผู้ชมตั้ง','ไม่ใช่น้ำหรือ sensor สด'],'ตรวจตามเกณฑ์จริง · ไม่บังคับโหมด',[`${Math.min(s.anomaly.spiralIndex,25)}/25 จุด`,s.anomaly.interruptedIndex===null?'ยังไม่มีจุดค้าง':`เก็บจุดสำรวจ ${s.anomaly.interruptedIndex+1} ไว้กลับต่อ`]],
+      report:['รายงานส่งค่าพร้อมตำแหน่ง',[tx?'มีรายงานเตรียมส่ง':'รอรอบส่ง','ค่าปัจจุบันกับรายงานเป็นคนละชุด'],'แสดงผลเมื่อฝั่งรับยืนยันเท่านั้น',[rx?'ได้รับรายงานแล้ว':'ยังไม่ได้รับ','ที่เก็บในเว็บเป็นหน่วยความจำตัวอย่าง']],
+      safety:['ผู้ดูแลสั่งกลับได้ · แบตต่ำมาก่อน',[s.returnCause==='route-complete'?'เก็บครบ 9 จุด':s.returnCause==='lowbattery'?'แบตเตอรี่ต่ำ':'ผู้ดูแลขอกลับ','สาเหตุต้องตรงกับเรื่องที่เล่า'],'HOME และเวลาหยุดยืนยันการจบ',[s.missionState==='COMPLETE'?'ถึง HOME และหยุด':s.missionState==='RTH'?'กำลังกลับ HOME':'รอคำสั่งกลับ',`${s.appliedPwm.left}/${s.appliedPwm.right} PWM`]]
     }[selected];
     $('fc-short-purpose').textContent=copy[0];$('fc-simple-input').textContent=copy[1][0];$('fc-simple-input-note').textContent=copy[1][1];$('fc-simple-logic').textContent=copy[2];$('fc-simple-output').textContent=copy[3][0];$('fc-simple-output-note').textContent=copy[3][1];
     const headingLab=$('fc-heading-lab');headingLab.hidden=selected!=='heading';
+    scheduleSvgLabelScale();
   }
   function pauseForExplanation(){
     if(!latest.playing)return;
@@ -205,12 +241,14 @@
     if(index===4&&latest.missionState==='GRID SCAN'&&latest.waypointIndex>=1&&!latest.anomaly.armed&&!latest.anomaly.used){
       const trigger=$('am-anomaly-activate');trigger.hidden=false;trigger.click();
     }
+    if(index===5&&latest.missionState==='SPIRAL SCAN'&&latest.anomaly.used)installOwnedDemoInput();
+    if(index===6&&latest.missionState==='GRID SCAN'&&latest.anomaly.used)releaseOwnedDemoInput();
     pauseForExplanation();
   }
   function advanceFromEvent(s){
     if(!movieStarted)return;
     if(s.missionState==='COMPLETE'){
-      clearTimeout(tourTimer);autoHold=false;tourState='finished';selected='safety';tourIndex=7;render();return;
+      clearTimeout(tourTimer);autoHold=false;tourState='finished';selected='safety';tourIndex=7;releaseOwnedDemoInput();render();return;
     }
     if(!s.playing||tourState==='paused'||autoHold)return;
     if(tourIndex===0&&s.acceptedRoute.length>0&&s.routeSealed&&s.incoming.received.some(item=>item.kind==='route-upload')&&s.incoming.applied.some(item=>item.kind==='route-upload'))moveChapter(1);
@@ -223,6 +261,23 @@
     else if(tourIndex===7&&s.missionState==='RTH'&&s.rth.arrivalMs>=3000&&s.driveDecision?.stopReason==='RTH_PARK'){
       $('fc-stage-proof').textContent=`RTH arrival dwell ${s.rth.arrivalMs} ms · applied ${pair(s.appliedPwm)} · รอ state transition จริง`;
     }
+  }
+  function installOwnedDemoInput(){
+    const input=main.querySelector('[data-policy-input="turbidityV"]');
+    if(!input||input.value.trim()!=='')return false;
+    const owner={input,value:'1.2',previousValue:input.value};demoTurbidity=owner;
+    input.dataset.presentationOwned='true';input.value=owner.value;
+    input.addEventListener('input',()=>{if(demoTurbidity===owner&&input.value!==owner.value){delete input.dataset.presentationOwned;demoTurbidity=null;}},{once:true});
+    input.dispatchEvent(new Event('change',{bubbles:true}));
+    return true;
+  }
+  function releaseOwnedDemoInput(){
+    const owner=demoTurbidity;demoTurbidity=null;if(!owner)return;
+    const {input,value,previousValue}=owner;
+    if(input.dataset.presentationOwned!=='true')return;
+    delete input.dataset.presentationOwned;
+    if(input.value!==value)return;
+    input.value=previousValue;input.dispatchEvent(new Event('change',{bubbles:true}));
   }
   function beginTour(){
     if(movieStarted)return;
@@ -246,7 +301,8 @@
       [geometry.alongTrackM,geometry.crossTrackM].every(Number.isFinite);
     $('fc-nav-visual').dataset.eventId=event?.id??'';
     $('fc-nav-visual').dataset.waypointIndex=ready?String(index):'';
-    $('fc-nav-event').textContent=ready?`EV-${event.id} · model ${(event.atMs/1000).toFixed(2)} s · P/LOS จากรอบเดียวกัน`:`${s.missionState} · ยังไม่มี GRID LOS event ที่ใช้แสดง`;
+    $('fc-nav-visual').dataset.acceptedEventId=lastAcceptedGridEvent?.eventId??'';
+    $('fc-nav-event').textContent=ready?'ตำแหน่งเรือ แนวเส้น และจุดเล็งจากการคำนวณรอบเดียวกัน':'รอรอบนำทางที่มีตำแหน่งและจุดเล็งใช้ได้';
     $('fc-nav-outcome').textContent='รอผลตรวจ WP';
     $('fc-nav-cross-label').textContent='cross-track: —';
     const geometryIds=['fc-nav-segment-line','fc-nav-acceptance','fc-nav-cross','fc-nav-projection','fc-nav-pose','fc-nav-los','fc-nav-end','fc-nav-a-label','fc-nav-b-label'];
@@ -273,7 +329,7 @@
       $('fc-nav-cross-label').textContent=`P ฉายบนแนว · cross-track ${cross>=0?'+':''}${fmt(cross,1)} m · LOS aim อยู่บน A→B`;
       const nextIndex=event.output?.waypointIndex;
       const accepted=reach.predicate.result===true&&Number.isInteger(nextIndex)&&nextIndex>index;
-      $('fc-nav-outcome').textContent=accepted?`ผ่าน WP${index+1} · EV-${event.id} เปลี่ยนไป WP${nextIndex+1}`:reach.predicate.result===true?`เงื่อนไขผ่าน · รอ event ยืนยันการเปลี่ยน WP${index+1}`:`ยังตาม WP${index+1} · ยังไม่เข้าเกณฑ์รับจุด`;
+      $('fc-nav-outcome').textContent=accepted?`ผ่านจุดสำรวจ ${index+1} · รอบตรวจเดิม → เริ่มติดตามจุด ${nextIndex+1}`:reach.predicate.result===true?`เงื่อนไขผ่าน · รอผลยืนยันการเปลี่ยนจุด ${index+1}`:`ยังตามจุดสำรวจ ${index+1} · ระยะ/ความคืบหน้ายังไม่ครบ`;
     }
     const targetDeg=control?.inputs?.targetDeg,measuredDeg=control?.inputs?.headingDeg,applied=drive?.output?.appliedPwm;
     const hasHeading=Number.isFinite(targetDeg)&&Number.isFinite(measuredDeg);
@@ -287,7 +343,7 @@
     setNavMotor('left',applied?.left);setNavMotor('right',applied?.right);
     if(lastAcceptedGridEvent){
       const accepted=lastAcceptedGridEvent;
-      if(!ready||accepted.eventId!==event?.id)$('fc-nav-outcome').textContent=`ล่าสุดผ่าน WP${accepted.index+1} · EV-${accepted.eventId} → index ${accepted.nextIndex} (รอบ ${(accepted.atMs/1000).toFixed(2)} s)`;
+      if(!ready||accepted.eventId!==event?.id)$('fc-nav-outcome').textContent=`ผ่านจุดสำรวจ ${accepted.index+1} ในรอบก่อน · ต่อไปติดตามจุด ${accepted.nextIndex+1}`;
     }
   }
   function setNavDialLine(id,point){const node=$(id);node.setAttribute('x1','48');node.setAttribute('y1','48');node.setAttribute('x2',point.x.toFixed(2));node.setAttribute('y2',point.y.toFixed(2));}
@@ -297,7 +353,7 @@
     fill.style.width=`${finite?Math.min(50,Math.abs(value)/window.GridGuidance.C.pwmLimit*50):0}%`;
     fill.dataset.sign=finite&&value<0?'negative':'positive';output.textContent=finite?`${value>0?'+':''}${fmt(value,0)}`:'—';
   }
-  function onReset(){clearTimeout(tourTimer);tourTimer=null;autoHold=false;movieStarted=false;tourState='idle';tourIndex=0;selected='setup';lastAcceptedGridEvent=null;renderMinimal();}
+  function onReset(){releaseOwnedDemoInput();clearTimeout(tourTimer);tourTimer=null;autoHold=false;movieStarted=false;tourState='idle';tourIndex=0;selected='setup';lastAcceptedGridEvent=null;renderMinimal();}
   installMinimal();
   mission.subscribe(s=>{
     if(generation!==null&&generation!==s.incoming.generation){

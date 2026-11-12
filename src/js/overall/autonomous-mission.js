@@ -67,7 +67,7 @@
     byId('am-battery-note').textContent=view.batteryNote;
     byId('am-data-notes').textContent=`${view.sourceNote} · ${view.timingNote} · ${view.roundingNote}`;
     const values=new Map(view.fields.map(field=>[field.id,field]));
-    root.querySelectorAll('#am-data-table [data-report-field]').forEach(row=>{
+    byId('am-data-table')?.querySelectorAll('[data-report-field]').forEach(row=>{
       const field=values.get(row.dataset.reportField);
       if(!field)return;
       row.querySelector('[data-report-value="outgoing"]').textContent=field.outgoingValue;
@@ -455,15 +455,31 @@
     resetInProgress=true;
     try {
       stopLoop();
+      const retainedInputs=new Map();
+      document.querySelectorAll('[data-mission-input]').forEach(e=>{
+        retainedInputs.set(e.dataset.missionInput,e.dataset.presentationOwned==='true'?e.defaultChecked:e.checked);
+      });
+      document.querySelectorAll('[data-policy-input]').forEach(e=>{
+        const owned=e.dataset.presentationOwned==='true';
+        const value=owned?e.defaultValue:e.value;
+        retainedInputs.set(e.dataset.policyInput,value.trim()===''?null:Number(value));
+      });
       const generation=incoming.reset();
       state=M.reset({generation,presentationPacingMs:PRESENTATION_PACING_MS});
       acceptedMarkerRoute='';spiralCause=null;transport.reset();disturbanceDirection=1;renderTrace(null);
-      root.querySelectorAll('input[type="checkbox"]').forEach(e=>{e.checked=e.defaultChecked;});
-      root.querySelectorAll('[data-mission-input]').forEach(e=>e.checked=state.inputs[e.dataset.missionInput]);
-      root.querySelectorAll('[data-policy-input]').forEach(e=>{
-        e.value=e.defaultValue;
-        if(e.value==='')delete state.inputs[e.dataset.policyInput];
-        else state.inputs[e.dataset.policyInput]=Number(e.value);
+      document.querySelectorAll('input[type="checkbox"]:not([data-mission-input])').forEach(e=>{e.checked=e.defaultChecked;});
+      document.querySelectorAll('[data-mission-input]').forEach(e=>{
+        const key=e.dataset.missionInput;
+        e.checked=retainedInputs.has(key)?Boolean(retainedInputs.get(key)):e.defaultChecked;
+        delete e.dataset.presentationOwned;
+        state.inputs[key]=e.checked;
+      });
+      document.querySelectorAll('[data-policy-input]').forEach(e=>{
+        const key=e.dataset.policyInput,value=retainedInputs.get(key);
+        e.value=value===null||value===undefined?'':String(value);
+        delete e.dataset.presentationOwned;
+        if(e.value==='')delete state.inputs[key];
+        else state.inputs[key]=Number(e.value);
       });
       render();
     } finally {

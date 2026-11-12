@@ -19,6 +19,8 @@
 #fc-nav-los{fill:#edc27f;stroke:#fff2d3;stroke-width:1}
 #fc-nav-end{fill:#edc27f;stroke:#fff0c9;stroke-width:1}
 #fc-nav-a-label,#fc-nav-b-label{fill:#d7e5e4;font:600 11px system-ui,sans-serif;text-anchor:middle}
+#fc-nav-a-label{text-anchor:start;transform:translateY(-70px)}
+#fc-nav-b-label{text-anchor:end}
 .fc-nav-legend{display:flex;flex-wrap:wrap;gap:4px 12px;color:#b8cacc;font-size:.72rem}
 .fc-nav-legend span{display:inline-flex;align-items:center;gap:5px}
 .fc-nav-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#75ddd0}
