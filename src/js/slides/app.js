@@ -52,7 +52,7 @@
     const authors = add(copy, "div", "authors");
     data.authors.forEach(function (name, index) {
       const person = add(authors, "div");
-      add(person, "span", "", index === 0 ? "Project authors" : " ");
+      add(person, "span", "", index === 0 ? (data.authorLabel || "Project authors") : " ");
       person.appendChild(document.createTextNode(name));
     });
     add(copy, "p", "cover-meta", data.meta);
@@ -60,7 +60,7 @@
     const image = add(art, "img");
     image.src = data.image;
     image.alt = data.alt || "";
-    add(art, "span", "vertical-label", "Surface water / autonomous monitoring");
+    add(art, "span", "vertical-label", data.verticalLabel || "Surface water / autonomous monitoring");
     return slide;
   }
 
@@ -148,14 +148,14 @@
     image.alt = data.alt || "";
     image.tabIndex = 0;
     image.setAttribute("role", "button");
-    image.title = "Open full-size image";
+    image.title = "เปิดภาพขนาดเต็ม";
     image.addEventListener("click", function () { openImage(data); });
     image.addEventListener("keydown", function (event) {
       if (event.key === "Enter" || event.key === " ") openImage(data);
     });
     const caption = add(slide, "div", "diagram-caption");
     add(caption, "span", "", data.caption || "");
-    const button = add(caption, "button", "image-open", "Open full size ↗");
+    const button = add(caption, "button", "image-open", "ดูภาพขนาดเต็ม ↗");
     button.type = "button";
     button.addEventListener("click", function () { openImage(data); });
     addFooter(slide, data.footer);
@@ -175,7 +175,7 @@
     });
     const tools = add(slide, "div", "phase-tools");
     add(tools, "p", "", data.note);
-    const button = add(tools, "button", "outline-button", "View full activity diagram ↗");
+    const button = add(tools, "button", "outline-button", "ดูผังการทำงานเต็ม ↗");
     button.type = "button";
     button.addEventListener("click", function () { openImage(data); });
     addFooter(slide, data.footer);
@@ -187,7 +187,7 @@
     addEyebrow(slide, data);
     const layout = add(slide, "div", "closing-layout");
     const left = add(layout, "div");
-    addTitle(left, "Operating conditions shape monitoring quality");
+    addTitle(left, data.limitTitle || "Operating conditions shape monitoring quality");
     const list = add(left, "ul", "limit-list");
     data.limitations.forEach(function (item) { add(list, "li", "", item); });
     const right = add(layout, "div", "closing-copy");
@@ -205,7 +205,7 @@
     if (!renderer) return;
     const slide = renderer(data);
     slide.dataset.index = String(index + 1);
-    slide.setAttribute("aria-label", "Slide " + (index + 1) + " of " + slides.length);
+    slide.setAttribute("aria-label", "สไลด์ " + (index + 1) + " จาก " + slides.length);
     slide.setAttribute("aria-hidden", index === 0 ? "false" : "true");
     slide.hidden = index !== 0;
     root.appendChild(slide);
@@ -221,7 +221,7 @@
     });
     counter.textContent = String(current + 1).padStart(2, "0") + " / " + String(slideElements.length).padStart(2, "0");
     progress.style.width = ((current + 1) / slideElements.length * 100) + "%";
-    document.title = String(current + 1).padStart(2, "0") + " · Smart Water Surface Boat";
+    document.title = "สไลด์ " + String(current + 1).padStart(2, "0") + " · เรือสำรวจคุณภาพน้ำ";
   }
   document.getElementById("prev").addEventListener("click", function () { show(current - 1); });
   document.getElementById("next").addEventListener("click", function () { show(current + 1); });

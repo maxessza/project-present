@@ -1,301 +1,220 @@
+// TEMPORARY THAI DECK REWRITE: replaced the previous 12-slide set with this 14-slide presentation.
+// To remove this rewrite, restore slides-data.js, app.js, pages/slides.html, and docs/SPEAKER_NOTES.md from baseline commit ed1855e.
 window.presentationSlides = [
   {
     "type": "cover",
-    "eyebrow": "Computer Engineering · Senior Project",
-    "title": "Development of a Smart Water Surface Boat for Water Quality Monitoring",
-    "subtitle": "Autonomous, location-aware surface water monitoring",
+    "eyebrow": "โครงงานวิศวกรรมคอมพิวเตอร์",
+    "title": "เรือ Smart Water Surface Boat เพื่อสำรวจคุณภาพน้ำ",
+    "subtitle": "เรือสำรวจอัตโนมัติที่เก็บค่าคุณภาพน้ำพร้อมพิกัด",
     "authors": ["Patcharapon Teerasamee", "Pisit Nilthongkam"],
-    "meta": "Bachelor of Engineering in Computer Engineering · Mae Fah Luang University · 2026",
+    "authorLabel": "ผู้จัดทำโครงงาน",
+    "meta": "มหาวิทยาลัยแม่ฟ้าหลวง · 2026",
+    "verticalLabel": "เรือผิวน้ำ / ตรวจวัดอัตโนมัติ",
     "image": "../assets/images/boat-structure.png",
-    "alt": "Boat structure drawing with top-down and side profile views"
+    "alt": "ภาพแบบโครงสร้างเรือสำรวจน้ำ มุมมองด้านบนและด้านข้าง"
   },
   {
     "type": "story",
-    "eyebrow": "01 / Monitoring need",
-    "title": "A single sampling point cannot describe the whole water area",
-    "lead": "Temperature, pH and turbidity can differ from one location to another. A fixed station follows its installation point; manual sampling takes time and leaves gaps between visits.",
-    "sideTitle": "Spatial variation",
-    "sideText": "Location-tagged readings show variation within the surveyed area.",
-    "sideItemsLabel": "Parameters measured by the project",
-    "sideItems": ["Temperature", "pH", "Turbidity"],
-    "footer": "Project rationale · BETA TEST.docx, Chapter 1"
-  },
-  {
-    "type": "story",
-    "eyebrow": "02 / Objectives and scope",
-    "title": "The project combines sensing, movement and remote review",
-    "lead": "The goal is a mobile platform that collects surface-water measurements at GPS-tagged locations, follows a planned route, stores mission data and presents information through a web dashboard.",
-    "sideTitle": "Included in the project",
-    "sideText": "The system targets surface water in ponds, lakes and reservoirs under moderate operating conditions.",
+    "eyebrow": "01 / เป้าหมายโครงงาน",
+    "title": "เรือช่วยเก็บข้อมูลน้ำได้หลายตำแหน่ง",
+    "lead": "จุดตรวจวัดประจำให้ข้อมูลเฉพาะบริเวณที่ติดตั้ง โครงงานนี้ใช้เรือเคลื่อนที่ไปตามแผน เพื่อบันทึกอุณหภูมิ pH และความขุ่นพร้อมพิกัด GPS",
+    "sideTitle": "เรือลำนี้ทำอะไร",
+    "sideText": "พาเซนเซอร์ไปวัดน้ำผิวหน้า แล้วส่งข้อมูลให้ผู้ใช้ตรวจดูบนเว็บ",
     "sideItemsStyle": "list",
-    "sideItemsLabel": "Core functions described in the report",
+    "sideItemsLabel": "ขอบเขตของระบบ",
     "sideItems": [
-      "Measure temperature, pH and turbidity.",
-      "Navigate by GPS waypoints and compass heading; support PID steering and return-to-home.",
-      "Log mission data to MicroSD and exchange commands and telemetry through ESP-NOW.",
-      "Flag configured threshold crossings and collect nearby readings with spiral mapping.",
-      "Estimate turbidity between sampled locations with IDW for a heat map."
+      "สำรวจผิวน้ำในพื้นที่ที่กำหนด",
+      "บันทึกค่าพร้อมตำแหน่งของเรือ",
+      "ผลวัดขึ้นกับการติดตั้งและสอบเทียบเซนเซอร์"
     ],
-    "footer": "Project objectives and scope · BETA TEST.docx, Sections 1.2–1.3"
-  },
-  {
-    "type": "story",
-    "eyebrow": "03 / Existing approaches",
-    "title": "Mobile sampling adds spatial coverage to point monitoring",
-    "lead": "The report describes fixed stations as continuous but limited to their installed locations. Manual sampling can target selected places, but requires visits and does not provide continuous readings between them.",
-    "sideTitle": "Project response",
-    "sideText": "The boat follows user-defined waypoints and associates sensor readings with location and mission context.",
-    "sideItemsStyle": "list",
-    "sideItemsLabel": "What mobility changes",
-    "sideItems": [
-      "A route samples several locations during one mission.",
-      "GPS position lets users review readings along the route.",
-      "Coverage depends on route design, navigation quality, sensor calibration, communication range and battery capacity."
-    ],
-    "footer": "Comparison summarized from BETA TEST.docx, Chapters 1–3"
+    "footer": "ที่มา: BETA TEST.docx · หัวข้อ 1.1–1.3"
   },
   {
     "type": "flow",
-    "eyebrow": "04 / System architecture",
-    "title": "Four subsystems carry each mission from water to dashboard",
+    "eyebrow": "02 / ภาพรวมระบบ",
+    "title": "ภารกิจหนึ่งรอบทำงานอย่างไร",
     "steps": [
-      {"label": "01 / SENSE", "title": "Boat sensors", "text": "DS18B20, pH and turbidity sensors collect water readings. GPS and the compass provide position and heading context."},
-      {"label": "02 / CONTROL", "title": "ESP32-S3", "text": "The controller reads sensors, runs navigation and heading control, manages mission commands and writes a local SD-card log."},
-      {"label": "03 / TRANSFER", "title": "Base station", "text": "ESP-NOW carries commands, waypoint information and telemetry between the boat and base station."},
-      {"label": "04 / REVIEW", "title": "Backend + web", "text": "FastAPI and MySQL receive and store data. The dashboard presents boat state, mission progress, routes, alerts and turbidity maps."}
+      {"label": "01 / วางแผน", "title": "กำหนดพื้นที่", "text": "ผู้ใช้เลือกขอบเขต และระบบสร้างจุด waypoint ให้เรือเดินตาม"},
+      {"label": "02 / ตรวจวัด", "title": "เก็บค่าพร้อมพิกัด", "text": "เรืออ่านอุณหภูมิ pH และความขุ่น แล้วบันทึกตำแหน่ง GPS"},
+      {"label": "03 / ควบคุม", "title": "ปรับทิศและแรงขับ", "text": "ESP32-S3 ใช้ตำแหน่งกับทิศเรือช่วยควบคุม thruster ซ้ายและขวา"},
+      {"label": "04 / ส่งข้อมูล", "title": "ติดตามบนเว็บ", "text": "ข้อมูลไปยังสถานีฐานและระบบเว็บ เพื่อดูสถานะ เส้นทาง และผลตรวจวัด"}
     ],
-    "note": "The boat keeps a local mission log while telemetry is sent through the base station for backend storage and web monitoring.",
-    "stack": "ESP32-S3 · ESP-NOW · FastAPI · MySQL",
-    "footer": "System architecture · BETA TEST.docx, Chapters 1–3; supplied source code"
+    "note": "การบันทึกบนเรือช่วยเก็บข้อมูลภารกิจไว้ ขณะที่การติดตามระยะไกลต้องอาศัยการเชื่อมต่อ",
+    "stack": "เซนเซอร์ · ESP32-S3 · MicroSD · ESP-NOW · Dashboard",
+    "footer": "สรุปภาพรวมจากข้อเสนอโครงงานและ source code ที่ให้มา"
+  },
+  {
+    "type": "story",
+    "eyebrow": "03 / โครงสร้างเรือ",
+    "title": "ทุ่นสองข้างพยุงโครงและอุปกรณ์",
+    "lead": "ตัวเรือมีทุ่นลอยน้ำสองด้านและโครงติดตั้งตรงกลาง เซนเซอร์กับชุดควบคุมอยู่บนโครง ส่วน thruster สองตัวสร้างแรงขับให้เรือเคลื่อนที่บนผิวน้ำ",
+    "sideTitle": "ส่วนประกอบหลักของตัวเรือ",
+    "sideText": "โครงสร้างจัดพื้นที่ให้ชุดตรวจวัด ชุดควบคุม และชุดขับเคลื่อนทำงานร่วมกัน",
+    "sideItemsStyle": "list",
+    "sideItemsLabel": "หน้าที่ของแต่ละส่วน",
+    "sideItems": [
+      "ทุ่นสองข้างช่วยพยุงเรือ",
+      "โครงกลางใช้ติดตั้งอุปกรณ์",
+      "thruster ซ้ายและขวาขับและบังคับทิศ"
+    ],
+    "footer": "ภาพแบบเรือ: BETA TEST.docx · Figure 3.3"
+  },
+  {
+    "type": "story",
+    "eyebrow": "04 / เซนเซอร์",
+    "title": "เซนเซอร์แต่ละตัวอ่านข้อมูลคนละแบบ",
+    "lead": "เซนเซอร์น้ำอ่านสภาพบริเวณที่เรือผ่าน ส่วน GPS และเข็มทิศบอกตำแหน่งกับทิศของเรือ เพื่อเชื่อมค่าที่วัดเข้ากับจุดบนแผนที่",
+    "sideTitle": "อุปกรณ์ตรวจวัด",
+    "sideText": "ระบบบันทึกค่าหลายชนิดไว้ในภารกิจเดียวกัน",
+    "sideItemsStyle": "list",
+    "sideItemsLabel": "อุปกรณ์และข้อมูลที่ได้",
+    "sideItems": [
+      "DS18B20 วัดอุณหภูมิน้ำ",
+      "pH sensor วัดค่าความเป็นกรด–ด่าง",
+      "Turbidity sensor วัดความขุ่น หน่วย NTU",
+      "NEO-8M GPS ระบุพิกัดเรือ",
+      "QMC5883L วัดทิศหัวเรือ"
+    ],
+    "footer": "ชื่ออุปกรณ์ตาม BETA TEST.docx · Figure 3.4"
+  },
+  {
+    "type": "story",
+    "eyebrow": "05 / ควบคุมและสื่อสาร",
+    "title": "ESP32-S3 จัดการการทำงานบนเรือ",
+    "lead": "ตัวควบคุมรับข้อมูลจากเซนเซอร์และระบบนำทาง จากนั้นจัดการสถานะภารกิจ บันทึกข้อมูล และส่งข้อมูลระหว่างเรือกับสถานีฐาน",
+    "sideTitle": "เส้นทางของข้อมูล",
+    "sideText": "ข้อมูลที่เก็บในเรือถูกนำไปใช้ติดตามและตรวจย้อนหลัง",
+    "sideItemsStyle": "list",
+    "sideItemsLabel": "อุปกรณ์และระบบ",
+    "sideItems": [
+      "ESP32-S3 ควบคุมภารกิจและอุปกรณ์",
+      "MicroSD เก็บไฟล์บันทึกบนเรือ",
+      "ESP-NOW รับส่งข้อมูลกับสถานีฐาน",
+      "FastAPI รับข้อมูลและ MySQL จัดเก็บ",
+      "Dashboard แสดงสถานะและประวัติภารกิจ"
+    ],
+    "footer": "ภาพรวมระบบ: BETA TEST.docx · Chapters 1–3; main.py; dashboard.html"
   },
   {
     "type": "diagram",
-    "eyebrow": "05 / Boat platform",
-    "title": "A twin-hull surface platform carries the monitoring equipment",
-    "lead": "The report includes top and side views of the boat structure. The drawing shows the platform layout used to organize propulsion, electronics and sensor equipment.",
-    "image": "../assets/images/boat-structure.png",
-    "alt": "Top-down and side profile design drawing of the smart water surface boat",
-    "caption": "Boat structure design · BETA TEST.docx, Figure 3.3",
-    "footer": "Design drawing from the supplied project report"
-  },
-  {
-    "type": "diagram",
-    "eyebrow": "06 / Hardware integration",
-    "title": "The wiring joins sensors, navigation, storage and propulsion",
-    "lead": "The ESP32-S3 is the main controller. The diagram connects the water sensors and navigation modules to the controller, with motor drivers and two thrusters providing movement.",
+    "eyebrow": "06 / ไฟเลี้ยงและชุดขับเคลื่อน",
+    "title": "แบตเตอรี่จ่ายไฟให้วงจรและมอเตอร์",
+    "lead": "แบตเตอรี่ LiPo 3S เป็นแหล่งพลังงาน LM2596 ลดแรงดันให้วงจรควบคุม และ BTS7960 รับคำสั่งไปขับ thruster 12 โวลต์สองตัวตามแผนผัง",
     "image": "../assets/images/hardware-wiring.png",
-    "alt": "Hardware wiring diagram for the ESP32-S3 water monitoring boat",
-    "caption": "Hardware wiring diagram · BETA TEST.docx, Figure 3.4",
-    "footer": "The report specifies BTS7960 motor drivers, 12 V thrusters, a 3S LiPo battery and an LM2596 buck converter"
+    "alt": "แผนผังสายไฟระหว่างแบตเตอรี่ ตัวควบคุม ไดรเวอร์ และอุปกรณ์บนเรือ",
+    "caption": "แผนผังอุปกรณ์ · คลิกภาพเพื่อขยาย",
+    "footer": "แผนผังไฟฟ้า: BETA TEST.docx · Figure 3.4"
   },
   {
     "type": "flow",
-    "eyebrow": "07 / Data journey",
-    "title": "Every reading can be logged locally and reviewed remotely",
+    "eyebrow": "07 / หลักการบังคับเรือ",
+    "title": "เรือเลี้ยวด้วยการปรับแรงขับซ้ายและขวา",
     "steps": [
-      {"label": "01 / MEASURE", "title": "Read + locate", "text": "The controller reads temperature, pH and turbidity together with GPS and heading information."},
-      {"label": "02 / PREPARE", "title": "Filter + format", "text": "The report describes basic filtering, signal conversion, calibration and formatting before data are used."},
-      {"label": "03 / PRESERVE", "title": "Log + transmit", "text": "Mission readings are written to MicroSD. ESP-NOW carries commands and telemetry to the base station."},
-      {"label": "04 / REVIEW", "title": "Store + visualize", "text": "The backend stores records for the dashboard to show current state, route, mission history, alerts and mapped turbidity."}
+      {"label": "01 / GPS", "title": "รู้ตำแหน่ง", "text": "ระบบเทียบตำแหน่งเรือกับ waypoint ที่กำลังมุ่งหน้าไป"},
+      {"label": "02 / COMPASS", "title": "รู้ทิศหัวเรือ", "text": "QMC5883L วัดทิศปัจจุบันเพื่อใช้คำนวณทิศที่ต้องการ"},
+      {"label": "03 / PID", "title": "คำนวณการแก้ทิศ", "text": "ระบบหาความต่างระหว่างทิศเป้าหมายกับทิศที่เรือหันอยู่"},
+      {"label": "04 / THRUSTERS", "title": "ปรับกำลังมอเตอร์", "text": "ปรับแรงขับซ้ายและขวาให้ต่างกันเพื่อช่วยหมุนเรือเข้าหาเป้าหมาย"}
     ],
-    "note": "Local SD logging provides a mission copy when the wireless link is unavailable; remote updates still depend on the communication path.",
-    "stack": "Sensors → ESP32-S3 → MicroSD / ESP-NOW → FastAPI → MySQL → Dashboard",
-    "footer": "Data workflow · BETA TEST.docx, Sections 1.3–2.4"
+    "note": "GPS บอกว่าเรืออยู่ตรงไหน ส่วนเข็มทิศบอกว่าเรือหันไปทางใด",
+    "stack": "ตำแหน่ง · ทิศหัวเรือ · PID · thruster ซ้ายและขวา",
+    "footer": "หลักการนำทางตาม BETA TEST.docx · Sections 1.3 และ 3.7–3.8"
   },
   {
     "type": "phases",
-    "eyebrow": "08 / Mission workflow",
-    "title": "A patrol moves from area setup through return-to-home",
+    "eyebrow": "08 / ลำดับภารกิจ",
+    "title": "เรือสำรวจตั้งแต่เริ่มงานจนกลับจุดเริ่มต้น",
     "phases": [
-      {"label": "PHASE 0", "title": "Define area", "text": "Set the monitoring boundary and grid layout, then generate waypoints."},
-      {"label": "PHASE 1", "title": "Check readiness", "text": "Record home, upload waypoints and check GPS, compass and battery before start."},
-      {"label": "PHASE 2", "title": "Patrol grid", "text": "Follow waypoints, read sensors at locations and save measurements to MicroSD."},
-      {"label": "PHASE 3", "title": "Investigate", "text": "On an abnormal reading, spiral around its location and collect more nearby data."},
-      {"label": "PHASE 4", "title": "Return + close", "text": "Return home, stop motors and finalize the mission log after patrol completion."}
+      {"label": "ขั้น 0", "title": "สร้างเส้นทาง", "text": "เลือกพื้นที่และสร้าง waypoint"},
+      {"label": "ขั้น 1", "title": "ตรวจความพร้อม", "text": "เช็กจุดเริ่ม GPS เข็มทิศ และแบตเตอรี่"},
+      {"label": "ขั้น 2", "title": "เก็บข้อมูล", "text": "เดินตาม waypoint และอ่านเซนเซอร์"},
+      {"label": "ขั้น 3", "title": "สำรวจเพิ่ม", "text": "เมื่อพบค่าเข้าเงื่อนไข จะตรวจบริเวณใกล้เคียง"},
+      {"label": "ขั้น 4", "title": "กลับและปิดงาน", "text": "กลับจุดเริ่มต้นและบันทึกสถานะภารกิจ"}
     ],
-    "note": "The activity diagram describes resuming the grid at the nearest waypoint after a spiral scan. The report says Wi-Fi is disabled during missions and ESP-NOW is used for boat communication.",
+    "note": "เอกสารอธิบายการสแกนรอบจุดและกลับเข้าสู่เส้นหลักไว้ แต่ยังไม่มีผลทดสอบภาคสนามเป็นตัวเลข",
     "image": "../assets/images/activity-flow.png",
-    "alt": "Activity diagram showing setup, pre-mission checks, grid patrol, spiral mapping, and return home",
-    "caption": "Full activity diagram from the report · open to zoom",
-    "footer": "Mission workflow · BETA TEST.docx, Section 3.6 and Figure 3.6"
+    "alt": "ผังลำดับการตั้งภารกิจ สำรวจ เก็บข้อมูล และกลับจุดเริ่มต้น",
+    "caption": "ผังลำดับการทำงานตามข้อเสนอโครงงาน",
+    "footer": "ลำดับภารกิจ: BETA TEST.docx · Sections 3.6–3.8"
+  },
+  {
+    "type": "flow",
+    "eyebrow": "09 / การสร้าง Waypoint",
+    "title": "เส้นทางกวาดพื้นที่ประกอบด้วย 15 จุด",
+    "steps": [
+      {"label": "01 / เลือก", "title": "กำหนดขอบเขต", "text": "ผู้ใช้คลิกมุมพื้นที่ 4 จุดบนแผนที่"},
+      {"label": "02 / เว้น", "title": "สร้างกรอบด้านใน", "text": "ระบบหากรอบครอบคลุมแล้วเว้นระยะขอบ 10%"},
+      {"label": "03 / แบ่ง", "title": "สร้างแนวสำรวจ", "text": "แบ่งเป็น 5 แนว แต่ละแนวมี waypoint 3 จุด"},
+      {"label": "04 / เรียง", "title": "เดินทางซิกแซ็ก", "text": "สลับทิศทางระหว่างแนว รวม 15 จุด เริ่มที่ WP1"}
+    ],
+    "note": "การคลิกสี่มุมกำหนดกรอบสี่เหลี่ยมตามโค้ดปัจจุบัน ยังไม่ใช่การวางขอบเขตหลายเหลี่ยม",
+    "stack": "5 แนว × 3 จุด = 15 waypoint",
+    "footer": "อ้างอิง main.py · generate_sweep และ dashboard.html · Generate Sweep"
   },
   {
     "type": "code",
-    "eyebrow": "09 / Route planning",
-    "title": "The automatic sweep spreads nine waypoints across the area",
-    "lead": "For a horizontal sweep, the backend divides the selected area into three latitude lines. Each line receives start, middle and end points; the point order reverses on alternating lines.",
-    "codeLabel": "Planner logic · simplified from main.py",
-    "source": "main.py · /generate_sweep",
-    "code": "sweep_lines = [start_lat, middle_lat, end_lat]\nline_points = [start_lng, middle_lng, end_lng]\ndirection = 1\n\nfor lat in sweep_lines:\n    points = line_points if direction == 1 else list(reversed(line_points))\n    for lng in points:\n        add_waypoint(lat, lng)\n    direction *= -1",
+    "eyebrow": "10 / Heatmap ความขุ่น",
+    "title": "Heatmap แยกค่าที่วัดจริงกับค่าที่ประเมิน",
+    "lead": "จุดที่เรือเก็บได้เป็นค่าจากเซนเซอร์ ช่องว่างระหว่างจุดใช้ IDW ประเมินจากตัวอย่างใกล้เคียง โดยจุดวัดที่อยู่ใกล้มีอิทธิพลต่อค่าประมาณมากกว่า",
+    "codeLabel": "หลักคิดของ IDW",
+    "source": "dashboard.html · Live Monitor และ heatmap",
+    "code": "ค่าอิทธิพลของจุดวัด = 1 / ระยะห่าง²\n\nค่า NTU โดยประมาณ =\n  ผลรวม(ค่า NTU × ค่าอิทธิพล)\n  ÷ ผลรวมค่าอิทธิพล",
     "facts": [
-      "Three sweep lines × three points produce nine waypoints in the automatic layout.",
-      "Reversing point order creates a serpentine route across the area.",
-      "The source also supports a vertical orientation; the dashboard has a separate manual-route workflow."
+      "Live Monitor แสดงตำแหน่งที่วัดค่า NTU ระหว่างภารกิจ",
+      "Final summary ใช้กริด 10 × 10 และเติมช่องว่างด้วย IDW",
+      "Mission detail ใช้กริด 40 × 40 สำหรับดูรายละเอียดภารกิจ"
     ],
-    "note": "This is a shortened excerpt of the route logic. The automatic layout uses start, midpoint and end coordinates; the report does not give a field-tested spacing or coverage percentage.",
-    "footer": "Implementation excerpt · supplied main.py and dashboard.html"
+    "note": "สีที่เติมในช่องว่างเป็นค่าคำนวณประมาณ ไม่ใช่จุดวัดใหม่",
+    "footer": "อ้างอิง dashboard.html · heatmap logic"
   },
   {
     "type": "story",
-    "eyebrow": "10 / Navigation and control",
-    "title": "Waypoint guidance and heading control steer the boat",
-    "lead": "At each waypoint, GPS provides the current position and the compass provides boat heading. The report describes line-of-sight guidance with heading PID control to guide movement and correct heading error.",
-    "sideTitle": "Mission control",
-    "sideText": "The boat checks navigation readiness before it starts, advances through the route, then returns to its recorded home location when commanded or when the patrol is complete.",
+    "eyebrow": "11 / Dashboard",
+    "title": "หน้าเว็บแสดงสถานะและข้อมูลย้อนหลัง",
+    "lead": "ผู้ใช้ตรวจตำแหน่งเรือ ความคืบหน้าภารกิจ ระดับแบตเตอรี่ และค่าจากเซนเซอร์ได้ รวมทั้งเปิดดูเส้นทางและประวัติที่บันทึกไว้",
+    "sideTitle": "ข้อมูลที่ส่งจากเรือ",
+    "sideText": "ระบบรวมค่าตรวจวัดเข้ากับสถานะเรือในแต่ละช่วงของภารกิจ",
     "sideItemsStyle": "list",
-    "sideItemsLabel": "Signals and actions involved",
+    "sideItemsLabel": "ตัวอย่างข้อมูล",
     "sideItems": [
-      "NEO-8M GPS provides position for waypoint tracking.",
-      "QMC5883L magnetometer provides heading information.",
-      "PID control adjusts movement through the left and right thrusters.",
-      "Return-to-home uses the recorded home coordinate and navigation control."
+      "พิกัด GPS และทิศหัวเรือ",
+      "อุณหภูมิ pH และความขุ่น NTU",
+      "ระดับแบตเตอรี่และโหมดการทำงาน",
+      "หมายเลข waypoint และความคืบหน้าภารกิจ"
     ],
-    "footer": "Navigation method described in BETA TEST.docx, Sections 1.3 and 3.7"
+    "footer": "ฟิลด์ข้อมูลตาม main.py และ dashboard.html ที่ให้มา"
   },
   {
     "type": "story",
-    "eyebrow": "11 / Threshold response",
-    "title": "An abnormal reading triggers a closer local survey",
-    "lead": "The report describes comparing temperature, pH and turbidity readings with configured thresholds. When a value is outside its accepted range, the system raises an alert and can collect additional readings around that location.",
-    "sideTitle": "Response sequence",
-    "sideText": "The local investigation is intended to add spatial detail around the reading that triggered the alert.",
+    "eyebrow": "12 / การประเมินระบบ",
+    "title": "ผลความแม่นยำต้องมาจากการทดลอง",
+    "lead": "ข้อเสนอโครงงานระบุหัวข้อที่ควรตรวจสอบ แต่เอกสารที่ได้รับยังไม่มีผลทดสอบเชิงตัวเลข จึงควรแยกสิ่งที่ออกแบบไว้จากผลที่วัดได้จริง",
+    "sideTitle": "หัวข้อที่ควรเก็บผล",
+    "sideText": "บันทึกเงื่อนไขทดสอบทุกครั้ง เพื่อเปรียบเทียบผลได้",
     "sideItemsStyle": "list",
-    "sideItemsLabel": "How the report describes it",
+    "sideItemsLabel": "รายการประเมิน",
     "sideItems": [
-      "Compare each measurement with its configured limit.",
-      "Mark the abnormal condition for dashboard review.",
-      "Run an expanding spiral scan around the detected location.",
-      "Return to grid patrol near the closest waypoint."
+      "เทียบเซนเซอร์กับเครื่องมืออ้างอิง",
+      "วัดความคลาดเคลื่อนการตาม waypoint",
+      "ทดสอบระยะและความต่อเนื่องของ ESP-NOW",
+      "ตรวจว่าข้อมูลใน MicroSD และ Dashboard ตรงกัน",
+      "จับเวลาการทำงานต่อการชาร์จหนึ่งครั้ง"
     ],
-    "footer": "Threshold detection and spiral mapping · BETA TEST.docx, Sections 1.2, 3.6 and 3.8"
-  },
-  {
-    "type": "code",
-    "eyebrow": "12 / Telemetry data model",
-    "title": "The backend accepts water readings with boat state",
-    "lead": "A single SensorData payload can carry the boat identifier, coordinates, three water readings, battery, heading and mission-state values. Optional fields let the sender omit unavailable measurements.",
-    "codeLabel": "Python model · selected fields",
-    "source": "main.py · SensorData (Pydantic model)",
-    "code": "class SensorData(BaseModel):\n    boat_id: str\n    latitude: float | None = None\n    longitude: float | None = None\n    temp_c: float | None = None\n    ph_level: float | None = None\n    turbidity_ntu: float | None = None\n    battery: float | None = None\n    heading: float | None = None\n    current_mode: int | None = None\n    stage_intent: int | None = None",
-    "facts": [
-      "GPS coordinates associate the measurement with a place on the route.",
-      "Temperature, pH and turbidity remain separate values with their own units or scales.",
-      "Battery, heading and mission state help explain what the boat was doing when it sent data."
-    ],
-    "note": "Only selected fields are shown. The backend model also contains flow_v_lat and flow_v_lng; this slide does not infer their meaning beyond the source field names.",
-    "footer": "Implementation excerpt · supplied main.py"
-  },
-  {
-    "type": "code",
-    "eyebrow": "13 / Mission commands",
-    "title": "The backend exposes separate controls for mission state",
-    "lead": "The supplied API has endpoints for mission start and completion, return-to-home, emergency stop, status and waypoint progress. The dashboard uses these routes to request mission actions and read current state.",
-    "codeLabel": "Python API · emergency-stop endpoint",
-    "source": "main.py · POST /mission/emergency-stop",
-    "code": "@app.post(\"/mission/emergency-stop\")\ndef emergencyStop():\n    global mission_running\n    global boat_state\n    global mission_command\n\n    mission_running = False\n    boat_state = \"Emergency Stop\"\n    mission_command = \"EMERGENCY_STOP\"\n\n    return {\n        \"success\": True,\n        \"status\": \"Emergency Stop\",\n        \"command\": \"EMERGENCY_STOP\"\n    }",
-    "facts": [
-      "The endpoint records an emergency-stop state and command on the backend.",
-      "Other routes support starting, completing or returning from a mission.",
-      "Status and waypoint-progress routes let the dashboard request mission updates."
-    ],
-    "note": "This code confirms the server-side state change and response. The excerpt alone does not prove that the physical motors stopped; the boat must receive and apply the command.",
-    "footer": "Implementation excerpt · supplied main.py"
-  },
-  {
-    "type": "code",
-    "eyebrow": "14 / Dashboard updates",
-    "title": "The dashboard polls boat position more often than history",
-    "lead": "The supplied page schedules refreshes at different intervals for boat state, mission progress, route information and history. These are browser polling intervals, not measured network latency or guaranteed update times.",
-    "codeLabel": "JavaScript · scheduled polling",
-    "source": "dashboard.html · dashboard initialization",
-    "code": "setInterval(loadBoat, 1000);\nsetInterval(loadMissionStatus, 2000);\nsetInterval(loadMissionProgress, 2000);\nsetInterval(loadPath, 5000);\nsetInterval(loadPrediction, 5000);\nsetInterval(loadHistory, 30000);",
-    "facts": [
-      "Boat status is scheduled every 1 second.",
-      "Mission status and progress are scheduled every 2 seconds.",
-      "Path and prediction are scheduled every 5 seconds; history every 30 seconds."
-    ],
-    "note": "Actual display freshness also depends on request completion, network availability and backend responses.",
-    "footer": "Implementation excerpt · supplied dashboard.html"
-  },
-  {
-    "type": "code",
-    "eyebrow": "15 / Mission history",
-    "title": "Completed missions store sample counts and sensor summaries",
-    "lead": "When a mission is completed, the backend query counts its sensor rows and calculates average temperature, pH and turbidity, plus minimum and maximum turbidity.",
-    "codeLabel": "SQL · mission summary query",
-    "source": "main.py · completeMission()",
-    "code": "SELECT\n    COUNT(*) AS sensor_samples,\n    AVG(temp_c) AS avg_temp,\n    AVG(ph_level) AS avg_ph,\n    AVG(turbidity_ntu) AS avg_turbidity,\n    MAX(turbidity_ntu) AS max_turbidity,\n    MIN(turbidity_ntu) AS min_turbidity\nFROM sensor_logs\nWHERE mission_id = %s",
-    "facts": [
-      "The query summarizes records linked to one mission ID.",
-      "Dashboard history groups route details and sensor records by mission.",
-      "The supplied dashboard source includes CSV export for sensor logs."
-    ],
-    "note": "This is the calculation logic, not a set of field results. The supplied report contains no sample count or measured sensor summary to display.",
-    "footer": "Implementation excerpt · supplied main.py and dashboard.html"
-  },
-  {
-    "type": "code",
-    "eyebrow": "16 / Spatial turbidity map",
-    "title": "IDW estimates turbidity between sampled coordinates",
-    "lead": "Inverse Distance Weighting assigns more influence to nearby measurements. The supplied dashboard routine applies this calculation to a 25 × 25 grid using a distance power of three.",
-    "codeLabel": "JavaScript · IDW calculation",
-    "source": "dashboard.html · loadHeatMap()",
-    "code": "const rows = 25;\nconst columns = 25;\nconst power = 3;\n\nconst weight = 1 / Math.pow(distance, power);\nweightedValue += sample.ntu * weight;\ntotalWeight += weight;\n\nconst estimatedNTU =\n    weightedValue / totalWeight;",
-    "facts": [
-      "The boat measures turbidity at sampled GPS locations.",
-      "IDW estimates values at grid cells between those measurements.",
-      "The heat map is an estimate of spatial distribution, not additional sensor readings."
-    ],
-    "note": "The IDW routine is present, but the supplied dashboard initialization has the general automatic startup and refresh calls commented out. Verify the active heat-map view before describing it as live.",
-    "footer": "Implementation excerpt · supplied dashboard.html"
-  },
-  {
-    "type": "phases",
-    "eyebrow": "17 / Verification",
-    "title": "Evaluation covers sensors, navigation and the full data path",
-    "phases": [
-      {"label": "01 / SENSORS", "title": "Readings", "text": "Check temperature, pH and turbidity readings, including calibration and signal conversion."},
-      {"label": "02 / POSITION", "title": "Navigation", "text": "Evaluate GPS and compass inputs, waypoint tracking, heading control and return-to-home."},
-      {"label": "03 / LINK", "title": "Communication", "text": "Check ESP-NOW waypoint transfer, commands and telemetry between boat and base station."},
-      {"label": "04 / DATA", "title": "Storage + web", "text": "Follow records through MicroSD, backend storage and dashboard display."},
-      {"label": "05 / FIELD", "title": "Operation", "text": "Assess navigation performance, communication reliability and system stability outdoors."}
-    ],
-    "note": "These are evaluation areas named in the report. It does not provide quantified accuracy, range, battery duration, pass rates or field-test measurements.",
-    "footer": "Testing methodology and limitations · BETA TEST.docx, Sections 1.4 and 4.2"
-  },
-  {
-    "type": "story",
-    "eyebrow": "18 / Sources and evidence",
-    "title": "The slides distinguish documented design from measured results",
-    "lead": "Project behavior and architecture come from the supplied report. Code examples come from the supplied backend and dashboard files. The report does not provide quantified field-performance results, so this presentation does not add them.",
-    "sideTitle": "Source materials",
-    "sideText": "The project report also cites research and technical references related to unmanned surface vehicles, route planning, interpolation and ESP-NOW.",
-    "sideItemsStyle": "list",
-    "sideItemsLabel": "Selected references in the report",
-    "sideItems": [
-      "BETA TEST.docx · Senior Project Report, Mae Fah Luang University, 2026.",
-      "Chang et al. · autonomous water-quality monitoring USV · Sensors 21(4), 1102 (2021).",
-      "Cao et al. · wide-area water-quality monitoring with USVs · Water 12(3), 681 (2020).",
-      "Wang & Xu · dynamics-constrained surface-vehicle path planning · IEEE TVT (2020).",
-      "Shepard · two-dimensional interpolation for irregularly spaced data (1968).",
-      "Espressif Systems · ESP-NOW Programming Guide (2026)."
-    ],
-    "footer": "Implementation examples are attributed to supplied main.py and dashboard.html excerpts"
+    "footer": "หัวข้อประเมินและข้อจำกัด: BETA TEST.docx · Sections 1.3–1.4"
   },
   {
     "type": "closing",
-    "eyebrow": "19 / Conclusion and next steps",
-    "title": "A mobile workflow for spatial water monitoring",
-    "summary": "The project brings water sensing, waypoint navigation, local mission logging and web monitoring onto one surface platform. Its main contribution is moving measurements between locations and linking them to route context.",
+    "eyebrow": "13 / สรุป",
+    "limitTitle": "เงื่อนไขที่มีผลต่อการสำรวจ",
+    "title": "เรือเชื่อมค่าคุณภาพน้ำเข้ากับตำแหน่ง",
+    "summary": "เรือเคลื่อนที่ไปตาม waypoint วัดน้ำผิวหน้า และบันทึกค่าพร้อมพิกัด เพื่อให้ผู้ใช้ดูความแตกต่างของข้อมูลตามพื้นที่ได้",
     "limitations": [
-      "Designed for surface water; it does not measure deep-water conditions.",
-      "Operation is intended for moderate weather and relatively stable water.",
-      "Measurement quality depends on sensor calibration and environmental conditions.",
-      "Navigation and communications depend on GPS, compass and wireless coverage.",
-      "Battery capacity and sample distribution constrain mission length and map detail."
+      "ระบบนี้ออกแบบมาสำหรับตรวจวัดน้ำผิวหน้า",
+      "คุณภาพข้อมูลขึ้นกับการสอบเทียบเซนเซอร์",
+      "การนำทางและติดตามระยะไกลขึ้นกับ GPS เข็มทิศ และสัญญาณสื่อสาร",
+      "สภาพน้ำและแบตเตอรี่มีผลต่อเวลาทำงาน"
     ],
-    "future": "The report identifies sensor accuracy, navigation performance, communication reliability and power efficiency as improvement areas. Field measurements and validation results should be added when they are available.",
-    "source": "Source: BETA TEST.docx, Chapters 1–4. No quantified field results were supplied.",
-    "footer": "Thank you · Patcharapon Teerasamee and Pisit Nilthongkam"
+    "future": "ขั้นต่อไปคือทดลองภาคสนาม แล้วรายงานความแม่นยำของเซนเซอร์ เส้นทาง ระยะสื่อสาร และเวลาทำงาน",
+    "source": "ข้อเสนอโครงงานยังไม่ได้รายงานผลภาคสนามเชิงตัวเลข",
+    "footer": "Patcharapon Teerasamee · Pisit Nilthongkam · Mae Fah Luang University"
   }
 ];
