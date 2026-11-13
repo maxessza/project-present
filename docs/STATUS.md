@@ -1,8 +1,8 @@
 # สถานะและขอบเขต
 
-## Current Overall movie preview
+## Current Overall presentation checkpoint — 2026-11-13
 
-See [PREVIEW_CHECKPOINT.md](PREVIEW_CHECKPOINT.md) for the current recovered movie/navigation candidate, verified checks and unresolved layout/review gates. All sections below are retained historical records, not current acceptance claims. Publication of this preview does not close any pending gate.
+See [PREVIEW_CHECKPOINT.md](PREVIEW_CHECKPOINT.md) for this exact preview and [Thai operating guide](PRESENTATION_GUIDE_TH.md). **Known issue: navigation explanation disappears after WP2 while the model continues toward WP3; NOT fixed by this publication.** Report/reset/ownership/SVG repairs are included, but full independent acceptance remains NOT VERIFIED. Publication is not approval or deployment. All sections below are retained historical records, not current acceptance claims.
 
 ## Current continuation — t_6328f694 (2026-10-20)
 

@@ -1,6 +1,6 @@
 # Smart Water Boat
 
-> **Current work-in-progress preview:** see [Overall checkpoint and known limits](docs/PREVIEW_CHECKPOINT.md). This branch is not an independently accepted release.
+> **Current preview checkpoint:** [status and known issues](docs/PREVIEW_CHECKPOINT.md) · [คู่มือใช้งานภาษาไทย](docs/PRESENTATION_GUIDE_TH.md). The navigation explanation still disappears after WP2 while the boat continues to WP3; this checkpoint preserves that known issue rather than claiming it fixed. Full independent/owner/physical acceptance is NOT VERIFIED.
 
 This site explains the project and provides interactive browser demonstrations. Open [index.html](index.html) to reach the existing Overall experience immediately. The root redirect keeps the incoming query string and hash, so links such as `#pid` and `#ms-uplink-panel` still reach their Overall sections.
 

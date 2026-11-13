@@ -1,27 +1,30 @@
-# Current Overall preview checkpoint
+# Current Overall presentation checkpoint — 2026-11-13
 
-This is a work-in-progress presentation preview, **not an accepted release or firmware safety approval**. Open the repository's `index.html`; the entry redirects to `pages/overall.html` and keeps the supporting files together.
+This commit saves the current displayed website **as a preview, not an accepted release**. Open `index.html` to enter `pages/overall.html`; keep the complete extracted project tree together. See [Thai operating guide](PRESENTATION_GUIDE_TH.md).
 
-## Included
+## Known visible issue — NOT fixed in this checkpoint
 
-- One START-driven Overall movie using the existing shared mission model and event-linked chapters.
-- A navigation explanation showing recorded position/projection, LOS aim, waypoint acceptance region, target/compass heading and signed final-drive PWM.
-- Removal of the presentation's unintended automatic FORCE_RTH after spiral scanning. The native browser journey resumes the pending GRID target, completes all nine example waypoints, returns HOME and reaches the model's COMPLETE/stopped state. Explicit manual FORCE_RTH remains available.
-- Removal of the gold marker ahead of the cyan boat glyph, and explicit station icon/text styling after the map is moved into the movie stage.
-- Existing other pages and detailed Heading/PID lab retained. Older standalone experiments remain in the repository; they are not additional authoritative mission runtimes for Overall.
+After WP2, when the boat resumes GRID travel toward WP3, the movie can remain on **พักเรือและวัดน้ำ** and hide its navigation explanation. The model continues navigating and the hidden segment labels update, but the selected presentation chapter does not return to navigation. The current movie advances through its chapters only once.
 
-## Verified boundary and remaining work
+Native reproduction on this source observed navigation visible for Start→WP1 and WP1→WP2, then hidden during moving WP2→WP3 while the displayed chapter remained `water`. Publishing this snapshot does not repair or accept that behavior. Continuous per-leg explanation is pending; no controller/route changes were made for this publication.
 
-Coordinator browser checks on the current source: **28/29 passed**. The failed check is presentation layout: on a 1264x800 desktop, the navigation mechanism is below the initial viewport and needs scrolling. Acceptance-transition geometry and final integrated-map coverage are not fully verified. Owner/projector acceptance and independent review remain **NOT VERIFIED**.
+## Included current behavior
 
-Node checks with the explicit read-only firmware checkout configured: **154/156 passed**, with the same two failures in the frozen pre-change baseline and this candidate: the expected stylesheet-version literal and the migration/source-hash map. These failures are not waived or described as green CI.
+- One START-driven Overall movie, short Thai system/role/measurement explanations, existing common mission state and optional technical details.
+- Navigation geometry, LOS aim, acceptance region, target/compass heading and signed applied motor outputs. These are browser-model values, not live vessel measurements.
+- A labelled persistent synthetic turbidity scenario demonstrating all25 scan targets without removing safety/clear-abort logic; continued survey and route-complete return HOME.
+- Correct report-table DOM ownership for all9 transmitted fields, actual browser receiver identity, RESET and replay.
+- RESET clears the mission/report/timers while preserving explicit user settings/faults; presentation-owned temporary turbidity is released rather than silently replacing user input.
+- Rendered SVG font sizing and separated boat/HOME and short-leg A/B captions. Other pages and detailed Heading/PID lab remain present.
 
-The builder reached its runtime cap. The coordinator recovered and checked the partial artifact without restarting the worker or purchasing another review. This checkpoint does not close earlier review/process or firmware/navigation/safety/concurrency/packet-ABI gates.
+## Evidence and honest limits
 
-## Local checks
+Retained source-bound native evidence includes two full movies44/44 (8chapters,25scan targets,9accepted survey points, HOME/COMPLETE/applied0-0), report9/9, reset configuration4/4, natural ownership/takeover8/8, and trusted real-tab visibility7/7. The final change after the full-movie evidence was only one CSS caption translation; unchanged runtime evidence was reused after checking relevance, not described as a newly rerun full mission. A separate independent natural short-leg caption probe passed12/12 at1366/1264/390, with source/archive guards.
 
-Browser use needs no real boat, radio, credentials or firmware checkout. Inputs and hull motion are illustrative; MessageChannel and memory logs are not ESP-NOW or a physical SD card.
+**Full independent acceptance remains NOT VERIFIED:** the final bounded review produced a scoped caption PASS report and raw passing checks but timed out before completing its final machine ledger/results/handoff. Earlier passing assertions do not establish continuous explanatory correctness after every waypoint, as the known issue above demonstrates. No claim is made that the entire historical Node/CI suite is green.
 
-For source-binding/native tests, configure `OVERALL_FIRMWARE_ROOT` to your own read-only firmware checkout. The native GRID test also supports `GRID_FIRMWARE_ROOT`, `CXX`, and `GRID_EVIDENCE_DIR`; put generated verification output outside the website. Maintainer-specific paths in historical documents/tests are not portable installation requirements.
+Owner/audience/projector acceptance, real boat/sensors/GPS/Compass/radio/e-stop/motor/SD/bench/pond validation and the reserved high-risk algorithm approval remain NOT VERIFIED. This browser simulation is not calibrated vessel physics, ESP-NOW, physical SD durability or a real-water safety assessment.
 
-Raw local agent logs, private work ledgers, compiled test executables and runtime evidence are deliberately excluded from this Git preview. No main merge or hosting/deployment change is included.
+## Publication boundary
+
+This is a normal preview-branch checkpoint only: no main merge, force push, hosting setting, deployment, firmware edit or additional paid implementation/review. An isolated publication worktree preserves the original dirty source/index. Local worker logs, raw evidence, executables and credentials are excluded. Workstation-bound documents/tests are not newly copied; their existing upstream history is preserved. Previously published historical documentation remains historical, not current acceptance evidence.
